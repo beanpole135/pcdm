@@ -16,8 +16,8 @@ BACKGROUND_IMAGE=background.jpg  	# will stretch to fill the screen
   BACKGROUND_DISABLE=FALSE		# Flag to disable using a background image
 
 HEADER_IMAGE=banner.png 	# Image to be displayed as a window header
-  HEADER_IMAGE_SIZE=400x83		# Size for the image (in pixels)
-  HEADER_DISABLE=TRUE			# Flag to remove the header image entirely
+  HEADER_IMAGE_SIZE=500x292		# Size for the image (in pixels)
+  HEADER_DISABLE=FALSE			# Flag to remove the header image entirely
   
 USER_IMAGE=default-user.png  		# Image for the user selection widget
  # USER_IMAGE_SIZE=30x30  		  # Size for the image (in pixels)
@@ -50,7 +50,7 @@ TOOLBAR_STYLE=textbesideicon 	 	# [icononly | textonly | textbesideicon | textun
 
 # ADD WINDOW ITEMS ON A GRID LAYOUT [row,column]
 # Note: [0,0]=upper left corner, grid automatically expands to fit all items 
-HEADER_LOCATION=[0,0]
+HEADER_LOCATION=[0,1]
 LOGIN_LOCATION=[1,1]
 DESKTOP_LOCATION=[3,1]
 
