@@ -42,9 +42,6 @@ if [ $? -eq 0 ]; then
 fi
 
 
-# Allow Auto-Login the first time PCDM starts
-touch /var/tmp/.PCDMAutoLogin
-
 # Remove a stale shutdown update trigger
 if [ -e "/var/db/pc-updatemanager/.doingShutdownUpdate" ] ; then
   rm /var/db/pc-updatemanager/.doingShutdownUpdate
@@ -56,14 +53,19 @@ if [ -e "/var/tmp/.pcdm-x-failed" ] ; then
 fi
 
 # Now start the X Server
+echo "  [PCDM] Starting Xorg init"
+touch /var/tmp/.PCDMAutoLogin # Allow Auto-Login the first time PCDM starts
 while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
-  /usr/local/bin/pc-checkxdisplay
+  if [ -e /usr/local/bin/pc-checkxdisplay ]; then
+     /usr/local/bin/pc-checkxdisplay
+  fi
   # Randomize the authorization file location
   PCDMAUTHFILE=${BASEPCDMAUTHFILE}-`openssl rand -hex 10`
   # Make sure the authorization file does not exist
   if [ -f ${PCDMAUTHFILE} ]; then
     rm ${PCDMAUTHFILE}
   fi
+  echo "  [PCDM] Generated auth file: ${PCDMAUTHFILE}"
   export XAUTHORITY=${PCDMAUTHFILE} #Set the auth file location
   touch ${PCDMAUTHFILE} #Create the (empty) authorization file
   xauth -f ${PCDMAUTHFILE} add :0 MIT-MAGIC-COOKIE-1 `openssl rand -hex 64` #Add a default entry to the file (randomized)
@@ -74,7 +76,7 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
 
   # Remove our X success marker
   if [ -e "/var/tmp/.pcdm-x-started" ] ; then rm /var/tmp/.pcdm-x-started; fi
-
+  echo "  [PCDM] Starting PCDM-session"
   xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS
   if [ $? -ne 0 ] ; then
      if [ ! -e "/var/tmp/.pcdm-x-started" ] ; then
