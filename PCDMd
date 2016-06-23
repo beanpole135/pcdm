@@ -4,8 +4,8 @@
 #------------------------------------
 
 PCDMCONF="/usr/local/etc/pcdm.conf"
-BASEPCDMAUTHFILE="/var/.PCDMAuth"
-STOPFILE="/var/.PCDMstop"
+BASEPCDMAUTHFILE="/var/tmp/.PCDMAuth"
+STOPFILE="/var/tmp/.PCDMstop"
 
 #Quick check that this is not the "stop" command
 if [ "${1}" = "stop" ]; then
