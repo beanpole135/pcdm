@@ -408,7 +408,7 @@ QStringList Backend::getAvailablePersonaCryptUsers(){
 
 bool Backend::MountPersonaCryptUser(QString user, QString pass){
   //First, the password needs to be saved to a temporary file for input
-  QTemporaryFile tmpfile("/tmp/.XXXXXXXXXXXXXXXXXXXX"); //just a long/hidden randomized name
+  QTemporaryFile tmpfile("/var/tmp/.XXXXXXXXXXXXXXXXXXXX"); //just a long/hidden randomized name
     tmpfile.setAutoRemove(true);
   if( !tmpfile.open() ){ return false; } //could not open the temporary file
   QTextStream out(&tmpfile);
