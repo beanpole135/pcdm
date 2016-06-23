@@ -469,7 +469,7 @@ void PCDMgui::slotClosePCDM(){
   //Same as UpdateGUI, but stops the daemon as well for debugging purposes
   system("killall -9 xvkbd"); //be sure to close the virtual keyboard
   for(int i=0; i<screens.length(); i++){ screens[i]->close(); } //close all the other screens
-  QProcess::execute("touch /tmp/.PCDMstop"); //turn off the daemon as well
+  QProcess::execute("touch /var/.PCDMstop"); //turn off the daemon as well
   QCoreApplication::exit(0);
   close();
 }
@@ -477,7 +477,7 @@ void PCDMgui::slotClosePCDM(){
 void PCDMgui::slotUpdateGUI(){
   system("killall -9 xvkbd"); //be sure to close the virtual keyboard
   for(int i=0; i<screens.length(); i++){ screens[i]->close(); } //close all the other screens
-  //QProcess::execute("touch /tmp/.PCDMstop"); //turn off the daemon as well
+  //QProcess::execute("touch /var/.PCDMstop"); //turn off the daemon as well
   QCoreApplication::exit(0);
   close();	
 }
@@ -704,4 +704,3 @@ void PCDMgui::retranslateUi(){
     }
 
 }
-

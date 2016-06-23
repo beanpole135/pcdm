@@ -25,10 +25,10 @@
 #include "pcdm-xprocess.h"
 #include "pcdm-logindelay.h"
 
-#define TMPLANGFILE QString("/tmp/.PCDMLang")
-#define TMPAUTOLOGINFILE QString("/tmp/.PCDMAutoLogin")
-#define TMPAUTHFILE QString("/tmp/.PCDMAuth")
-#define TMPSTOPFILE QString("/tmp/.PCDMstop")
+#define TMPLANGFILE QString("/var/.PCDMLang")
+#define TMPAUTOLOGINFILE QString("/var/.PCDMAutoLogin")
+#define TMPAUTHFILE QString("/var/.PCDMAuth")
+#define TMPSTOPFILE QString("/var/.PCDMstop")
 //Make sure that prefix is set
 //#ifndef prefix
 //#define prefix "/usr/local/"
