@@ -13,6 +13,7 @@
 #include <QMessageBox>
 #include <QTemporaryFile>
 #include <QThread>
+#include <QCoreApplication>
 
 /*
 Sub-classed QProcess for starting an XSession Process

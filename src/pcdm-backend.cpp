@@ -10,10 +10,11 @@
 #include <QTextStream>
 #include <QDebug>
 #include <QStringList>
+#include <QCoreApplication>
 
 #include "pcdm-backend.h"
 #include "pcdm-config.h"
-#include "pcbsd-utils.h"
+//#include "pcbsd-utils.h"
 
 QStringList displaynameList,usernameList,homedirList,usershellList,instXNameList,instXBinList,instXCommentList,instXIconList,instXDEList,excludedUsers;
 QString logFile;
@@ -91,6 +92,32 @@ QString Backend::getALUsername(){
     }
   }
   return ruser;
+}
+
+//Run a shell command (return a list of lines and an optional success flag)
+QStringList Backend::runShellCommand(QString command){
+ //split the command string with individual commands seperated by a ";" (if any)
+ QStringList cmdl = command.split(";");
+ QString outstr;
+ //run each individual command
+ bool ok = true;
+ for(int i=0;i<cmdl.length() && ok;i++){ 
+   QProcess p;  
+   //Make sure we use the system environment to properly read system variables, etc.
+   p.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
+   //Merge the output channels to retrieve all output possible
+   p.setProcessChannelMode(QProcess::MergedChannels);   
+   p.start(cmdl[i]);
+   while(p.state()==QProcess::Starting || p.state() == QProcess::Running){
+     p.waitForFinished(200);
+     QCoreApplication::processEvents();
+   }
+   QString tmp = p.readAllStandardOutput();
+   outstr.append(tmp);
+   ok = (p.exitCode()==0);
+ }
+ if(outstr.endsWith("\n")){outstr.chop(1);} //remove the newline at the end 
+ return outstr.split("\n");
 }
 
 QString Backend::getALPassword(){
@@ -369,7 +396,7 @@ QStringList Backend::getRegisteredPersonaCryptUsers(){
 }
 
 QStringList Backend::getAvailablePersonaCryptUsers(){
-  QStringList info = pcbsd::Utils::runShellCommand("personacrypt list");
+  QStringList info = runShellCommand("personacrypt list");
   QStringList users;
   for(int i=0; i<info.length(); i++){
     if(info[i].contains(" on ")){

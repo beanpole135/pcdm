@@ -17,7 +17,7 @@
 #include <QTextStream>
 
 #include "pcdm-config.h"
-#include "pcbsd-utils.h"
+//#include "pcbsd-utils.h"
 
 #define PCSYSINSTALL    QString("/usr/sbin/pc-sysinstall")
 #define DBDIR QString("/var/db/pcdm/")
@@ -51,6 +51,7 @@ public:
     static QString getUserHomeDir(QString);
     static QString getUserShell(QString);
     static void checkLocalDirs();
+    static QStringList runShellCommand(QString);
 
     //Auto-login usage
     static QString getALUsername();

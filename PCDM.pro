@@ -3,8 +3,8 @@ TARGET = PCDM-session
 target.path=/usr/local/bin
 TEMPLATE = app
 QT += core widgets x11extras
-LIBS += -L../libpcbsd -L/usr/local/lib -lpcbsd-ui -lpcbsd-utils -lpam -lX11 -lutil
-INCLUDEPATH += ../libpcbsd/utils /usr/local/include
+LIBS += -L/usr/local/lib -lpam -lX11 -lutil
+INCLUDEPATH += /usr/local/include
 
 SOURCES += src/main.cpp \
            src/pcdm-gui.cpp \

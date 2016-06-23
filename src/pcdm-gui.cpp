@@ -650,7 +650,7 @@ void PCDMgui::retranslateUi(){
   if(hostname.isEmpty()){
     if(DEBUG_MODE){ qDebug() << "Finding Hostname..."; }
     //Find the system hostname
-    hostname = pcbsd::Utils::runShellCommand("hostname").join(" ").simplified();
+    hostname = Backend::runShellCommand("hostname").join(" ").simplified();
     if(DEBUG_MODE){ qDebug() << " - Host:" << hostname; }
     loginW->displayHostName(hostname);	  
   }
