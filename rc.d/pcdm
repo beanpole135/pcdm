@@ -38,7 +38,6 @@ pcdm_start()
   (
     iter=0
     while [ -e /var/run/nologin ]; do 
-#! ps -axoargs | grep "^/usr/libexec/getty " | grep -qv grep >/dev/null 2>&1; do
 	if [ ${iter} -eq 60 ]; then
 	    break
 	fi
@@ -48,6 +47,9 @@ pcdm_start()
 
     #Start the PCDM login daemon
     if [ ! -e /var/run/nologin ]; then
+      if [ -e /var/tmp/.PCDMstop ]; then 
+        rm /var/tmp/.PCDMstop
+      fi
       ${command} ${pcdm_flags} 
     fi
   ) &

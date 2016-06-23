@@ -104,8 +104,8 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   fi
 done
 
-if [ -e /var/run/nologin -o -e ${STOPFILE} ]; then
-  echo "Stopped while loop: /var/run/nologin or ${STOPFILE} exists"
-fi
+#if [ -e /var/run/nologin -o -e ${STOPFILE} ]; then
+  #echo "Stopped while loop: /var/run/nologin or ${STOPFILE} exists"
+#fi
 #Remove the stopfile if it exists
 rm ${STOPFILE}
