@@ -2,7 +2,7 @@
 # Login daemon for PCDM
 # This starts the main PCDM UI appropriately
 #------------------------------------
-
+echo "[PCDM] starting daemon..."
 PCDMCONF="/usr/local/etc/pcdm.conf"
 BASEPCDMAUTHFILE="/var/tmp/.PCDMAuth"
 STOPFILE="/var/tmp/.PCDMstop"
