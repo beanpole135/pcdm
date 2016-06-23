@@ -8,7 +8,8 @@
 #include <QTimer>
 #include <QGraphicsPixmapItem>
 #include <QStyle>
-#include <pcbsd-utils.h>
+#include <QTranslator>
+//#include <pcbsd-utils.h>
 
 #include "pcdm-gui.h"
 #include "pcdm-backend.h"
@@ -110,7 +111,7 @@ void PCDMgui::createGUIfromTheme(){
   
   //get the default translation directory
   if(DEBUG_MODE){ qDebug() << "Load Translations"; }
-  translationDir = "/usr/local/share/pcbsd/i18n/";
+  translationDir = "/usr/local/share/PCDM/i18n/";
   //Fill the translator
   m_translator = new QTranslator();
   //Create the Toolbar

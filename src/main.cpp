@@ -19,16 +19,18 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
+#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
+#define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin")
+#define TMPAUTHFILE QString("/var/tmp/.PCDMAuth")
+#define TMPSTOPFILE QString("/var/tmp/.PCDMstop")
+
 #include "pcdm-gui.h"
 #include "pcdm-backend.h"
 #include "pcdm-config.h"
 #include "pcdm-xprocess.h"
 #include "pcdm-logindelay.h"
 
-#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
-#define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin")
-#define TMPAUTHFILE QString("/var/tmp/.PCDMAuth")
-#define TMPSTOPFILE QString("/var/tmp/.PCDMstop")
+
 //Make sure that prefix is set
 //#ifndef prefix
 //#define prefix "/usr/local/"
@@ -38,7 +40,7 @@
 
 //Setup any qDebug/qWarning/qError messages to get saved into this log file directly
 QFile logfile("/var/log/PCDM.log");
-void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg){
+void MessageOutput(QtMsgType type, const QMessageLogContext &, const QString &msg){
   QString txt;
   switch(type){
   case QtDebugMsg:
@@ -53,6 +55,8 @@ void MessageOutput(QtMsgType type, const QMessageLogContext &context, const QStr
   case QtFatalMsg:
   	  txt = QString("FATAL: %1").arg(msg);
   	  break;
+  default:
+    txt = msg;
   }
 
   QTextStream out(&logfile);
@@ -117,7 +121,7 @@ int runSingleSession(int argc, char *argv[]){
   XProcess desktop;
   
   // Check what directory our app is in
-    QString appDir = "/usr/local/share/pcbsd";
+    QString appDir = "/usr/local/share/PCDM";
     // Load the translator
     QTranslator translator;
     QString langCode = lang;

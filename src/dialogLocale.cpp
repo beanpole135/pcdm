@@ -73,7 +73,7 @@ void widgetLocale::slotApply()
 
 QStringList widgetLocale::getLanguages(){
   //Detect all the available localizations
-  QString str = "/usr/local/share/pcbsd/i18n";
+  QString str = "/usr/local/share/PCDM/i18n";
   QDir dir(str);
   QStringList stL = dir.entryList(QDir::Files);
   stL = stL.filter(".qm");  
@@ -87,4 +87,3 @@ QStringList widgetLocale::getLanguages(){
   stL.sort();
   return stL;
 }
-

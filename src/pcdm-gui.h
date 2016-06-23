@@ -32,7 +32,9 @@
 #include "dialogLocale.h"
 #include "loginWidget.h"
 
-#define TMPLANGFILE QString("/tmp/.PCDMLang")
+#ifndef TMPLANGFILE
+#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
+#endif
 
 class PCDMgui : public QMainWindow
 {
