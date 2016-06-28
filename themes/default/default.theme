@@ -17,7 +17,7 @@ BACKGROUND_IMAGE=background.jpg  	# will stretch to fill the screen
 
 HEADER_IMAGE=banner.png 	# Image to be displayed as a window header
   HEADER_IMAGE_SIZE=500x292		# Size for the image (in pixels)
-  HEADER_DISABLE=FALSE			# Flag to remove the header image entirely
+  HEADER_DISABLE=TRUE			# Flag to remove the header image entirely
   
 USER_IMAGE=default-user.png  		# Image for the user selection widget
  # USER_IMAGE_SIZE=30x30  		  # Size for the image (in pixels)
