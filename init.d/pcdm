@@ -3,7 +3,7 @@
 # Released under the 2-clause BSD license.
 
 command=/usr/local/sbin/PCDMd
-command_args=$devd_args
+command_args=$pcdm_args
 name="TrueOS Display Manager"
 
 depend() {
