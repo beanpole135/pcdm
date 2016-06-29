@@ -10,7 +10,7 @@ COMMENT=	QT5 based display manager for FreeBSD
 
 LICENSE=	BSD2CLAUSE
 
-RUN_DEPENDS=    xorg>=0:${PORTSDIR}/x11/xorg-minimal
+RUN_DEPENDS=    xorg-minimal>=0:${PORTSDIR}/x11/xorg-minimal
 
 CONFLICTS=      pcbsd-utils-qt*
 
