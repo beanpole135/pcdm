@@ -658,7 +658,7 @@ void Backend::readSystemUsers(bool directfile){
 }
 
 void Backend::readSystemLastLogin(){
-    lastDE="Lumina-DE.desktop"; //PC-BSD default desktop (use if nothing else set)
+    lastDE="Lumina"; //PC-BSD default desktop (use if nothing else set)
     if(!QFile::exists(DBDIR+"lastlogin")){
       lastUser.clear();
       Backend::log("PCDM: No previous login data found");
