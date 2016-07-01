@@ -3,7 +3,6 @@ etc/pcdm.conf.dist
 etc/rc.d/pcdm
 sbin/PCDMd
 share/PCDM/pcdm-session
-share/PCDM/themes/default/background.jpg
 share/PCDM/themes/default/banner.png
 share/PCDM/themes/default/default-desktop.png
 share/PCDM/themes/default/default-user.png
@@ -15,7 +14,6 @@ share/PCDM/themes/default/login.png
 share/PCDM/themes/default/nextDE.png
 share/PCDM/themes/default/password.png
 share/PCDM/themes/default/previousDE.png
-share/PCDM/themes/default/splashscreen.png
 share/PCDM/themes/default/system.png
 share/PCDM/themes/default/virtualkeyboard.png
 share/PCDM/themes/dragonflybsd/default-user.png
