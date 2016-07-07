@@ -81,23 +81,24 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
 
   # Remove our X success marker
   if [ -e "/var/tmp/.pcdm-x-started" ] ; then rm /var/tmp/.pcdm-x-started; fi
-#  echo "  [PCDM] Starting PCDM-session"
+  echo "  [PCDM] Starting PCDM-session"
   xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS
-  if [ $? -ne 0 ] ; then
-     if [ ! -e "/var/tmp/.pcdm-x-started" ] ; then
+     if [ $? != 0 -a  ! -e "/var/tmp/.pcdm-x-started"] ; then
         # Looks like X failed to start...
-
-        if [ -e "/var/tmp/.pcdm-x-failed" ] ; then
-          # Wow, we really failed here, lets try running X wizard
-          touch /var/.runxsetup
-          rm /var/tmp/.pcdm-x-failed
-        else
-          # Lets move xorg.conf away, and try again
+        if [ ! -e "/var/tmp/.pcdm-x-failed" ] ; then
+          echo " [PCDM] xinit failure 1 - set the failed flag and try again"
+          # Failure 1: Lets move xorg.conf away, and try again
           touch /var/tmp/.pcdm-x-failed
           mv /etc/X11/xorg.conf /etc/X11/xorg.conf.prevFailed 2>/dev/null
+        else
+          echo "[PCDM] xinit failure 2 - move xorg.conf away."
+          # Failure 2: Wow, we really failed here, lets try running X wizard
+          touch ${STOPFILE} #debuging break out here
+          #mv /etc/X11/xorg.con.prevFailedf /etc/X11/xorg.conf.prev 2>/dev/null
+          touch /var/.runxsetup
+          rm /var/tmp/.pcdm-x-failed
         fi
      fi
-  fi
 
   #Now remove the authorization file
   rm ${PCDMAUTHFILE}

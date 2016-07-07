@@ -142,9 +142,9 @@ int runSingleSession(int argc, char *argv[]){
     QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") ); //Force Utf-8 compliance
     //qDebug() << "Translation Finished:" << QString::number(clock.elapsed())+" ms";
 
-  if ( QFile::exists("/usr/local/bin/compton") )
-  {
-    QProcess::execute("/usr/local/bin/compton", QStringList() << "-b" );
+  QProcess compositor;
+  if ( QFile::exists("/usr/local/bin/compton") ) {
+    compositor.startDetached("/usr/local/bin/compton", QStringList() << "-b" );
   }
     
   // *** STARTUP THE PROGRAM ***
@@ -209,6 +209,7 @@ int runSingleSession(int argc, char *argv[]){
    }//end special retCode==-1 check (restart GUI)
   }  // end of PCDM GUI running
   //Wait for the desktop session to finish before exiting
+  if(compositor.state()==QProcess::Running){ compositor.terminate(); }
     desktop.waitForSessionClosed(); 
     qDebug() << "PCDM Session finished";
     logfile.close();
