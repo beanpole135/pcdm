@@ -141,6 +141,11 @@ int runSingleSession(int argc, char *argv[]){
 
     QTextCodec::setCodecForLocale( QTextCodec::codecForName("UTF-8") ); //Force Utf-8 compliance
     //qDebug() << "Translation Finished:" << QString::number(clock.elapsed())+" ms";
+
+  if ( QFile::exists("/usr/local/bin/compton") )
+  {
+    QProcess::execute("/usr/local/bin/compton", QStringList() << "-b" );
+  }
     
   // *** STARTUP THE PROGRAM ***
   bool goodAL = false; //Flag for whether the autologin was successful
