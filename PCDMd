@@ -58,9 +58,6 @@ fi
 #echo "  [PCDM] Starting Xorg init"
 touch /var/tmp/.PCDMAutoLogin # Allow Auto-Login the first time PCDM starts
 while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
-  if [ ! -e "/etc/X11/xorg.conf" ] ; then 
-    touch /var/.runxsetup
-  fi
   if [ -e /usr/local/bin/pc-checkxdisplay ]; then
      /usr/local/bin/pc-checkxdisplay
   fi
