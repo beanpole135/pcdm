@@ -122,6 +122,7 @@ bool XProcess::startXSession(){
   //Emit the last couple logs before dropping privileges
   Backend::log("Starting session:");
   Backend::log(" - Session Log: ~/.pcdm-startup.log");
+  QProcess::execute("killall compton");
   //For sanity's sake, ensure that the ZFS mountpoint are all available first
   if(QFile::exists("/sbin/zfs")){
     QProcess::execute("zfs mount -a"); //just to ensure the user's home dir is actually mounted
