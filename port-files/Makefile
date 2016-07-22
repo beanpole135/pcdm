@@ -10,12 +10,13 @@ COMMENT=	QT5 based display manager for FreeBSD
 
 LICENSE=	BSD2CLAUSE
 
-RUN_DEPENDS=    xorg-minimal>=0:${PORTSDIR}/x11/xorg-minimal
+RUN_DEPENDS=    xorg-minimal>=0:x11/xorg-minimal \
+		setxkbmap:x11/setxkbmap
 
 CONFLICTS=      pcbsd-utils-qt*
 
 USE_QT5=        core gui network svg multimedia imageformats \
-                buildtools_build x11extras concurrent
+		buildtools_build x11extras concurrent
 USES=           qmake
 
 USE_GITHUB=	yes
