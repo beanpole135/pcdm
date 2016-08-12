@@ -15,6 +15,9 @@ if [ "${1}" = "stop" ]; then
   exit
 fi
 
+# Stupid I know, remove me later when i915kms isn't so finiky
+sleep 5
+
 XOPTS=""
 grep -q "^ENABLE_TCP_LISTEN=TRUE" ${PCDMCONF}
 if [ $? -ne 0 ]; then
