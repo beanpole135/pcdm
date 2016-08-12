@@ -80,6 +80,7 @@ int runSingleSession(int argc, char *argv[]){
   //Backend::openLogFile("/var/log/PCDM.log"); 
 
   //qDebug() << "Backend Checks Finished:" << QString::number(clock.elapsed())+" ms";
+  Backend::loadDPIpreference();
   //Setup the initial system environment (locale, keyboard)
   QString lang, kmodel, klayout, kvariant;
   Backend::readDefaultSysEnvironment(lang,kmodel,klayout,kvariant);

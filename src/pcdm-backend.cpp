@@ -334,6 +334,32 @@ void Backend::saveLoginInfo(QString user, QString desktop){
   writeUserLastDesktop(user,desktop); //save the user file (~/.lastlogin)
 }
 
+void Backend::loadDPIpreference(){
+  if( !QFile::exists(DBDIR+"last-dpi") ){ return; }
+  QFile file(DBDIR+"last-dpi");
+  QString dpi = "96";
+  if(file.open(QIODevice::ReadOnly) ){
+    QTextStream in(&file);
+    dpi = in.readLine();
+    file.close();
+  }else{
+    return;
+  }
+  if(dpi.toInt()>47){
+    QProcess::execute("xrandr --dpi "+dpi);
+  }
+}
+
+void Backend::setDPIpreference(QString dpi){
+  if(dpi.toInt()<48){ return; } //not an integer value or invalid number
+  QFile file(DBDIR+"last-dpi");
+  if(file.open(QIODevice::WriteOnly | QIODevice::Truncate)){
+    QTextStream out(&file);
+    out << dpi;
+    file.close();
+  }
+}
+
 void Backend::readDefaultSysEnvironment(QString &lang, QString &keymodel, QString &keylayout, QString &keyvariant){
   //Set the default values
     lang = "en_US";

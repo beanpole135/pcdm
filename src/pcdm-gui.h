@@ -62,6 +62,7 @@ private slots:
     void slotPushVirtKeyboard();    // Start xvkbd
     void slotLocaleChanged(QString);
     void LoadAvailableUsers();
+    void ChangeDPI(QAction*);
 
 private:
     //Objects

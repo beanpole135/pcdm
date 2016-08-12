@@ -602,6 +602,12 @@ void PCDMgui::LoadAvailableUsers(){
   
 }
 
+void PCDMgui::ChangeDPI(QAction *act){
+  if(act->whatsThis().isEmpty()){ return; }
+  Backend::setDPIpreference(act->whatsThis());
+  slotUpdateGUI(); //need to re-load the X session/UI now
+}
+
 void PCDMgui::slotChangeKeyboardLayout(){
   //Fill a couple global variables
   QStringList kModels = Backend::keyModels();
@@ -641,6 +647,15 @@ void PCDMgui::retranslateUi(){
   systemButton->defaultAction()->setText(tr("System"));
   //Menu entries for system button
     systemMenu->clear();	
+    //Get the current DPI and add options to switch
+    QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
+       connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
+       QAction *tmpA = dpimenu->addAction(tr("High (4K)")); tmpA->setWhatsThis("196");
+        tmpA = dpimenu->addAction(tr("Medium")); tmpA->setWhatsThis("144");
+        tmpA = dpimenu->addAction(tr("Standard")); tmpA->setWhatsThis("96");
+        tmpA = dpimenu->addAction(tr("Low ")); tmpA->setWhatsThis("48");
+    systemMenu->addMenu(dpimenu);
+    systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
