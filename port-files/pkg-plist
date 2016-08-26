@@ -1,7 +1,76 @@
 bin/PCDM-session
-etc/pcdm.conf.dist
+bin/pc-dmconf
+%%ETCDIR%%.conf.dist
 etc/rc.d/pcdm
 sbin/PCDMd
+share/PCDM/i18n/PCDM_af.qm
+share/PCDM/i18n/PCDM_ar.qm
+share/PCDM/i18n/PCDM_az.qm
+share/PCDM/i18n/PCDM_bg.qm
+share/PCDM/i18n/PCDM_bn.qm
+share/PCDM/i18n/PCDM_bs.qm
+share/PCDM/i18n/PCDM_ca.qm
+share/PCDM/i18n/PCDM_cs.qm
+share/PCDM/i18n/PCDM_cy.qm
+share/PCDM/i18n/PCDM_da.qm
+share/PCDM/i18n/PCDM_de.qm
+share/PCDM/i18n/PCDM_el.qm
+share/PCDM/i18n/PCDM_en.qm
+share/PCDM/i18n/PCDM_en_GB.qm
+share/PCDM/i18n/PCDM_en_US.qm
+share/PCDM/i18n/PCDM_en_ZA.qm
+share/PCDM/i18n/PCDM_es.qm
+share/PCDM/i18n/PCDM_et.qm
+share/PCDM/i18n/PCDM_eu.qm
+share/PCDM/i18n/PCDM_fa.qm
+share/PCDM/i18n/PCDM_fi.qm
+share/PCDM/i18n/PCDM_fr.qm
+share/PCDM/i18n/PCDM_fr_CA.qm
+share/PCDM/i18n/PCDM_fur.qm
+share/PCDM/i18n/PCDM_gl.qm
+share/PCDM/i18n/PCDM_he.qm
+share/PCDM/i18n/PCDM_hi.qm
+share/PCDM/i18n/PCDM_hr.qm
+share/PCDM/i18n/PCDM_hu.qm
+share/PCDM/i18n/PCDM_id.qm
+share/PCDM/i18n/PCDM_is.qm
+share/PCDM/i18n/PCDM_it.qm
+share/PCDM/i18n/PCDM_ja.qm
+share/PCDM/i18n/PCDM_ka.qm
+share/PCDM/i18n/PCDM_ko.qm
+share/PCDM/i18n/PCDM_lt.qm
+share/PCDM/i18n/PCDM_lv.qm
+share/PCDM/i18n/PCDM_mk.qm
+share/PCDM/i18n/PCDM_mn.qm
+share/PCDM/i18n/PCDM_ms.qm
+share/PCDM/i18n/PCDM_mt.qm
+share/PCDM/i18n/PCDM_nb.qm
+share/PCDM/i18n/PCDM_ne.qm
+share/PCDM/i18n/PCDM_nl.qm
+share/PCDM/i18n/PCDM_pa.qm
+share/PCDM/i18n/PCDM_pl.qm
+share/PCDM/i18n/PCDM_pt.qm
+share/PCDM/i18n/PCDM_pt_BR.qm
+share/PCDM/i18n/PCDM_ro.qm
+share/PCDM/i18n/PCDM_ru.qm
+share/PCDM/i18n/PCDM_sa.qm
+share/PCDM/i18n/PCDM_sk.qm
+share/PCDM/i18n/PCDM_sl.qm
+share/PCDM/i18n/PCDM_sr.qm
+share/PCDM/i18n/PCDM_sv.qm
+share/PCDM/i18n/PCDM_sw.qm
+share/PCDM/i18n/PCDM_ta.qm
+share/PCDM/i18n/PCDM_tg.qm
+share/PCDM/i18n/PCDM_th.qm
+share/PCDM/i18n/PCDM_tr.qm
+share/PCDM/i18n/PCDM_uk.qm
+share/PCDM/i18n/PCDM_ur.qm
+share/PCDM/i18n/PCDM_uz.qm
+share/PCDM/i18n/PCDM_vi.qm
+share/PCDM/i18n/PCDM_zh_CN.qm
+share/PCDM/i18n/PCDM_zh_HK.qm
+share/PCDM/i18n/PCDM_zh_TW.qm
+share/PCDM/i18n/PCDM_zu.qm
 share/PCDM/pcdm-session
 share/PCDM/themes/default/banner.png
 share/PCDM/themes/default/default-desktop.png
@@ -106,17 +175,35 @@ share/PCDM/themes/trueos/previousDE.png
 share/PCDM/themes/trueos/system.png
 share/PCDM/themes/trueos/trueos.theme
 share/PCDM/themes/trueos/virtualkeyboard.png
-share/xsessions/_deforaos.desktop
-share/xsessions/_evilwm.desktop
-share/xsessions/_fluxbox.desktop
-share/xsessions/_fvwm-crystal.desktop
-share/xsessions/_fvwm.desktop
-share/xsessions/_gnome-classic.desktop
-share/xsessions/_icewm.desktop
-share/xsessions/_kde4.desktop
-share/xsessions/_plex.desktop
-share/xsessions/_ratpoison.desktop
-share/xsessions/_spectrwm.desktop
-share/xsessions/_vtwm.desktop
-share/xsessions/_windowlab.desktop
-share/xsessions/_windowmaker.desktop
+share/applications/pc-dmconf.desktop
+share/pixmaps/pc-dmconf.png
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_deforaos.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_evilwm.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_fluxbox.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_fvwm-crystal.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_fvwm.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_gnome-classic.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_icewm.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_kde4.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_plex.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_ratpoison.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_spectrwm.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_vtwm.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_windowlab.desktop
+/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_windowmaker.desktop
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage/usr
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5
+@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc
+@dir /usr/ports/x11/pcdm/work
+@dir /usr/ports/x11/pcdm
+@dir /usr/ports/x11
+@dir /usr/ports
