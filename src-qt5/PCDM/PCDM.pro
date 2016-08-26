@@ -34,6 +34,8 @@ FORMS += src/dialogKeyboard.ui \
 	 src/dialogLocale.ui \
 	 src/pcdm-logindelay.ui
 
+RESOURCES += PCDM.qrc
+
 TRANSLATIONS =  i18n/PCDM_af.ts \
 		i18n/PCDM_ar.ts \
 		i18n/PCDM_az.ts \
@@ -103,31 +105,11 @@ TRANSLATIONS =  i18n/PCDM_af.ts \
 		i18n/PCDM_zh_TW.ts \
 		i18n/PCDM_zu.ts
 
-scripts=PCDMd
-scripts.path=/usr/local/sbin
-scripts.extra=cp PCDMd $(INSTALL_ROOT)/usr/local/sbin/PCDMd
-
-rcd=rc.d/pcdm
-rcd.path=/usr/local/etc/rc.d
-rcd.extra=cp rc.d/pcdm $(INSTALL_ROOT)/usr/local/etc/rc.d/pcdm
-
-cleanthemes.path=/usr/local/share/PCDM/themes
-cleanthemes.extra=rm -r $(INSTALL_ROOT)/usr/local/share/PCDM/themes
-
-theme=themes
-theme.path=/usr/local/share/PCDM
-theme.extra=cp -r themes $(INSTALL_ROOT)/usr/local/share/PCDM/.
-
-session.path=/usr/local/share/PCDM
-session.extra=cc -o pcdm-session src/pcdm-session.c && strip pcdm-session && install -m 755 pcdm-session $(INSTALL_ROOT)/usr/local/share/PCDM/
-
 conf=pcdm.conf
 conf.path=/usr/local/etc
 conf.extra=cp pcdm.conf $(INSTALL_ROOT)/usr/local/etc/pcdm.conf.dist && chmod 600 $(INSTALL_ROOT)/usr/local/etc/pcdm.conf.dist
 
-xsession.files=xsessions/*.desktop
-xsession.path=/usr/local/share/xsessions
+session.path=/usr/local/share/PCDM
+session.extra=cc -o pcdm-session src/pcdm-session.c && strip pcdm-session && install -m 755 pcdm-session $(INSTALL_ROOT)/usr/local/share/PCDM/
 
-INSTALLS += scripts rcd cleanthemes theme conf target session xsession
-
-RESOURCES += PCDM.qrc
+INSTALLS += target session conf
