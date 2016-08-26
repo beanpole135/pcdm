@@ -105,6 +105,11 @@ TRANSLATIONS =  i18n/PCDM_af.ts \
 		i18n/PCDM_zh_TW.ts \
 		i18n/PCDM_zu.ts
 
+isEmpty(LRELEASE){ LRELEASE = $$[QT_INSTALL_BINS]/lrelease }
+
+dotrans.path=/usr/local/share/PCDM/i18n/
+dotrans.extra=cd i18n && $${LRELEASE} -nounfinished *.ts && cp *.qm $(INSTALL_ROOT)/usr/local/share/PCDM/i18n/
+
 conf=pcdm.conf
 conf.path=/usr/local/etc
 conf.extra=cp pcdm.conf $(INSTALL_ROOT)/usr/local/etc/pcdm.conf.dist && chmod 600 $(INSTALL_ROOT)/usr/local/etc/pcdm.conf.dist
@@ -112,4 +117,4 @@ conf.extra=cp pcdm.conf $(INSTALL_ROOT)/usr/local/etc/pcdm.conf.dist && chmod 60
 session.path=/usr/local/share/PCDM
 session.extra=cc -o pcdm-session src/pcdm-session.c && strip pcdm-session && install -m 755 pcdm-session $(INSTALL_ROOT)/usr/local/share/PCDM/
 
-INSTALLS += target session conf
+INSTALLS += target session conf dotrans
