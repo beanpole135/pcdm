@@ -29,7 +29,6 @@
     <file>images/refresh.png</file>
   </qresource>
   <qresource prefix="samples">
-    <file>themes/default/default.theme</file>
     <file>pcdm.conf</file>
   </qresource>
 </RCC>
