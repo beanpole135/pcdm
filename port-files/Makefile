@@ -11,7 +11,11 @@ COMMENT=	QT5 based display manager for FreeBSD
 LICENSE=	BSD2CLAUSE
 
 RUN_DEPENDS=    xorg-minimal>=0:x11/xorg-minimal \
-		setxkbmap:x11/setxkbmap
+		setxkbmap:x11/setxkbmap \
+		${LOCALBASE}/bin/qsudo:sysutils/qsudo
+
+WRKSRC_SUBDIR=  src-qt5
+MAKE_ARGS=      PREFIX=${STAGEDIR}${PREFIX}
 
 CONFLICTS=      pcbsd-utils-qt*
 
