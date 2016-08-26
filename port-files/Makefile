@@ -14,6 +14,9 @@ RUN_DEPENDS=    xorg-minimal>=0:x11/xorg-minimal \
 		setxkbmap:x11/setxkbmap \
 		${LOCALBASE}/bin/qsudo:sysutils/qsudo
 
+WRKSRC_SUBDIR=  src-qt5
+MAKE_ARGS=      PREFIX=${STAGEDIR}${PREFIX}
+
 CONFLICTS=      pcbsd-utils-qt*
 
 USE_QT5=        core gui network svg multimedia imageformats \
