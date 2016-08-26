@@ -2,9 +2,9 @@
 [Desktop Entry]
 Comment[en_US]=
 Comment=
-Exec=pc-su pc-dmconf
+Exec=qsudo pc-dmconf
 
-Icon=/usr/local/share/pcbsd/icons/pc-dmconf.png
+Icon=pc-dmconf
 StartupNotify=true
 Terminal=false
 TerminalOptions=
