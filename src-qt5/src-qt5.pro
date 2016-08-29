@@ -18,6 +18,6 @@ theme.path=/usr/local/share/PCDM
 theme.extra=cp -r themes $(INSTALL_ROOT)/usr/local/share/PCDM/.
 
 xsession.files=xsessions/*.desktop
-xsession.path=$(INSTALL_ROOT)/usr/local/share/xsessions
+xsession.path=/usr/local/share/xsessions
 
 INSTALLS += scripts rcd cleanthemes theme xsession
