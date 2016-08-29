@@ -177,33 +177,3 @@ share/PCDM/themes/trueos/trueos.theme
 share/PCDM/themes/trueos/virtualkeyboard.png
 share/applications/pc-dmconf.desktop
 share/pixmaps/pc-dmconf.png
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_deforaos.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_evilwm.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_fluxbox.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_fvwm-crystal.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_fvwm.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_gnome-classic.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_icewm.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_kde4.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_plex.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_ratpoison.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_spectrwm.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_vtwm.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_windowlab.desktop
-/usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions/_windowmaker.desktop
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share/xsessions
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%/share
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage%%QT_PREFIX%%
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage/usr
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work/stage
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm/work
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11/pcdm
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports/x11
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr/ports
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5/usr
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc/src-qt5
-@dir /usr/ports/x11/pcdm/work/pcdm-ea9b6ed0a9346e6b755c42915efbd0f6da0138fc
-@dir /usr/ports/x11/pcdm/work
-@dir /usr/ports/x11/pcdm
-@dir /usr/ports/x11
-@dir /usr/ports
