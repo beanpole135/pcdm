@@ -177,3 +177,17 @@ share/PCDM/themes/trueos/trueos.theme
 share/PCDM/themes/trueos/virtualkeyboard.png
 share/applications/pc-dmconf.desktop
 share/pixmaps/pc-dmconf.png
+share/xsessions/_deforaos.desktop
+share/xsessions/_evilwm.desktop
+share/xsessions/_fluxbox.desktop
+share/xsessions/_fvwm-crystal.desktop
+share/xsessions/_fvwm.desktop
+share/xsessions/_gnome-classic.desktop
+share/xsessions/_icewm.desktop
+share/xsessions/_kde4.desktop
+share/xsessions/_plex.desktop
+share/xsessions/_ratpoison.desktop
+share/xsessions/_spectrwm.desktop
+share/xsessions/_vtwm.desktop
+share/xsessions/_windowlab.desktop
+share/xsessions/_windowmaker.desktop
