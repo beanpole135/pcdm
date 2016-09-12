@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -78,6 +78,29 @@
     <message>
         <source>&amp;Close</source>
         <translation>&amp;Beenden</translation>
+    </message>
+    <message>
+        <source>Allow Valid Users with UID under 1000</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Additional Excluded Users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Allow Stealth Sessions</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>You should run this application as root</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
