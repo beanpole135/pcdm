@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_ru">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,7 +40,7 @@
         <translation>Разное</translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
+        <source>Enable "show password" button</source>
         <translation>Показывать кнопку «Показать пароль»</translation>
     </message>
     <message>
@@ -81,26 +81,26 @@
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешить доступных пользователей с UID менее 1000</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Дополнительные исключения пользователей</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Разрешить скрытые сессии</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>Вы должны запустить это приложение с правами root</translation>
     </message>
 </context>
 </TS>
