@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="PCDM_ru">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -119,7 +119,7 @@
     </message>
     <message>
         <source>Tip: Make sure that caps-lock is turned off.</source>
-        <translation>Подсказка: Убедитесь что Caps-Lock не включён</translation>
+        <translation>Подсказка: Убедитесь что Caps-Lock не включён.</translation>
     </message>
     <message>
         <source>Restart</source>
