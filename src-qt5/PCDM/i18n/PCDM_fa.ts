@@ -1,35 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="PCDM_fa">
 <context>
     <name>FancySwitcher</name>
     <message>
         <source>Alt+Left</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+چپ</translation>
     </message>
     <message>
         <source>Alt+Right</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+راست</translation>
     </message>
     <message>
         <source>Alt+Up</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+بالا</translation>
     </message>
     <message>
         <source>Alt+Down</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+پایین</translation>
     </message>
 </context>
 <context>
     <name>LoginWidget</name>
     <message>
         <source>Select</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>برگزین</translation>
     </message>
     <message>
         <source>Select an alternate user and clear the password field</source>
