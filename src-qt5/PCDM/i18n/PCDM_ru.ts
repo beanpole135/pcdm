@@ -68,31 +68,31 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation type="unfinished"></translation>
+        <translation>Подключите устройство PersonaCrypt для запуска процедуры входа в систему.</translation>
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Скрытая сессия</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
-        <translation type="unfinished"></translation>
+        <translation>Используется временный домашний каталог, который будет удален при выходе из системы)</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление</translation>
     </message>
     <message>
         <source>Refresh available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление доступных пользователей</translation>
     </message>
     <message>
         <source>Device encryption key</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ шифрования устройства</translation>
     </message>
     <message>
         <source>Device encryption key (personacrypt users only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ключ шифрования устройства (только для пользователей personacrypt)</translation>
     </message>
 </context>
 <context>
@@ -167,31 +167,31 @@
     </message>
     <message>
         <source>Change locale (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменение локали (%1)</translation>
     </message>
     <message>
         <source>Change DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Изменение DPI </translation>
     </message>
     <message>
         <source>High (4K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Высокое (4К)</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Среднее</translation>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Стандартное</translation>
     </message>
     <message>
         <source>Low </source>
-        <translation type="unfinished"></translation>
+        <translation>Низкое</translation>
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление PCDM </translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>PCDM Automatic Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Автоматический логин PCDM </translation>
     </message>
 </context>
 <context>
