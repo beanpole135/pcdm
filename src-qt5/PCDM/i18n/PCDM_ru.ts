@@ -171,7 +171,7 @@
     </message>
     <message>
         <source>Change DPI</source>
-        <translation>Изменение DPI </translation>
+        <translation>Изменение DPI</translation>
     </message>
     <message>
         <source>High (4K)</source>
@@ -187,11 +187,11 @@
     </message>
     <message>
         <source>Low </source>
-        <translation>Низкое</translation>
+        <translation>Низкое </translation>
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation>Обновление PCDM </translation>
+        <translation>Обновление PCDM</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>PCDM Automatic Login</source>
-        <translation>Автоматический логин PCDM </translation>
+        <translation>Автоматический вход PCDM</translation>
     </message>
 </context>
 <context>
