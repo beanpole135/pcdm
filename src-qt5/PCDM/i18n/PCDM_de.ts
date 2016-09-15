@@ -225,7 +225,7 @@
     </message>
     <message>
         <source>Key Layout</source>
-        <translation>Tastaturbelegung</translation>
+        <translation>Tastenbelegung</translation>
     </message>
     <message>
         <source>Variant</source>
@@ -237,7 +237,7 @@
     </message>
     <message>
         <source>( you may type into the space below to test your selected settings. )</source>
-        <translation>(Sie können in das freie Feld tippen, um die Einstellungen zu testen.)</translation>
+        <translation>( Sie könnten in den Raum unterhalb tippen, um Ihre ausgewählten Einstellungen zu testen. )</translation>
     </message>
     <message>
         <source>&amp;Apply</source>
@@ -245,18 +245,18 @@
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation>B&amp;eenden</translation>
+        <translation>&amp;Schließen</translation>
     </message>
 </context>
 <context>
     <name>widgetLocale</name>
     <message>
         <source>Select Locale</source>
-        <translation>Sprache wählen</translation>
+        <translation>Auswählen der Region</translation>
     </message>
     <message>
         <source>Current Locale</source>
-        <translation>Derzeitige Sprache</translation>
+        <translation>Gegenwärtige Region</translation>
     </message>
     <message>
         <source>Apply</source>
@@ -264,7 +264,7 @@
     </message>
     <message>
         <source>Cancel</source>
-        <translation>Abbruch</translation>
+        <translation>Abbrechen</translation>
     </message>
 </context>
 </TS>
