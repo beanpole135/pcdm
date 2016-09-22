@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="PCDM_ja">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -68,31 +68,31 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation type="unfinished"></translation>
+        <translation>ログインを開始するには PersonaCrypt デバイスを接続してください。</translation>
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation type="unfinished"></translation>
+        <translation>ステルスセッション</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
-        <translation type="unfinished"></translation>
+        <translation>暫定ホームディレクトリー内のデータはログアウト後に削除されます)</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>更新</translation>
     </message>
     <message>
         <source>Refresh available users</source>
-        <translation type="unfinished"></translation>
+        <translation>ユーザーの一覧を更新します</translation>
     </message>
     <message>
         <source>Device encryption key</source>
-        <translation type="unfinished"></translation>
+        <translation>デバイス暗号化キー</translation>
     </message>
     <message>
         <source>Device encryption key (personacrypt users only)</source>
-        <translation type="unfinished"></translation>
+        <translation>デバイス暗号化キー(PersonaCrypt ユーザー用)</translation>
     </message>
 </context>
 <context>
@@ -167,31 +167,31 @@
     </message>
     <message>
         <source>Change locale (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>ロケール設定の変更 (%1)</translation>
     </message>
     <message>
         <source>Change DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>DPI の変更</translation>
     </message>
     <message>
         <source>High (4K)</source>
-        <translation type="unfinished"></translation>
+        <translation>高 (4K)</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>中</translation>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>標準</translation>
     </message>
     <message>
         <source>Low </source>
-        <translation type="unfinished"></translation>
+        <translation>低 </translation>
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation type="unfinished"></translation>
+        <translation>PCDM のリフレッシュ</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>PCDM Automatic Login</source>
-        <translation type="unfinished"></translation>
+        <translation>PCDM 自動ログイン</translation>
     </message>
 </context>
 <context>
