@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_sv">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,8 +40,8 @@
         <translation>Övrigt</translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
-        <translation>Aktivera &quot;visa lösenord&quot; knapp</translation>
+        <source>Enable "show password" button</source>
+        <translation>Aktivera "visa lösenord" knapp</translation>
     </message>
     <message>
         <source>Please enter the remote login password</source>
@@ -66,8 +66,7 @@
     </message>
     <message>
         <source> Seconds</source>
-        <translation type="unfinished">
-            </translation>
+        <translation> Sekunder</translation>
     </message>
     <message>
         <source>Display available users</source>
@@ -76,13 +75,11 @@
     </message>
     <message>
         <source>&amp;Apply</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>&amp;Verkställ</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>&amp;Stäng</translation>
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
@@ -94,7 +91,7 @@
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
@@ -105,7 +102,7 @@
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>Du ska köra detta program som root</translation>
     </message>
 </context>
 </TS>
