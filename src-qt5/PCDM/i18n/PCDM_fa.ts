@@ -1,35 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1" language="PCDM_fa">
 <context>
     <name>FancySwitcher</name>
     <message>
         <source>Alt+Left</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+چپ</translation>
     </message>
     <message>
         <source>Alt+Right</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+راست</translation>
     </message>
     <message>
         <source>Alt+Up</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+بالا</translation>
     </message>
     <message>
         <source>Alt+Down</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+پایین</translation>
     </message>
 </context>
 <context>
     <name>LoginWidget</name>
     <message>
         <source>Select</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>برگزین</translation>
     </message>
     <message>
         <source>Select an alternate user and clear the password field</source>
@@ -81,6 +76,34 @@
         <translation type="unfinished">
             </translation>
     </message>
+    <message>
+        <source>Please connect your PersonaCrypt device to start login procedures.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stealth Session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use a temporary home directory which is deleted on log out)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh available users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device encryption key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device encryption key (personacrypt users only)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PCDMgui</name>
@@ -91,11 +114,6 @@
     </message>
     <message>
         <source>Locale</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>Change locale</source>
         <translation type="unfinished">
             </translation>
     </message>
@@ -174,24 +192,39 @@
         <translation type="unfinished">
             </translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>System Shutting Down</source>
-        <translation type="unfinished">
-            </translation>
+        <source>Change locale (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High (4K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh PCDM</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>loginDelay</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PCDM Automatic Login&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">
             </translation>
     </message>
@@ -209,6 +242,10 @@
         <source>Login Now</source>
         <translation type="unfinished">
             </translation>
+    </message>
+    <message>
+        <source>PCDM Automatic Login</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

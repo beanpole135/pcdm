@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -66,6 +66,34 @@
         <source>Available desktop environments</source>
         <translation>可用的桌面环境</translation>
     </message>
+    <message>
+        <source>Please connect your PersonaCrypt device to start login procedures.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Stealth Session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Use a temporary home directory which is deleted on log out)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh available users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device encryption key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Device encryption key (personacrypt users only)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>PCDMgui</name>
@@ -76,10 +104,6 @@
     <message>
         <source>Locale</source>
         <translation>Locale</translation>
-    </message>
-    <message>
-        <source>Change locale</source>
-        <translation>更改locale</translation>
     </message>
     <message>
         <source>Keyboard Layout</source>
@@ -141,23 +165,39 @@
         <source>You are about to restart the system.</source>
         <translation>您即将重启系统。</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>System Shutting Down</source>
-        <translation>系统正在关闭</translation>
+        <source>Change locale (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Change DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>High (4K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Low </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refresh PCDM</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>loginDelay</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">
-            </translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PCDM Automatic Login&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished">
             </translation>
     </message>
@@ -175,6 +215,10 @@
         <source>Login Now</source>
         <translation type="unfinished">
             </translation>
+    </message>
+    <message>
+        <source>PCDM Automatic Login</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

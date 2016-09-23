@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1" language="PCDM_ja">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -66,6 +66,34 @@
         <source>Available desktop environments</source>
         <translation>選択可能なデスクトップ環境</translation>
     </message>
+    <message>
+        <source>Please connect your PersonaCrypt device to start login procedures.</source>
+        <translation>ログインを開始するには PersonaCrypt デバイスを接続してください。</translation>
+    </message>
+    <message>
+        <source>Stealth Session</source>
+        <translation>ステルスセッション</translation>
+    </message>
+    <message>
+        <source>Use a temporary home directory which is deleted on log out)</source>
+        <translation>暫定ホームディレクトリー内のデータはログアウト後に削除されます)</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>更新</translation>
+    </message>
+    <message>
+        <source>Refresh available users</source>
+        <translation>ユーザーの一覧を更新します</translation>
+    </message>
+    <message>
+        <source>Device encryption key</source>
+        <translation>デバイス暗号化キー</translation>
+    </message>
+    <message>
+        <source>Device encryption key (personacrypt users only)</source>
+        <translation>デバイス暗号化キー(PersonaCrypt ユーザー用)</translation>
+    </message>
 </context>
 <context>
     <name>PCDMgui</name>
@@ -76,10 +104,6 @@
     <message>
         <source>Locale</source>
         <translation>ロケール</translation>
-    </message>
-    <message>
-        <source>Change locale</source>
-        <translation>ロケールを変更します</translation>
     </message>
     <message>
         <source>Keyboard Layout</source>
@@ -141,12 +165,33 @@
         <source>Close PCDM</source>
         <translation>PCDM を閉じる</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>System Shutting Down</source>
-        <translation>システムを終了しています</translation>
+        <source>Change locale (%1)</source>
+        <translation>ロケール設定の変更 (%1)</translation>
+    </message>
+    <message>
+        <source>Change DPI</source>
+        <translation>DPI の変更</translation>
+    </message>
+    <message>
+        <source>High (4K)</source>
+        <translation>高 (4K)</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation>中</translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation>標準</translation>
+    </message>
+    <message>
+        <source>Low </source>
+        <translation>低 </translation>
+    </message>
+    <message>
+        <source>Refresh PCDM</source>
+        <translation>PCDM のリフレッシュ</translation>
     </message>
 </context>
 <context>
@@ -154,10 +199,6 @@
     <message>
         <source>Dialog</source>
         <translation>ダイアログ</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PCDM Automatic Login&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PCDM自動ログイン&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>%v/%m seconds</source>
@@ -170,6 +211,10 @@
     <message>
         <source>Login Now</source>
         <translation>今すぐログインする</translation>
+    </message>
+    <message>
+        <source>PCDM Automatic Login</source>
+        <translation>PCDM 自動ログイン</translation>
     </message>
 </context>
 <context>

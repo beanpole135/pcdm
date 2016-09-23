@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0" language="en_US">
+<TS version="2.1" language="en_US">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -27,60 +27,95 @@
 <context>
     <name>LoginWidget</name>
     <message>
-        <location filename="../src/loginWidget.cpp" line="341"/>
-        <location filename="../src/loginWidget.cpp" line="343"/>
+        <location filename="../src/loginWidget.cpp" line="460"/>
+        <source>Please connect your PersonaCrypt device to start login procedures.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="461"/>
+        <location filename="../src/loginWidget.cpp" line="463"/>
         <source>Select</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="342"/>
+        <location filename="../src/loginWidget.cpp" line="462"/>
         <source>Select an alternate user and clear the password field</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="344"/>
+        <location filename="../src/loginWidget.cpp" line="464"/>
         <source>Select this user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="346"/>
+        <location filename="../src/loginWidget.cpp" line="465"/>
+        <source>Stealth Session</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="466"/>
+        <source>Use a temporary home directory which is deleted on log out)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="467"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="347"/>
+        <location filename="../src/loginWidget.cpp" line="468"/>
         <source>Login to the system with the current user and password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="348"/>
+        <location filename="../src/loginWidget.cpp" line="469"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="350"/>
+        <location filename="../src/loginWidget.cpp" line="470"/>
+        <source>Refresh</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="471"/>
+        <source>Refresh available users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="473"/>
         <source>Hold to view the currently entered password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="352"/>
-        <location filename="../src/loginWidget.cpp" line="356"/>
+        <location filename="../src/loginWidget.cpp" line="475"/>
+        <location filename="../src/loginWidget.cpp" line="479"/>
         <source>Login password for the selected user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="354"/>
-        <location filename="../src/loginWidget.cpp" line="355"/>
+        <location filename="../src/loginWidget.cpp" line="477"/>
+        <location filename="../src/loginWidget.cpp" line="478"/>
         <source>Available users</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="357"/>
+        <location filename="../src/loginWidget.cpp" line="480"/>
+        <source>Device encryption key</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="481"/>
+        <source>Device encryption key (personacrypt users only)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/loginWidget.cpp" line="482"/>
         <source>Available desktop environments</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/loginWidget.cpp" line="362"/>
+        <location filename="../src/loginWidget.cpp" line="487"/>
         <source>Login to %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -88,107 +123,128 @@
 <context>
     <name>PCDMgui</name>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="117"/>
-        <location filename="../src/pcdm-gui.cpp" line="468"/>
-        <location filename="../src/pcdm-gui.cpp" line="469"/>
+        <location filename="../src/pcdm-gui.cpp" line="160"/>
+        <location filename="../src/pcdm-gui.cpp" line="636"/>
+        <location filename="../src/pcdm-gui.cpp" line="637"/>
         <source>Virtual Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="128"/>
-        <location filename="../src/pcdm-gui.cpp" line="473"/>
+        <location filename="../src/pcdm-gui.cpp" line="171"/>
         <source>Locale</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="136"/>
-        <location filename="../src/pcdm-gui.cpp" line="476"/>
+        <location filename="../src/pcdm-gui.cpp" line="179"/>
+        <location filename="../src/pcdm-gui.cpp" line="644"/>
         <source>Keyboard Layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="149"/>
-        <location filename="../src/pcdm-gui.cpp" line="479"/>
+        <location filename="../src/pcdm-gui.cpp" line="192"/>
+        <location filename="../src/pcdm-gui.cpp" line="647"/>
         <source>System</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="309"/>
+        <location filename="../src/pcdm-gui.cpp" line="395"/>
         <source>Invalid Username/Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="311"/>
+        <location filename="../src/pcdm-gui.cpp" line="397"/>
         <source>Username/Password combination is invalid, please try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="312"/>
+        <location filename="../src/pcdm-gui.cpp" line="398"/>
         <source>Tip: Make sure that caps-lock is turned off.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="347"/>
+        <location filename="../src/pcdm-gui.cpp" line="439"/>
         <source>System Shutdown</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="348"/>
+        <location filename="../src/pcdm-gui.cpp" line="440"/>
         <source>You are about to shut down the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="349"/>
-        <location filename="../src/pcdm-gui.cpp" line="365"/>
+        <location filename="../src/pcdm-gui.cpp" line="441"/>
+        <location filename="../src/pcdm-gui.cpp" line="457"/>
         <source>Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="363"/>
+        <location filename="../src/pcdm-gui.cpp" line="455"/>
         <source>System Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="364"/>
+        <location filename="../src/pcdm-gui.cpp" line="456"/>
         <source>You are about to restart the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="472"/>
-        <source>Change locale</source>
+        <location filename="../src/pcdm-gui.cpp" line="640"/>
+        <source>Change locale (%1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="475"/>
+        <location filename="../src/pcdm-gui.cpp" line="643"/>
         <source>Change Keyboard Layout</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="478"/>
+        <location filename="../src/pcdm-gui.cpp" line="646"/>
         <source>Shutdown the computer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="482"/>
+        <location filename="../src/pcdm-gui.cpp" line="651"/>
+        <source>Change DPI</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/pcdm-gui.cpp" line="653"/>
+        <source>High (4K)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/pcdm-gui.cpp" line="654"/>
+        <source>Medium</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/pcdm-gui.cpp" line="655"/>
+        <source>Standard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/pcdm-gui.cpp" line="656"/>
+        <source>Low </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/pcdm-gui.cpp" line="659"/>
+        <source>Refresh PCDM</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/pcdm-gui.cpp" line="661"/>
         <source>Restart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="483"/>
+        <location filename="../src/pcdm-gui.cpp" line="662"/>
         <source>Shut Down</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-gui.cpp" line="484"/>
+        <location filename="../src/pcdm-gui.cpp" line="663"/>
         <source>Close PCDM</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>QObject</name>
-    <message>
-        <location filename="../src/main.cpp" line="168"/>
-        <source>System Shutting Down</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -200,22 +256,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-logindelay.ui" line="25"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PCDM Automatic Login&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <location filename="../src/pcdm-logindelay.ui" line="27"/>
+        <source>PCDM Automatic Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-logindelay.ui" line="54"/>
+        <location filename="../src/pcdm-logindelay.ui" line="56"/>
         <source>%v/%m seconds</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-logindelay.ui" line="63"/>
+        <location filename="../src/pcdm-logindelay.ui" line="65"/>
         <source>Cancel Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../src/pcdm-logindelay.ui" line="87"/>
+        <location filename="../src/pcdm-logindelay.ui" line="89"/>
         <source>Login Now</source>
         <translation type="unfinished"></translation>
     </message>

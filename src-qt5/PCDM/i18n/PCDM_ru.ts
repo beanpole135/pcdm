@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.1" language="PCDM_ru">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -66,6 +66,34 @@
         <source>Available desktop environments</source>
         <translation>Доступные окружения рабочего стола</translation>
     </message>
+    <message>
+        <source>Please connect your PersonaCrypt device to start login procedures.</source>
+        <translation>Подключите устройство PersonaCrypt для запуска процедуры входа в систему.</translation>
+    </message>
+    <message>
+        <source>Stealth Session</source>
+        <translation>Скрытая сессия</translation>
+    </message>
+    <message>
+        <source>Use a temporary home directory which is deleted on log out)</source>
+        <translation>Используется временный домашний каталог, который будет удален при выходе из системы)</translation>
+    </message>
+    <message>
+        <source>Refresh</source>
+        <translation>Обновление</translation>
+    </message>
+    <message>
+        <source>Refresh available users</source>
+        <translation>Обновление доступных пользователей</translation>
+    </message>
+    <message>
+        <source>Device encryption key</source>
+        <translation>Ключ шифрования устройства</translation>
+    </message>
+    <message>
+        <source>Device encryption key (personacrypt users only)</source>
+        <translation>Ключ шифрования устройства (только для пользователей personacrypt)</translation>
+    </message>
 </context>
 <context>
     <name>PCDMgui</name>
@@ -76,10 +104,6 @@
     <message>
         <source>Locale</source>
         <translation>Региональные параметры</translation>
-    </message>
-    <message>
-        <source>Change locale</source>
-        <translation>Свойства</translation>
     </message>
     <message>
         <source>Keyboard Layout</source>
@@ -95,7 +119,7 @@
     </message>
     <message>
         <source>Tip: Make sure that caps-lock is turned off.</source>
-        <translation>Подсказка: Убедитесь что Caps-Lock не включён</translation>
+        <translation>Подсказка: Убедитесь что Caps-Lock не включён.</translation>
     </message>
     <message>
         <source>Restart</source>
@@ -141,12 +165,33 @@
         <source>You are about to restart the system.</source>
         <translation>Вы хотите перезагрузить компьютер.</translation>
     </message>
-</context>
-<context>
-    <name>QObject</name>
     <message>
-        <source>System Shutting Down</source>
-        <translation>Выключение компьютера</translation>
+        <source>Change locale (%1)</source>
+        <translation>Изменение локали (%1)</translation>
+    </message>
+    <message>
+        <source>Change DPI</source>
+        <translation>Изменение DPI</translation>
+    </message>
+    <message>
+        <source>High (4K)</source>
+        <translation>Высокое (4К)</translation>
+    </message>
+    <message>
+        <source>Medium</source>
+        <translation>Среднее</translation>
+    </message>
+    <message>
+        <source>Standard</source>
+        <translation>Стандартное</translation>
+    </message>
+    <message>
+        <source>Low </source>
+        <translation>Низкое </translation>
+    </message>
+    <message>
+        <source>Refresh PCDM</source>
+        <translation>Обновление PCDM</translation>
     </message>
 </context>
 <context>
@@ -154,10 +199,6 @@
     <message>
         <source>Dialog</source>
         <translation>Диалог</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;PCDM Automatic Login&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Автоматический вход PCDM&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>%v/%m seconds</source>
@@ -170,6 +211,10 @@
     <message>
         <source>Login Now</source>
         <translation>Войти сейчас</translation>
+    </message>
+    <message>
+        <source>PCDM Automatic Login</source>
+        <translation>Автоматический вход PCDM</translation>
     </message>
 </context>
 <context>
