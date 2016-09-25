@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_it">
 <context>
     <name>MainWindow</name>
     <message>
         <source>Login Manager Settings</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Impostazioni Login Manager</translation>
     </message>
     <message>
         <source>Auto login</source>
@@ -15,13 +14,11 @@
     </message>
     <message>
         <source>Enable auto login</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Abilita auto login</translation>
     </message>
     <message>
         <source>Auto login user</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Auto login utente</translation>
     </message>
     <message>
         <source>Remote login</source>
@@ -49,9 +46,8 @@
             </translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
-        <translation type="unfinished">
-            </translation>
+        <source>Enable "show password" button</source>
+        <translation>Abilita  il pulsante "password visibile"</translation>
     </message>
     <message>
         <source>Please enter the remote login password</source>
