@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="PCDM_az">
 <context>
     <name>FancySwitcher</name>
     <message>
         <source>Alt+Left</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+Izq</translation>
     </message>
     <message>
         <source>Alt+Right</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Alt+Der</translation>
     </message>
     <message>
         <source>Alt+Up</source>
