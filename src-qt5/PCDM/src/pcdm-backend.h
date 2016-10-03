@@ -15,6 +15,8 @@
 #include <QString>
 #include <QStringList>
 #include <QTextStream>
+#include <QTimer>
+#include <QHash>
 
 #include "pcdm-config.h"
 //#include "pcbsd-utils.h"
@@ -28,6 +30,53 @@ public:
         setReadChannel(QProcess::StandardOutput);
         start(PCSYSINSTALL, args);
     }
+};
+
+//Class for reading/listing the available users/info for the system
+class UserList : public QObject{
+	Q_OBJECT
+public:
+	UserList(QObject *parent = 0);
+	~UserList();
+
+	//Environment setting functions
+	void allowUnder1K(bool allow); //flag to allow/show UID's under 1000 if other data checks out
+	void excludeUsers(QStringList exclude); //particular users which should always be excluded if their UID < 1000
+
+	//Main start function (returns almost instantly)
+	void updateList(); //results will be ready when signals are send out
+
+	//Get usernames
+	QStringList users();
+	QString findUser(QString displayname);
+	//Return info for a username
+	QString homedir(QString user);
+	QString displayname(QString user);
+	QString shell(QString user);
+	QString status(QString user);
+	bool isReady(QString user); //always true unless a personacrypt user
+	
+private:
+	QProcess *syncProc, *userProc;
+	QTimer *syncTimer, *userTimer;
+	QHash<QString,QString> HASH;
+
+	//Special flags for running user scans
+	bool allowunder1kUID;
+	QStringList excludedUsers;
+
+	bool parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC); //returns true if data changed, and removes itself from oldusers as needed
+
+private slots:
+	void userProcFinished();
+	void syncProcFinished();
+	
+	void startSyncProc(); //start probe for personacrypt user status
+	void startUserProc(); //start probe for users
+
+signals:
+	void UsersChanged();
+	void UserStatusChanged(QString, QString); //[user, status] emitted when a user status changes for personacrypt/syncthing
 };
 
 class Backend {

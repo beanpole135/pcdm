@@ -21,6 +21,240 @@ QString logFile;
 QString saveX,saveUsername, lastUser, lastDE;
 bool Over1K = true;
 
+//========================
+//    USERLIST CLASS
+//========================
+UserList::UserList(QObject *parent) : QObject(parent){
+  //Setup processes
+  syncProc = 0; userProc = 0; //not created yet
+  //Setup timers
+  syncTimer = new QTimer(this);
+    syncTimer->setInterval(15000); //15 seconds between status updates minimum
+    connect(syncTimer, SIGNAL(timeout()), this, SLOT(startSyncProc()) );
+  userTimer = new QTimer(this);
+    userTimer->setInterval(30000); //30 seconds between personacrypt user scans
+    connect(userTimer, SIGNAL(timeout()), this, SLOT(startUserProc()) );
+  //Setup other default values
+  allowunder1kUID = false;
+}
+
+UserList::~UserList(){
+
+}
+
+void UserList::allowUnder1K(bool allow){
+  allowunder1kUID = allow;
+}
+
+void UserList::excludeUsers(QStringList exclude){
+  excludedUsers = exclude;
+}
+
+void UserList::updateList(){
+  //results will be ready when signals are send out
+  QTimer::singleShot(0, this, SLOT(startUserProc()) );
+}
+
+//Get usernames
+QStringList UserList::users(){
+  QStringList keys = HASH.keys().filter("/name");
+  for(int i=0; i<keys.length(); i++){ keys[i] = keys[i].section("/",0,0); }
+  return keys;
+}
+
+QString UserList::findUser(QString displayname){
+  QStringList keys = HASH.keys().filter("/name");
+  for(int i=0; i<keys.length(); i++){
+    if(HASH.value(keys[i])==displayname){ return keys[i].section("/",0,0); }
+  }
+  return ""; //no match found
+}
+
+//Return info for a username
+QString UserList::homedir(QString user){
+  if(!HASH.contains(user+"/home")){ return ""; }
+  return HASH.value(user+"/home");
+}
+
+QString UserList::displayname(QString user){
+  if(!HASH.contains(user+"/name")){ return ""; }
+  return HASH.value(user+"/name");
+}
+
+QString UserList::shell(QString user){
+  if(!HASH.contains(user+"/shell")){ return ""; }
+  return HASH.value(user+"/shell");
+}
+
+QString UserList::status(QString user){
+  if(!HASH.contains(user+"/status")){ return ""; }
+  return HASH.value(user+"/status");
+}
+
+bool UserList::isReady(QString user){
+  if(!HASH.contains(user+"/name")){ return false; }
+  if(HASH.contains(user+"/pcstat")){  return (HASH.value(user+"/pcstat")=="ok"); }
+  return true; //non-PC user - always ready if found
+}
+
+//Private
+bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC){
+  //returns true if data changed, and removes itself from oldusers as needed
+  //Remove all users that have:
+  static QStringList filter; 
+   if(filter.isEmpty()){ filter << "server" << "daemon" << "database" << "system"<< "account"<<"pseudo"; }
+  //List any shells which are still valid - if not installed fall back on csh
+  static QStringList validShells; 
+  if(validShells.isEmpty()){ validShells << "/usr/local/bin/zsh" << "/usr/local/bin/fish" << "/usr/local/bin/bash"; }
+  //Now load the information
+  QStringList info = line.split(":"); //FIELDS: <username, *, uid, gid, comment, home, shell>
+  if(info.length() < 7){ return false; } //invalid user line - missing fields
+    bool bad = false;
+    bool fixshell = false;
+    QString dispcheck = info[4].toLower();
+    QString shell = info[6];
+    //First see if the listed shell is broken, but valid
+    if(!QFile::exists(shell) && validShells.contains(shell)){ fixshell = true; }
+    // Shell Checks
+    if(shell.contains("nologin") || shell.isEmpty() ){bad=true;}
+    else if( !QFile::exists(shell) && !fixshell ){ bad = true; }
+    // User Home Dir
+    else if(info[5].contains("nonexistent") || info[5].contains("/empty") || info[5].isEmpty() ){bad=true;}
+    // uid > 0
+    else if(info[2].toInt() < 1){bad=true;} //don't show the root user
+    //Check that the name/description does not contain "server"
+    else if(info[2].toInt() < 1000){
+	if(!allowunder1kUID){ bad = true;} //ignore anything under UID 1000
+	else{
+	  //Apply the special <1000 filters
+	  if(excludedUsers.contains(info[0])){ bad = true; }
+	  for(int f=0;f<filter.length() && !bad; f++){
+	    if(dispcheck.contains(filter[f])){ bad = true; }
+          }
+        }
+    }
+    bool changed = false;
+    //See if it failed any checks
+    if(!bad){
+      if(fixshell){ shell = "/bin/csh"; }
+      //Add this user to the lists if it is good
+      changed = !oldusers->contains(info[0]);
+      if(!changed){ //go one level deeper to see if anything is different
+        oldusers->removeAll(info[0]);
+        if(HASH.value(info[0]+"/name")!=info[4].simplified()){ changed = true; }
+       else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ changed = true; }
+       else if(HASH.value(info[0]+"/shell")!=shell){ changed = true; }
+        if(allPC->contains(info[0])){
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
+        }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
+      }
+      if(changed){ //need to update the hash
+        HASH.insert(info[0]+"/name", info[4].simplified());
+        HASH.insert(info[0]+"/home", info[5].simplified());
+        HASH.insert(info[0]+"/shell",shell);
+	if(allPC->contains(info[0])){
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
+        }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
+      }
+    }
+  return changed;
+}
+
+//Private slots
+void UserList::userProcFinished(){
+  bool changed = false;
+  //Get all the user lists
+  QStringList cusers = this->users(); //read all the current users
+  QStringList oldpcusers = HASH.keys().filter("/pcstat");
+    for(int i=0; i<oldpcusers.length(); i++){ oldpcusers[i] = oldpcusers[i].section("/",0,0); }
+  QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
+  QStringList activepcusers; 
+  if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
+
+  //Parse the user data
+  QStringList data = QString::fromUtf8(userProc->readAllStandardOutput() ).split("\n");
+  for(int i=0; i<data.length(); i++){
+    changed = changed || parseUserLine(data[i], &cusers, &allpcusers, &activepcusers);
+  }
+  //Now clean up the process
+  userProc->deleteLater();
+  userProc = 0;
+  //Clean up any old user data
+  for(int i=0; i<cusers.length(); i++){
+    QStringList keys = HASH.keys().filter(cusers[i]+"/");
+    for(int j=0; j<keys.length(); j++){ 
+      if(keys[j].startsWith(cusers[i])){ HASH.remove(keys[j]); } 
+    }
+    changed = true;
+  }
+  for(int i=0; i<oldpcusers.length(); i++){
+    if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ HASH.remove(oldpcusers[i]+"/pcstat"); }
+  }
+  if(userTimer->isActive()){ userTimer->stop(); }
+  if(HASH.keys().isEmpty() && !allowunder1kUID){ 
+    allowunder1kUID = true; 
+    startUserProc(); //run this process again with the larger "pool" of possible users
+    return;
+  }
+  if(!allpcusers.isEmpty()){  
+    startSyncProc(); //need to probe PC users now
+  }
+  userTimer->start();
+  if(changed){ emit UsersChanged(); }
+}
+
+void UserList::syncProcFinished(){
+  QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
+  for(int i=0; i<data.length(); i++){
+    QString user = data[i].section(" on ",0,0);
+    QString stat = data[i].section("(",1,1).section(")",0,0);
+    if(HASH.contains(user+"/name")){
+      if(HASH.value(user+"/status")!=stat){
+        HASH.insert(user+"/status", stat);
+        emit UserStatusChanged(user, stat);
+      }
+    }
+  }
+  //Now clean up the process
+  syncProc->deleteLater();
+  syncProc = 0;
+}
+
+void UserList::startSyncProc(){
+ if(syncProc==0){
+    syncProc = new QProcess(this);
+    syncProc->setProgram("personacrypt");
+    syncProc->setArguments(QStringList() << "list" << "-s");
+    connect(syncProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(syncProcFinished()) );
+  }
+  if(syncProc->state()==QProcess::Running){ return; } //already running
+  if(syncTimer->isActive()){ syncTimer->stop(); }
+  syncProc->start();
+}
+
+void UserList::startUserProc(){
+  if(userProc==0){
+    userProc = new QProcess(this);
+      userProc->setProcessChannelMode(QProcess::MergedChannels);
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        //Make sure to set all the possible UTF-8 flags before reading users
+        env.insert("LANG", "en_US.UTF-8");
+        env.insert("LC_ALL", "en_US.UTF-8");
+        env.insert("MM_CHARSET","UTF-8");
+    userProc->setProcessEnvironment(env);
+    userProc->setProgram("getent");
+    userProc->setArguments(QStringList() << "passwd");
+    connect(userProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(userProcFinished()) );
+  }
+  if(userProc->state()==QProcess::Running){ return; } //already running
+  if(userTimer->isActive()){ userTimer->stop(); }
+  userProc->start();
+}
+
+
+//========================
+//      STATIC FUNCTIONS
+//========================
 QStringList Backend::getAvailableDesktops(){  
   if(instXNameList.isEmpty()){ loadXSessionsData(); }
   QStringList out = instXNameList;
