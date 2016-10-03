@@ -442,7 +442,7 @@ bool Backend::MountPersonaCryptUser(QString user, QString pass){
   tmpfile.close();
   
   //Second, the mount command needs to be run (be careful about spaces in the names)
-  return 0==QProcess::execute("personacrypt mount \""+user+"\" \""+tmpfile.fileName()+"\"");
+  return (0 == QProcess::execute("personacrypt mount \""+user+"\" \""+tmpfile.fileName()+"\"") );
   //Finally, delete the temporary input file (if personacrypt did not already)
     //QTemporaryFile automatically tries to delete the file when it goes out of scope
     // no need to manually remove it

@@ -103,6 +103,8 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   connect(listDE,SIGNAL(currentIndexChanged(int)),this,SLOT(slotDesktopChanged(int)) );
   connect(checkAnon, SIGNAL(stateChanged(int)), this, SLOT(slotAnonChanged()) );
   connect(pushRefresh, SIGNAL(clicked()), this, SIGNAL(refreshUsers()) );
+  connect(linePassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
+  connect(lineDevPassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   allowPasswordView(allowPWVisible); //setup signal/slots for pushViewPassword
   //Set this layout for the loginWidget
   this->setLayout(vlayout);
@@ -308,6 +310,14 @@ void LoginWidget::slotAnonChanged(){
   }else{
     pushLogin->setIcon(QIcon(loginIcon));
   }
+}
+
+void LoginWidget::passChanged(){
+  bool haspass = !linePassword->text().simplified().isEmpty();
+  if(listUsers->currentData().toString()=="persona" ){
+    haspass = haspass & !lineDevPassword->text().simplified().isEmpty();
+  }
+  pushLogin->setEnabled(haspass);
 }
 
 //-----------------------------
