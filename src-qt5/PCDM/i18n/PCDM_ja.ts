@@ -237,7 +237,7 @@
     </message>
     <message>
         <source>( you may type into the space below to test your selected settings. )</source>
-        <translation>(以下の入力欄に文字を入力して設定内容を確認できます。)</translation>
+        <translation>(以下の入力欄に文字を入力して設定内容を確認できます)</translation>
     </message>
     <message>
         <source>&amp;Apply</source>
