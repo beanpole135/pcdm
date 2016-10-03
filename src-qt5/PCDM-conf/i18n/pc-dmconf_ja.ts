@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_ja">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,7 +40,7 @@
         <translation>その他</translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
+        <source>Enable "show password" button</source>
         <translation>「パスワードを表示する」ボタンを有効にする</translation>
     </message>
     <message>
@@ -81,26 +81,26 @@
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation type="unfinished"></translation>
+        <translation>UID が 1000 以下のユーザーも選択できるようにする</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
-        <translation type="unfinished"></translation>
+        <translation>除外されたユーザーを追加</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>ステルスセッションを許可する</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>アプリケーションを root 権限で実行する必要があります</translation>
     </message>
 </context>
 </TS>
