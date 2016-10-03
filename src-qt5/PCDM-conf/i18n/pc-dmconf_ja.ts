@@ -57,7 +57,7 @@
     </message>
     <message>
         <source>This application will now close</source>
-        <translation>このアプリケーションを終了します。</translation>
+        <translation>このアプリケーションを終了します</translation>
     </message>
     <message>
         <source>Time Delay</source>
