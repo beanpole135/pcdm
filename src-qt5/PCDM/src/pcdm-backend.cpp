@@ -87,13 +87,16 @@ QString UserList::shell(QString user){
 }
 
 QString UserList::status(QString user){
-  if(!HASH.contains(user+"/status")){ return ""; }
+  if(!HASH.contains(user+"/status")){
+    if(HASH.contains(user+"/pcstat")){ return HASH.value(user+"/pcstat"); }
+    else{ return ""; }
+  }
   return HASH.value(user+"/status");
 }
 
 bool UserList::isReady(QString user){
   if(!HASH.contains(user+"/name")){ return false; }
-  if(HASH.contains(user+"/pcstat")){  return (HASH.value(user+"/pcstat")=="ok"); }
+  if(HASH.contains(user+"/pcstat")){  return (HASH.value(user+"/pcstat")=="ready"); }
   return true; //non-PC user - always ready if found
 }
 
@@ -145,7 +148,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
        else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ changed = true; }
        else if(HASH.value(info[0]+"/shell")!=shell){ changed = true; }
         if(allPC->contains(info[0])){
-          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
         }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
       }
       if(changed){ //need to update the hash
@@ -290,15 +293,15 @@ QString Backend::getDesktopBinary(QString xName){
   return instXBinList[index];
 }
 
-void Backend::allowUidUnder1K(bool allow, QStringList excludes){
+/*void Backend::allowUidUnder1K(bool allow, QStringList excludes){
   Over1K = !allow;
   excludedUsers = excludes;
   //Make sure to re-load the user list if necessary
   readSystemUsers();
-}
+}*/
 
 
-QStringList Backend::getSystemUsers(bool realnames){
+/*QStringList Backend::getSystemUsers(bool realnames){
   if(usernameList.isEmpty()){
     readSystemUsers();
   }
@@ -307,13 +310,13 @@ QStringList Backend::getSystemUsers(bool realnames){
   }else{
     return usernameList;
   }
-}
+}*/
 
 QString Backend::getALUsername(){
   //Make sure the requested user is valid
-  readSystemUsers(); //first read the available users on this system
+  //readSystemUsers(); //first read the available users on this system
   QString ruser = Config::autoLoginUsername();
-  int index = usernameList.indexOf(ruser);
+  /*int index = usernameList.indexOf(ruser);
   if(index == -1){ //invalid username
     //Check if a display name was given instead
     index = displaynameList.indexOf(ruser);
@@ -324,7 +327,7 @@ QString Backend::getALUsername(){
       //use the valid username for the given display name
       ruser = usernameList[index]; 
     }
-  }
+  }*/
   return ruser;
 }
 
@@ -359,7 +362,7 @@ QString Backend::getALPassword(){
   return rpassword;
 }
 
-QString Backend::getUsernameFromDisplayname(QString dspname){
+/*QString Backend::getUsernameFromDisplayname(QString dspname){
   if(dspname.isEmpty()){return "";}
   int i = displaynameList.indexOf(dspname);
   if(i == -1){ i = usernameList.indexOf(dspname); }
@@ -376,23 +379,23 @@ QString Backend::getDisplayNameFromUsername(QString username){
   else{
     return displaynameList[i];  
   }
-}
+}*/
 
-QString Backend::getUserHomeDir(QString username){
+/*QString Backend::getUserHomeDir(QString username){
   if(username.isEmpty()){ return ""; }
   int i = usernameList.indexOf(username);
   if( i == -1 ){ i = displaynameList.indexOf(username); }
   if( i < 0){ return ""; }
   return homedirList[i];
-}
+}*/
 
-QString Backend::getUserShell(QString username){
+/*QString Backend::getUserShell(QString username){
   if(username.isEmpty()){ return ""; }
   int i = usernameList.indexOf(username);
   if( i == -1 ){ i = displaynameList.indexOf(username); }
   if( i < 0){ return ""; }
   return usershellList[i];	
-}
+}*/
 
 QStringList Backend::keyModels()
 {
@@ -548,11 +551,11 @@ QString Backend::getLastUser(){
     readSystemLastLogin();  
   }
   //return the value
-  QString user = getDisplayNameFromUsername(lastUser);
-  return user;
+  //QString user = getDisplayNameFromUsername(lastUser);
+  return lastUser;
 }
 
-QString Backend::getLastDE(QString user){
+QString Backend::getLastDE(QString user, QString home){
   if(user.isEmpty()){ return ""; }
   if(lastDE.isEmpty()){
     readSystemLastLogin();
@@ -563,9 +566,9 @@ QString Backend::getLastDE(QString user){
   
 }
 
-void Backend::saveLoginInfo(QString user, QString desktop){
+void Backend::saveLoginInfo(QString user, QString home, QString desktop){
   writeSystemLastLogin(user,desktop); //save the system file (DBDIR/lastlogin)
-  writeUserLastDesktop(user,desktop); //save the user file (~/.lastlogin)
+  writeUserLastDesktop(home,desktop); //save the user file (~/.lastlogin)
 }
 
 void Backend::loadDPIpreference(){
@@ -839,7 +842,7 @@ QStringList Backend::readXSessionsFile(QString filePath, QString locale){
 
 }
 
-void Backend::readSystemUsers(bool directfile){
+/*void Backend::readSystemUsers(bool directfile){
   //make sure the lists are empty
   usernameList.clear(); displaynameList.clear(); homedirList.clear();
   QStringList uList;	
@@ -915,7 +918,7 @@ void Backend::readSystemUsers(bool directfile){
     qWarning() << "No users found with \"getent passwd\", reading the database directly...";
     readSystemUsers(true);
   }
-}
+}*/
 
 void Backend::readSystemLastLogin(){
     lastDE="Lumina"; //PC-BSD default desktop (use if nothing else set)
@@ -948,16 +951,16 @@ void Backend::writeSystemLastLogin(QString user, QString desktop){
 
 }
 
-QString Backend::readUserLastDesktop(QString user){
+QString Backend::readUserLastDesktop(QString userhome){
   QString desktop;
-  QString LLpath = Backend::getUserHomeDir(user) + "/.lastlogin";
+  QString LLpath = userhome + "/.lastlogin";
   if(!QFile::exists(LLpath)){
-    Backend::log("PCDM: No previous user login data found for user: "+user);
+    Backend::log("PCDM: No previous user login data found for user: "+userhome);
   }else{
     //Load the previous login data
     QFile file(LLpath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-      Backend::log("PCDM: Unable to open previous user login file: "+user);    
+      Backend::log("PCDM: Unable to open previous user login file: "+userhome);    
     }else{
       QTextStream in(&file);
       desktop = in.readLine();
@@ -967,10 +970,10 @@ QString Backend::readUserLastDesktop(QString user){
   return desktop;
 }
 
-void Backend::writeUserLastDesktop(QString user, QString desktop){
-  QFile file2( Backend::getUserHomeDir(user) + "/.lastlogin" );
+void Backend::writeUserLastDesktop(QString userhome, QString desktop){
+  QFile file2( userhome + "/.lastlogin" );
   if(!file2.open(QIODevice::Truncate | QIODevice::WriteOnly | QIODevice::Text)){
-    Backend::log("PCDM: Unable to save last login data for user:"+user);	  
+    Backend::log("PCDM: Unable to save last login data for user:"+userhome);	  
   }else{
     QTextStream out(&file2);
     out << desktop;

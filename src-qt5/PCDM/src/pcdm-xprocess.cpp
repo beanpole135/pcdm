@@ -22,6 +22,7 @@ Sub-classed QProcess for starting an XSession Process
 #include "pcdm-xprocess.h"
 
 #define DEBUG 0
+extern UserList *USERS;
 
 XProcess::XProcess() : QProcess(0) {
   //initialize the variables
@@ -47,9 +48,9 @@ void XProcess::loginToXSession(QString username, QString password, QString deskt
   //Setup the variables
   xuser = username;
   xpwd = password;
-  xhome = Backend::getUserHomeDir(xuser);
+  xhome = USERS->homedir(xuser);
   xcmd = Backend::getDesktopBinary(desktop);
-  xshell = Backend::getUserShell(xuser);
+  xshell = USERS->shell(xuser);
   xde = desktop;
   xlang = lang;
   xdevpass = devPassword;
@@ -105,7 +106,7 @@ bool XProcess::startXSession(){
   }
 
   //Save the current user/desktop as the last login
-  Backend::saveLoginInfo(xuser,xde);
+  Backend::saveLoginInfo(xuser, xhome, xde);
 
   // Get the users uid/gid information
   struct passwd *pw;
@@ -243,7 +244,9 @@ void XProcess::setupSessionEnvironment(){
 
 //Stand-alone function to check a username/password combination for validity
 void XProcess::checkPW(QString user, QString pwd){
-  xuser = Backend::getUsernameFromDisplayname(user); 
+  if(USERS->isReady(user)){ xuser = user; }
+  else{ xuser = USERS->findUser(user); } //convert display name into username
+  //xuser = Backend::getUsernameFromDisplayname(user); 
   xpwd = pwd;
   bool ok = pam_checkPW();
   pam_shutdown();
