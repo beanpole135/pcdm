@@ -208,7 +208,9 @@ void UserList::userProcFinished(){
 }
 
 void UserList::syncProcFinished(){
+  qDebug() << "Sync Proc Finished";
   QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
+  qDebug() << "Sync Proc Data:" << data;
   for(int i=0; i<data.length(); i++){
     QString user = data[i].section(" on ",0,0);
     QString stat = data[i].section("(",1,1).section(")",0,0);
@@ -220,8 +222,8 @@ void UserList::syncProcFinished(){
     }
   }
   //Now clean up the process
-  syncProc->deleteLater();
-  syncProc = 0;
+  //syncProc->deleteLater();
+  //syncProc = 0;
 }
 
 void UserList::startSyncProc(){
@@ -233,6 +235,7 @@ void UserList::startSyncProc(){
   }
   if(syncProc->state()==QProcess::Running){ return; } //already running
   if(syncTimer->isActive()){ syncTimer->stop(); }
+  qDebug() << "Starting Sync Proc";
   syncProc->start();
 }
 

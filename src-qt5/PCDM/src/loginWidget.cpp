@@ -275,8 +275,8 @@ void LoginWidget::slotUserSelected(){
   }
   updateWidget();
   linePassword->setFocus();
+  if(listUsers->currentText().isEmpty() || idL.length()<1){ return; }
   qDebug() << "User Selected:" << listUsers->currentText();
-  
   emit UserSelected(idL.at(listUsers->currentIndex()));//listUsers->currentText());
 }
 
