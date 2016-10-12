@@ -54,7 +54,7 @@ void XProcess::loginToXSession(QString username, QString password, QString deskt
   xde = desktop;
   xlang = lang;
   xdevpass = devPassword;
-  xanonlogin = false; //anon;
+  xanonlogin = anon;
   //Now start the login process
   if( !startXSession() ){
     //Could not continue after session changed significantly - close down the session to restart

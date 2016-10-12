@@ -204,7 +204,9 @@ void UserList::userProcFinished(){
     startSyncProc(); //need to probe PC users now
   }
   userTimer->start();
-  if(changed){ emit UsersChanged(); }
+  //if(changed){ 
+    emit UsersChanged(); 
+  //}
 }
 
 void UserList::syncProcFinished(){
