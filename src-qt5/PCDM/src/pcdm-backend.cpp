@@ -16,10 +16,11 @@
 #include "pcdm-config.h"
 //#include "pcbsd-utils.h"
 
-QStringList displaynameList,usernameList,homedirList,usershellList,instXNameList,instXBinList,instXCommentList,instXIconList,instXDEList,excludedUsers;
+//QStringList displaynameList,usernameList,homedirList,usershellList,
+QStringList instXNameList,instXBinList,instXCommentList,instXIconList,instXDEList;//,excludedUsers;
 QString logFile;
 QString saveX,saveUsername, lastUser, lastDE;
-bool Over1K = true;
+//bool Over1K = true;
 
 //========================
 //    USERLIST CLASS
