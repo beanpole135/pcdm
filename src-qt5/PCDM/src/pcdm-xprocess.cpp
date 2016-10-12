@@ -54,7 +54,7 @@ void XProcess::loginToXSession(QString username, QString password, QString deskt
   xde = desktop;
   xlang = lang;
   xdevpass = devPassword;
-  xanonlogin = anon;
+  xanonlogin = false; //anon;
   //Now start the login process
   if( !startXSession() ){
     //Could not continue after session changed significantly - close down the session to restart
@@ -92,7 +92,8 @@ bool XProcess::startXSession(){
   if( !pam_checkPW() ){ emit InvalidLogin(); pam_shutdown(); return true; }
 
   //If this has a special device password, mount the personacrypt device
-  if( !xanonlogin && !xdevpass.isEmpty() && Backend::getAvailablePersonaCryptUsers().contains(xuser) ){
+  if( !xanonlogin && !xdevpass.isEmpty() ){ //&& Backend::getAvailablePersonaCryptUsers().contains(xuser) ){
+    Backend::log(" - PersonaCrypt Login Detected");
     if( !Backend::MountPersonaCryptUser(xuser, xdevpass) ){ 
       //Could not mount the personacrypt device (invalid password?)
       xdevpass.clear(); //clear the invalid password

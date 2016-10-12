@@ -116,6 +116,7 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
 
   //Run the display setup to ensure appropriate visiblility/usage
   updateWidget();
+  QTimer::singleShot(500, this, SLOT(slotUsersChanged()) );
   
 }
 
@@ -250,6 +251,7 @@ void LoginWidget::slotTryLogin(){
   }else{
     user = lineUsername->text();
   }
+  if(user.contains("(")){ user = user.section("(",0,0).simplified(); }
   QString pw = linePassword->text();
   emit loginRequested(user,pw);
   linePassword->setText(""); //always clear the box after a login attempt

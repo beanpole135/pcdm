@@ -367,7 +367,7 @@ void PCDMgui::slotStartLogin(QString displayname, QString password){
   }
   QString devPassword;
   bool anonymous = loginW->isAnonymous();
-  if(!anonymous && pcCurrent.contains(username)){
+  if(!anonymous && !USERS->status(username).isEmpty()){ //pcCurrent.contains(username)){
     //personacrypt user - also pull device password
     devPassword = loginW->currentDevicePassword();
   }
