@@ -170,6 +170,10 @@ bool XProcess::startXSession(){
   if(QFile::exists("/usr/local/bin/dbus-launch")){
     cmd.append("dbus-launch --exit-with-session "+xcmd);
   }
+
+  // Change ownership on the Xauthority file
+  QProcess::execute("chown "+tUid+":"+tGid+" "+xhome+"/.Xauthority");
+
   //Need to run a couple commands in sequence: so put them in a script file
   tOut << "#!/bin/sh\n\n";
 
@@ -178,6 +182,7 @@ bool XProcess::startXSession(){
   if ( ! PICOCLIENT.isEmpty() && ! PICOHOME.isEmpty() ) {
     tOut << "rm "+xhome+"/.Xauthority\n";
     tOut << "ln -fs "+PICOHOME+"/.Xauthority "+xhome+"/.Xauthority\n";
+    QProcess::execute("chown "+tUid+" "+PICOHOME+"/.Xauthority"); // Change ownership on the pico login
   }
 
   tOut << "if [ -e '"+xhome+"/.xprofile' ] ; then\n";
