@@ -1,0 +1,10 @@
+#!/bin/sh
+
+# Set our values for PCDM
+export PICO_CLIENT_LOGIN=$(whoami)
+export PICO_CLIENT_HOME="${HOME}"
+
+cd $HOME
+chmod 660 .Xauthority
+
+sudo /usr/local/bin/PCDM-session

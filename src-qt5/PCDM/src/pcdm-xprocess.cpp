@@ -172,6 +172,14 @@ bool XProcess::startXSession(){
   }
   //Need to run a couple commands in sequence: so put them in a script file
   tOut << "#!/bin/sh\n\n";
+
+  QString PICOCLIENT = qgetenv("PICO_CLIENT_LOGIN");
+  QString PICOHOME = qgetenv("PICO_CLIENT_HOME");
+  if ( ! PICOCLIENT.isEmpty() && ! PICOHOME.isEmpty() ) {
+    tOut << "rm "+xhome+"/.Xauthority\n";
+    tOut << "ln -fs "+PICOHOME+"/.Xauthority "+xhome+"/.Xauthority\n";
+  }
+
   tOut << "if [ -e '"+xhome+"/.xprofile' ] ; then\n";
   tOut << "  chmod 755 "+xhome+"/.xprofile\n";
   tOut << "  . "+xhome+"/.xprofile\n";
