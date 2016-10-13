@@ -104,6 +104,8 @@ bool UserList::isReady(QString user){
 //Private
 bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC){
   //returns true if data changed, and removes itself from oldusers as needed
+  //qDebug() << "Parse Line:" << line;
+  //if(line.endsWith("\n")){ line.chop(1); }
   //Remove all users that have:
   static QStringList filter; 
    if(filter.isEmpty()){ filter << "server" << "daemon" << "database" << "system"<< "account"<<"pseudo"; }
@@ -111,7 +113,8 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
   static QStringList validShells; 
   if(validShells.isEmpty()){ validShells << "/usr/local/bin/zsh" << "/usr/local/bin/fish" << "/usr/local/bin/bash"; }
   //Now load the information
-  QStringList info = line.split(":"); //FIELDS: <username, *, uid, gid, comment, home, shell>
+  QStringList info = line.section("\n",0,0).split(":"); //FIELDS: <username, *, uid, gid, comment, home, shell>
+  //qDebug() << "User Info:" << info << line;
   if(info.length() < 7){ return false; } //invalid user line - missing fields
     bool bad = false;
     bool fixshell = false;
@@ -140,10 +143,12 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
     bool changed = false;
     //See if it failed any checks
     if(!bad){
+      //qDebug() << "Good User:" << info;
       if(fixshell){ shell = "/bin/csh"; }
       //Add this user to the lists if it is good
       changed = !oldusers->contains(info[0]);
       if(!changed){ //go one level deeper to see if anything is different
+        qDebug() << " - Check existing user info:" << info;
         oldusers->removeAll(info[0]);
         if(HASH.value(info[0]+"/name")!=info[4].simplified()){ changed = true; }
        else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ changed = true; }
@@ -153,6 +158,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
         }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
       }
       if(changed){ //need to update the hash
+        qDebug() << " - Change info in HASH:" << info;
         HASH.insert(info[0]+"/name", info[4].simplified());
         HASH.insert(info[0]+"/home", info[5].simplified());
         HASH.insert(info[0]+"/shell",shell);
@@ -160,6 +166,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
           HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
         }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
       }
+      //qDebug() << " - Done with user info";
     }
   return changed;
 }
@@ -174,20 +181,26 @@ void UserList::userProcFinished(){
   QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
   QStringList activepcusers; 
   if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
-
+  qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
   //Parse the user data
-  QStringList data = QString::fromUtf8(userProc->readAllStandardOutput() ).split("\n");
-  for(int i=0; i<data.length(); i++){
-    changed = changed || parseUserLine(data[i], &cusers, &allpcusers, &activepcusers);
+  while(userProc->canReadLine()){
+   while(userProc->canReadLine()){
+    QString line = QString::fromUtf8(userProc->readLine()).section("\n",0,0);
+    changed = changed || parseUserLine( line, &cusers, &allpcusers, &activepcusers);
+   }
+   QCoreApplication::processEvents(); //just in case the process buffer was filled - see if more is available first
   }
+  qDebug() << " - done parsing process data" << userProc->canReadLine() << users();
+
   //Now clean up the process
   userProc->deleteLater();
   userProc = 0;
   //Clean up any old user data
   for(int i=0; i<cusers.length(); i++){
+    qDebug() << "Remove User Data from HASH:" << cusers[i];
     QStringList keys = HASH.keys().filter(cusers[i]+"/");
     for(int j=0; j<keys.length(); j++){ 
-      if(keys[j].startsWith(cusers[i])){ HASH.remove(keys[j]); } 
+      if(keys[j].startsWith(cusers[i]+"/")){ HASH.remove(keys[j]); } 
     }
     changed = true;
   }
@@ -203,10 +216,11 @@ void UserList::userProcFinished(){
   if(!allpcusers.isEmpty()){  
     startSyncProc(); //need to probe PC users now
   }
+  qDebug() << " - End Of Probe: " << users();
   userTimer->start();
-  //if(changed){ 
+  if(changed){ 
     emit UsersChanged(); 
-  //}
+  }
 }
 
 void UserList::syncProcFinished(){
@@ -244,15 +258,15 @@ void UserList::startSyncProc(){
 void UserList::startUserProc(){
   if(userProc==0){
     userProc = new QProcess(this);
-      userProc->setProcessChannelMode(QProcess::MergedChannels);
+      //userProc->setProcessChannelMode(QProcess::MergedChannels);
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         //Make sure to set all the possible UTF-8 flags before reading users
         env.insert("LANG", "en_US.UTF-8");
         env.insert("LC_ALL", "en_US.UTF-8");
         env.insert("MM_CHARSET","UTF-8");
     userProc->setProcessEnvironment(env);
-    userProc->setProgram("getent");
-    userProc->setArguments(QStringList() << "passwd");
+    userProc->setProgram("sudo");
+    userProc->setArguments(QStringList() << "-u" << "nobody" << "getent" << "passwd");
     connect(userProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(userProcFinished()) );
   }
   if(userProc->state()==QProcess::Running){ return; } //already running
