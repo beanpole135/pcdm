@@ -7,4 +7,4 @@ export PICO_CLIENT_HOME="${HOME}"
 cd $HOME
 chmod 660 .Xauthority
 
-sudo /usr/local/bin/PCDM-session
+sudo -E /usr/local/bin/PCDM-session
