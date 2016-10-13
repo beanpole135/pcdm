@@ -45,6 +45,7 @@ public:
 
 	//Main start function (returns almost instantly)
 	void updateList(); //results will be ready when signals are send out
+	void stopUpdates(); //stop the periodic updates/checks
 
 	//Get usernames
 	QStringList users();

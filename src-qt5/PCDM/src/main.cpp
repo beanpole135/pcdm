@@ -212,6 +212,7 @@ int runSingleSession(int argc, char *argv[]){
     retCode = a.exec();
    }//end special retCode==-1 check (restart GUI)
   }  // end of PCDM GUI running
+  USERS->stopUpdates();
   //Wait for the desktop session to finish before exiting
   if(compositor.state()==QProcess::Running){ compositor.terminate(); }
     desktop.waitForSessionClosed(); 

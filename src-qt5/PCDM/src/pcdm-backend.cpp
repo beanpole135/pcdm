@@ -56,6 +56,11 @@ void UserList::updateList(){
   QTimer::singleShot(0, this, SLOT(startUserProc()) );
 }
 
+void UserList::stopUpdates(){
+  if(userTimer->isActive()){ userTimer->stop(); }
+  if(syncTimer->isActive()){ syncTimer->stop(); }
+}
+
 //Get usernames
 QStringList UserList::users(){
   QStringList keys = HASH.keys().filter("/name");
@@ -140,25 +145,25 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
           }
         }
     }
-    bool changed = false;
+    bool change = false;
     //See if it failed any checks
     if(!bad){
       //qDebug() << "Good User:" << info;
       if(fixshell){ shell = "/bin/csh"; }
       //Add this user to the lists if it is good
-      changed = !oldusers->contains(info[0]);
-      if(!changed){ //go one level deeper to see if anything is different
-        qDebug() << " - Check existing user info:" << info;
+      change = !oldusers->contains(info[0]);
+      if(!change){ //go one level deeper to see if anything is different
+        //qDebug() << " - Check existing user info:" << info;
         oldusers->removeAll(info[0]);
-        if(HASH.value(info[0]+"/name")!=info[4].simplified()){ changed = true; }
-       else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ changed = true; }
-       else if(HASH.value(info[0]+"/shell")!=shell){ changed = true; }
+        if(HASH.value(info[0]+"/name")!=info[4].simplified()){ change = true; }
+       else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ change = true; }
+       else if(HASH.value(info[0]+"/shell")!=shell){ change = true; }
         if(allPC->contains(info[0])){
           HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
         }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
       }
-      if(changed){ //need to update the hash
-        qDebug() << " - Change info in HASH:" << info;
+      if(change){ //need to update the hash
+        //qDebug() << " - Change info in HASH:" << info;
         HASH.insert(info[0]+"/name", info[4].simplified());
         HASH.insert(info[0]+"/home", info[5].simplified());
         HASH.insert(info[0]+"/shell",shell);
@@ -168,7 +173,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
       }
       //qDebug() << " - Done with user info";
     }
-  return changed;
+  return change;
 }
 
 //Private slots
@@ -181,23 +186,23 @@ void UserList::userProcFinished(){
   QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
   QStringList activepcusers; 
   if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
-  qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
+  //qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
   //Parse the user data
-  while(userProc->canReadLine()){
-   while(userProc->canReadLine()){
-    QString line = QString::fromUtf8(userProc->readLine()).section("\n",0,0);
-    changed = changed || parseUserLine( line, &cusers, &allpcusers, &activepcusers);
-   }
-   QCoreApplication::processEvents(); //just in case the process buffer was filled - see if more is available first
+  QStringList data = QString::fromUtf8(userProc->readAllStandardOutput()).split("\n");
+  //qDebug() << " - Data lines:" << data.length();
+  for(int i=0; i<data.length(); i++){
+    bool gotchange = parseUserLine( data[i], &cusers, &allpcusers, &activepcusers);
+    //if(gotchange){ qDebug() << "Got Change:" << i << data[i]; }
+    changed = changed || gotchange;
   }
-  qDebug() << " - done parsing process data" << userProc->canReadLine() << users();
+  //qDebug() << " - done parsing process data" << userProc->canReadLine() << users();
 
   //Now clean up the process
   userProc->deleteLater();
   userProc = 0;
   //Clean up any old user data
   for(int i=0; i<cusers.length(); i++){
-    qDebug() << "Remove User Data from HASH:" << cusers[i];
+    //qDebug() << "Remove User Data from HASH:" << cusers[i];
     QStringList keys = HASH.keys().filter(cusers[i]+"/");
     for(int j=0; j<keys.length(); j++){ 
       if(keys[j].startsWith(cusers[i]+"/")){ HASH.remove(keys[j]); } 
@@ -216,7 +221,7 @@ void UserList::userProcFinished(){
   if(!allpcusers.isEmpty()){  
     startSyncProc(); //need to probe PC users now
   }
-  qDebug() << " - End Of Probe: " << users();
+  //qDebug() << " - End Of Probe: " << users();
   userTimer->start();
   if(changed){ 
     emit UsersChanged(); 
@@ -224,9 +229,9 @@ void UserList::userProcFinished(){
 }
 
 void UserList::syncProcFinished(){
-  qDebug() << "Sync Proc Finished";
+  //qDebug() << "Sync Proc Finished";
   QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
-  qDebug() << "Sync Proc Data:" << data;
+  //qDebug() << "Sync Proc Data:" << data;
   for(int i=0; i<data.length(); i++){
     QString user = data[i].section(" on ",0,0);
     QString stat = data[i].section("(",1,1).section(")",0,0);
@@ -265,8 +270,8 @@ void UserList::startUserProc(){
         env.insert("LC_ALL", "en_US.UTF-8");
         env.insert("MM_CHARSET","UTF-8");
     userProc->setProcessEnvironment(env);
-    userProc->setProgram("sudo");
-    userProc->setArguments(QStringList() << "-u" << "nobody" << "getent" << "passwd");
+    userProc->setProgram("getent");
+    userProc->setArguments(QStringList() << "passwd");
     connect(userProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(userProcFinished()) );
   }
   if(userProc->state()==QProcess::Running){ return; } //already running
@@ -580,7 +585,7 @@ QString Backend::getLastDE(QString user, QString home){
   if(lastDE.isEmpty()){
     readSystemLastLogin();
   }
-  QString de = readUserLastDesktop(user);
+  QString de = readUserLastDesktop(home);
   if(de.isEmpty()){ return lastDE; }
   else{ return de; }
   
