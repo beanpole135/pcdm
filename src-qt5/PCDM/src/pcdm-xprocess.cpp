@@ -171,6 +171,11 @@ bool XProcess::startXSession(){
     cmd.append("dbus-launch --exit-with-session "+xcmd);
   }
 
+  QString tUid, tGid, logFile;
+  tUid.setNum(pw->pw_uid);
+  tGid.setNum(pw->pw_gid);
+  logFile=xhome + "/.pcdm-startup.log";
+
   // Change ownership on the Xauthority file
   QProcess::execute("chown "+tUid+":"+tGid+" "+xhome+"/.Xauthority");
 
@@ -192,10 +197,6 @@ bool XProcess::startXSession(){
   tOut << cmd + "\n"; //+ " >" + xhome+ "/.pcdm-startup.log" + " 2>" + xhome + "/.pcdm-startup.log\n";
   tOut << "exit $?"; //Make sure we return the DE return value
 
-  QString tUid, tGid, logFile;
-  tUid.setNum(pw->pw_uid);
-  tGid.setNum(pw->pw_gid);
-  logFile=xhome + "/.pcdm-startup.log";
   cmd = "/usr/local/share/PCDM/pcdm-session "+xuser+" "+tUid+" "+tGid+" "+tFile->fileName()+" "+logFile;
   connect( this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotCleanup()) );
   tFile->setPermissions(QFile::ReadOwner | QFile::WriteOwner |QFile::ReadGroup | QFile::ReadUser | QFile::ReadOther);
