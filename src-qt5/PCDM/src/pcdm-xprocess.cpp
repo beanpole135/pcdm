@@ -176,8 +176,10 @@ bool XProcess::startXSession(){
   tGid.setNum(pw->pw_gid);
   logFile=xhome + "/.pcdm-startup.log";
 
-  QString authfile = qgetenv("XAUTHORITY");
   // Change ownership on the Xauthority file
+  QString authfile = qgetenv("XAUTHORITY");
+  if ( authfile.isEmpty() )
+    authfile = xhome + "/.Xauthority";
   QProcess::execute("chown "+tUid+":"+tGid+" "+authfile);
 
   //Need to run a couple commands in sequence: so put them in a script file
