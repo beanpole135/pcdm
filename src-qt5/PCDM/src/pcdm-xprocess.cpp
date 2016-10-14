@@ -176,11 +176,10 @@ bool XProcess::startXSession(){
   tGid.setNum(pw->pw_gid);
   logFile=xhome + "/.pcdm-startup.log";
 
-  // Change ownership on the Xauthority file
+  // Locate the auth file
   QString authfile = qgetenv("XAUTHORITY");
   if ( authfile.isEmpty() )
     authfile = xhome + "/.Xauthority";
-  QProcess::execute("chown "+tUid+":"+tGid+" "+authfile);
 
   //Need to run a couple commands in sequence: so put them in a script file
   tOut << "#!/bin/sh\n\n";
@@ -188,9 +187,13 @@ bool XProcess::startXSession(){
   QString PICOCLIENT = qgetenv("PICO_CLIENT_LOGIN");
   QString PICOHOME = qgetenv("PICO_CLIENT_HOME");
   if ( ! PICOCLIENT.isEmpty() && ! PICOHOME.isEmpty() ) {
+    // Change ownership on the Xauthority file for PICO usage
     tOut << "rm "+authfile+"\n";
     tOut << "ln -fs "+PICOHOME+"/.Xauthority "+authfile+"\n";
     QProcess::execute("chown "+tUid+" "+PICOHOME+"/.Xauthority"); // Change ownership on the pico login
+  } else {
+    // Change ownership on the Xauthority file
+    QProcess::execute("chown "+tUid+":"+tGid+" "+authfile);
   }
 
   tOut << "if [ -e '"+xhome+"/.xprofile' ] ; then\n";
