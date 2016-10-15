@@ -16,11 +16,274 @@
 #include "pcdm-config.h"
 //#include "pcbsd-utils.h"
 
-QStringList displaynameList,usernameList,homedirList,usershellList,instXNameList,instXBinList,instXCommentList,instXIconList,instXDEList,excludedUsers;
+//QStringList displaynameList,usernameList,homedirList,usershellList,
+QStringList instXNameList,instXBinList,instXCommentList,instXIconList,instXDEList;//,excludedUsers;
 QString logFile;
 QString saveX,saveUsername, lastUser, lastDE;
-bool Over1K = true;
+//bool Over1K = true;
 
+//========================
+//    USERLIST CLASS
+//========================
+UserList::UserList(QObject *parent) : QObject(parent){
+  //Setup processes
+  syncProc = 0; userProc = 0; //not created yet
+  //Setup timers
+  syncTimer = new QTimer(this);
+    syncTimer->setInterval(15000); //15 seconds between status updates minimum
+    connect(syncTimer, SIGNAL(timeout()), this, SLOT(startSyncProc()) );
+  userTimer = new QTimer(this);
+    userTimer->setInterval(30000); //30 seconds between personacrypt user scans
+    connect(userTimer, SIGNAL(timeout()), this, SLOT(startUserProc()) );
+  //Setup other default values
+  allowunder1kUID = false;
+}
+
+UserList::~UserList(){
+
+}
+
+void UserList::allowUnder1K(bool allow){
+  allowunder1kUID = allow;
+}
+
+void UserList::excludeUsers(QStringList exclude){
+  excludedUsers = exclude;
+}
+
+void UserList::updateList(){
+  //results will be ready when signals are send out
+  QTimer::singleShot(0, this, SLOT(startUserProc()) );
+}
+
+void UserList::stopUpdates(){
+  if(userTimer->isActive()){ userTimer->stop(); }
+  if(syncTimer->isActive()){ syncTimer->stop(); }
+}
+
+//Get usernames
+QStringList UserList::users(){
+  QStringList keys = HASH.keys().filter("/name");
+  for(int i=0; i<keys.length(); i++){ keys[i] = keys[i].section("/",0,0); }
+  return keys;
+}
+
+QString UserList::findUser(QString displayname){
+  QStringList keys = HASH.keys().filter("/name");
+  for(int i=0; i<keys.length(); i++){
+    if(HASH.value(keys[i])==displayname){ return keys[i].section("/",0,0); }
+  }
+  return ""; //no match found
+}
+
+//Return info for a username
+QString UserList::homedir(QString user){
+  if(!HASH.contains(user+"/home")){ return ""; }
+  return HASH.value(user+"/home");
+}
+
+QString UserList::displayname(QString user){
+  if(!HASH.contains(user+"/name")){ return ""; }
+  return HASH.value(user+"/name");
+}
+
+QString UserList::shell(QString user){
+  if(!HASH.contains(user+"/shell")){ return ""; }
+  return HASH.value(user+"/shell");
+}
+
+QString UserList::status(QString user){
+  if(!HASH.contains(user+"/status")){
+    if(HASH.contains(user+"/pcstat")){ return HASH.value(user+"/pcstat"); }
+    else{ return ""; }
+  }
+  return HASH.value(user+"/status");
+}
+
+bool UserList::isReady(QString user){
+  if(!HASH.contains(user+"/name")){ return false; }
+  if(HASH.contains(user+"/pcstat")){  return (HASH.value(user+"/pcstat")=="ready"); }
+  return true; //non-PC user - always ready if found
+}
+
+//Private
+bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC){
+  //returns true if data changed, and removes itself from oldusers as needed
+  //qDebug() << "Parse Line:" << line;
+  //if(line.endsWith("\n")){ line.chop(1); }
+  //Remove all users that have:
+  static QStringList filter; 
+   if(filter.isEmpty()){ filter << "server" << "daemon" << "database" << "system"<< "account"<<"pseudo"; }
+  //List any shells which are still valid - if not installed fall back on csh
+  static QStringList validShells; 
+  if(validShells.isEmpty()){ validShells << "/usr/local/bin/zsh" << "/usr/local/bin/fish" << "/usr/local/bin/bash"; }
+  //Now load the information
+  QStringList info = line.section("\n",0,0).split(":"); //FIELDS: <username, *, uid, gid, comment, home, shell>
+  //qDebug() << "User Info:" << info << line;
+  if(info.length() < 7){ return false; } //invalid user line - missing fields
+    bool bad = false;
+    bool fixshell = false;
+    QString dispcheck = info[4].toLower();
+    QString shell = info[6];
+    //First see if the listed shell is broken, but valid
+    if(!QFile::exists(shell) && validShells.contains(shell)){ fixshell = true; }
+    // Shell Checks
+    if(shell.contains("nologin") || shell.isEmpty() ){bad=true;}
+    else if( !QFile::exists(shell) && !fixshell ){ bad = true; }
+    // User Home Dir
+    else if(info[5].contains("nonexistent") || info[5].contains("/empty") || info[5].isEmpty() ){bad=true;}
+    // uid > 0
+    else if(info[2].toInt() < 1){bad=true;} //don't show the root user
+    else if(info[0].indexOf("picoauth") != -1){bad=true;} //don't show pico connect users
+    //Check that the name/description does not contain "server"
+    else if(info[2].toInt() < 1000){
+	if(!allowunder1kUID){ bad = true;} //ignore anything under UID 1000
+	else{
+	  //Apply the special <1000 filters
+	  if(excludedUsers.contains(info[0])){ bad = true; }
+	  for(int f=0;f<filter.length() && !bad; f++){
+	    if(dispcheck.contains(filter[f])){ bad = true; }
+          }
+        }
+    }
+    bool change = false;
+    //See if it failed any checks
+    if(!bad){
+      //qDebug() << "Good User:" << info;
+      if(fixshell){ shell = "/bin/csh"; }
+      //Add this user to the lists if it is good
+      change = !oldusers->contains(info[0]);
+      if(!change){ //go one level deeper to see if anything is different
+        //qDebug() << " - Check existing user info:" << info;
+        oldusers->removeAll(info[0]);
+        if(HASH.value(info[0]+"/name")!=info[4].simplified()){ change = true; }
+       else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ change = true; }
+       else if(HASH.value(info[0]+"/shell")!=shell){ change = true; }
+        if(allPC->contains(info[0])){
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
+        }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
+      }
+      if(change){ //need to update the hash
+        //qDebug() << " - Change info in HASH:" << info;
+        HASH.insert(info[0]+"/name", info[4].simplified());
+        HASH.insert(info[0]+"/home", info[5].simplified());
+        HASH.insert(info[0]+"/shell",shell);
+	if(allPC->contains(info[0])){
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
+        }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
+      }
+      //qDebug() << " - Done with user info";
+    }
+  return change;
+}
+
+//Private slots
+void UserList::userProcFinished(){
+  bool changed = false;
+  //Get all the user lists
+  QStringList cusers = this->users(); //read all the current users
+  QStringList oldpcusers = HASH.keys().filter("/pcstat");
+    for(int i=0; i<oldpcusers.length(); i++){ oldpcusers[i] = oldpcusers[i].section("/",0,0); }
+  QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
+  QStringList activepcusers; 
+  if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
+  //qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
+  //Parse the user data
+  QStringList data = QString::fromUtf8(userProc->readAllStandardOutput()).split("\n");
+  //qDebug() << " - Data lines:" << data.length();
+  for(int i=0; i<data.length(); i++){
+    bool gotchange = parseUserLine( data[i], &cusers, &allpcusers, &activepcusers);
+    //if(gotchange){ qDebug() << "Got Change:" << i << data[i]; }
+    changed = changed || gotchange;
+  }
+  //qDebug() << " - done parsing process data" << userProc->canReadLine() << users();
+
+  //Now clean up the process
+  userProc->deleteLater();
+  userProc = 0;
+  //Clean up any old user data
+  for(int i=0; i<cusers.length(); i++){
+    //qDebug() << "Remove User Data from HASH:" << cusers[i];
+    QStringList keys = HASH.keys().filter(cusers[i]+"/");
+    for(int j=0; j<keys.length(); j++){ 
+      if(keys[j].startsWith(cusers[i]+"/")){ HASH.remove(keys[j]); } 
+    }
+    changed = true;
+  }
+  for(int i=0; i<oldpcusers.length(); i++){
+    if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ HASH.remove(oldpcusers[i]+"/pcstat"); }
+  }
+  if(userTimer->isActive()){ userTimer->stop(); }
+  if(HASH.keys().isEmpty() && !allowunder1kUID){ 
+    allowunder1kUID = true; 
+    startUserProc(); //run this process again with the larger "pool" of possible users
+    return;
+  }
+  if(!allpcusers.isEmpty()){  
+    startSyncProc(); //need to probe PC users now
+  }
+  //qDebug() << " - End Of Probe: " << users();
+  userTimer->start();
+  if(changed){ 
+    emit UsersChanged(); 
+  }
+}
+
+void UserList::syncProcFinished(){
+  //qDebug() << "Sync Proc Finished";
+  QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
+  //qDebug() << "Sync Proc Data:" << data;
+  for(int i=0; i<data.length(); i++){
+    QString user = data[i].section(" on ",0,0);
+    QString stat = data[i].section("(",1,1).section(")",0,0);
+    if(HASH.contains(user+"/name")){
+      if(HASH.value(user+"/status")!=stat){
+        HASH.insert(user+"/status", stat);
+        emit UserStatusChanged(user, stat);
+      }
+    }
+  }
+  //Now clean up the process
+  //syncProc->deleteLater();
+  //syncProc = 0;
+}
+
+void UserList::startSyncProc(){
+ if(syncProc==0){
+    syncProc = new QProcess(this);
+    syncProc->setProgram("personacrypt");
+    syncProc->setArguments(QStringList() << "list" << "-s");
+    connect(syncProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(syncProcFinished()) );
+  }
+  if(syncProc->state()==QProcess::Running){ return; } //already running
+  if(syncTimer->isActive()){ syncTimer->stop(); }
+  qDebug() << "Starting Sync Proc";
+  syncProc->start();
+}
+
+void UserList::startUserProc(){
+  if(userProc==0){
+    userProc = new QProcess(this);
+      //userProc->setProcessChannelMode(QProcess::MergedChannels);
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        //Make sure to set all the possible UTF-8 flags before reading users
+        env.insert("LANG", "en_US.UTF-8");
+        env.insert("LC_ALL", "en_US.UTF-8");
+        env.insert("MM_CHARSET","UTF-8");
+    userProc->setProcessEnvironment(env);
+    userProc->setProgram("getent");
+    userProc->setArguments(QStringList() << "passwd");
+    connect(userProc, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(userProcFinished()) );
+  }
+  if(userProc->state()==QProcess::Running){ return; } //already running
+  if(userTimer->isActive()){ userTimer->stop(); }
+  userProc->start();
+}
+
+
+//========================
+//      STATIC FUNCTIONS
+//========================
 QStringList Backend::getAvailableDesktops(){  
   if(instXNameList.isEmpty()){ loadXSessionsData(); }
   QStringList out = instXNameList;
@@ -56,15 +319,15 @@ QString Backend::getDesktopBinary(QString xName){
   return instXBinList[index];
 }
 
-void Backend::allowUidUnder1K(bool allow, QStringList excludes){
+/*void Backend::allowUidUnder1K(bool allow, QStringList excludes){
   Over1K = !allow;
   excludedUsers = excludes;
   //Make sure to re-load the user list if necessary
   readSystemUsers();
-}
+}*/
 
 
-QStringList Backend::getSystemUsers(bool realnames){
+/*QStringList Backend::getSystemUsers(bool realnames){
   if(usernameList.isEmpty()){
     readSystemUsers();
   }
@@ -73,13 +336,13 @@ QStringList Backend::getSystemUsers(bool realnames){
   }else{
     return usernameList;
   }
-}
+}*/
 
 QString Backend::getALUsername(){
   //Make sure the requested user is valid
-  readSystemUsers(); //first read the available users on this system
+  //readSystemUsers(); //first read the available users on this system
   QString ruser = Config::autoLoginUsername();
-  int index = usernameList.indexOf(ruser);
+  /*int index = usernameList.indexOf(ruser);
   if(index == -1){ //invalid username
     //Check if a display name was given instead
     index = displaynameList.indexOf(ruser);
@@ -90,7 +353,7 @@ QString Backend::getALUsername(){
       //use the valid username for the given display name
       ruser = usernameList[index]; 
     }
-  }
+  }*/
   return ruser;
 }
 
@@ -125,7 +388,7 @@ QString Backend::getALPassword(){
   return rpassword;
 }
 
-QString Backend::getUsernameFromDisplayname(QString dspname){
+/*QString Backend::getUsernameFromDisplayname(QString dspname){
   if(dspname.isEmpty()){return "";}
   int i = displaynameList.indexOf(dspname);
   if(i == -1){ i = usernameList.indexOf(dspname); }
@@ -142,23 +405,23 @@ QString Backend::getDisplayNameFromUsername(QString username){
   else{
     return displaynameList[i];  
   }
-}
+}*/
 
-QString Backend::getUserHomeDir(QString username){
+/*QString Backend::getUserHomeDir(QString username){
   if(username.isEmpty()){ return ""; }
   int i = usernameList.indexOf(username);
   if( i == -1 ){ i = displaynameList.indexOf(username); }
   if( i < 0){ return ""; }
   return homedirList[i];
-}
+}*/
 
-QString Backend::getUserShell(QString username){
+/*QString Backend::getUserShell(QString username){
   if(username.isEmpty()){ return ""; }
   int i = usernameList.indexOf(username);
   if( i == -1 ){ i = displaynameList.indexOf(username); }
   if( i < 0){ return ""; }
   return usershellList[i];	
-}
+}*/
 
 QStringList Backend::keyModels()
 {
@@ -314,24 +577,24 @@ QString Backend::getLastUser(){
     readSystemLastLogin();  
   }
   //return the value
-  QString user = getDisplayNameFromUsername(lastUser);
-  return user;
+  //QString user = getDisplayNameFromUsername(lastUser);
+  return lastUser;
 }
 
-QString Backend::getLastDE(QString user){
+QString Backend::getLastDE(QString user, QString home){
   if(user.isEmpty()){ return ""; }
   if(lastDE.isEmpty()){
     readSystemLastLogin();
   }
-  QString de = readUserLastDesktop(user);
+  QString de = readUserLastDesktop(home);
   if(de.isEmpty()){ return lastDE; }
   else{ return de; }
   
 }
 
-void Backend::saveLoginInfo(QString user, QString desktop){
+void Backend::saveLoginInfo(QString user, QString home, QString desktop){
   writeSystemLastLogin(user,desktop); //save the system file (DBDIR/lastlogin)
-  writeUserLastDesktop(user,desktop); //save the user file (~/.lastlogin)
+  writeUserLastDesktop(home,desktop); //save the user file (~/.lastlogin)
 }
 
 void Backend::loadDPIpreference(){
@@ -605,7 +868,7 @@ QStringList Backend::readXSessionsFile(QString filePath, QString locale){
 
 }
 
-void Backend::readSystemUsers(bool directfile){
+/*void Backend::readSystemUsers(bool directfile){
   //make sure the lists are empty
   usernameList.clear(); displaynameList.clear(); homedirList.clear();
   QStringList uList;	
@@ -681,7 +944,7 @@ void Backend::readSystemUsers(bool directfile){
     qWarning() << "No users found with \"getent passwd\", reading the database directly...";
     readSystemUsers(true);
   }
-}
+}*/
 
 void Backend::readSystemLastLogin(){
     lastDE="Lumina"; //PC-BSD default desktop (use if nothing else set)
@@ -714,16 +977,16 @@ void Backend::writeSystemLastLogin(QString user, QString desktop){
 
 }
 
-QString Backend::readUserLastDesktop(QString user){
+QString Backend::readUserLastDesktop(QString userhome){
   QString desktop;
-  QString LLpath = Backend::getUserHomeDir(user) + "/.lastlogin";
+  QString LLpath = userhome + "/.lastlogin";
   if(!QFile::exists(LLpath)){
-    Backend::log("PCDM: No previous user login data found for user: "+user);
+    Backend::log("PCDM: No previous user login data found for user: "+userhome);
   }else{
     //Load the previous login data
     QFile file(LLpath);
     if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-      Backend::log("PCDM: Unable to open previous user login file: "+user);    
+      Backend::log("PCDM: Unable to open previous user login file: "+userhome);    
     }else{
       QTextStream in(&file);
       desktop = in.readLine();
@@ -733,10 +996,10 @@ QString Backend::readUserLastDesktop(QString user){
   return desktop;
 }
 
-void Backend::writeUserLastDesktop(QString user, QString desktop){
-  QFile file2( Backend::getUserHomeDir(user) + "/.lastlogin" );
+void Backend::writeUserLastDesktop(QString userhome, QString desktop){
+  QFile file2( userhome + "/.lastlogin" );
   if(!file2.open(QIODevice::Truncate | QIODevice::WriteOnly | QIODevice::Text)){
-    Backend::log("PCDM: Unable to save last login data for user:"+user);	  
+    Backend::log("PCDM: Unable to save last login data for user:"+userhome);	  
   }else{
     QTextStream out(&file2);
     out << desktop;

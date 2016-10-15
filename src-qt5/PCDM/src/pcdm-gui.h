@@ -88,6 +88,8 @@ private:
     QString translationDir;
     
     QString hostname;
+
+
     //Functions
     void createGUIfromTheme();
     void fillScreens();

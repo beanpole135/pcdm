@@ -9,6 +9,9 @@ Sub-classed widget for inputting login information
 */
 
 #include "loginWidget.h"
+#include "pcdm-backend.h"
+
+extern UserList *USERS;
 
 LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
 {
@@ -108,9 +111,12 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   allowPasswordView(allowPWVisible); //setup signal/slots for pushViewPassword
   //Set this layout for the loginWidget
   this->setLayout(vlayout);
-  
+  connect(USERS, SIGNAL(UsersChanged()), this, SLOT(slotUsersChanged()) );
+  connect(USERS, SIGNAL(UserStatusChanged(QString, QString)), this, SLOT(slotUserUpdated(QString, QString)) );
+
   //Run the display setup to ensure appropriate visiblility/usage
   updateWidget();
+  QTimer::singleShot(500, this, SLOT(slotUsersChanged()) );
   
 }
 
@@ -245,6 +251,7 @@ void LoginWidget::slotTryLogin(){
   }else{
     user = lineUsername->text();
   }
+  if(user.contains("(")){ user = user.section("(",0,0).simplified(); }
   QString pw = linePassword->text();
   emit loginRequested(user,pw);
   linePassword->setText(""); //always clear the box after a login attempt
@@ -270,8 +277,9 @@ void LoginWidget::slotUserSelected(){
   }
   updateWidget();
   linePassword->setFocus();
+  if(listUsers->currentText().isEmpty() || idL.length()<1){ return; }
   qDebug() << "User Selected:" << listUsers->currentText();
-  emit UserSelected(listUsers->currentText());
+  emit UserSelected(idL.at(listUsers->currentIndex()));//listUsers->currentText());
 }
 
 void LoginWidget::slotUserUnselected(){
@@ -318,6 +326,21 @@ void LoginWidget::passChanged(){
     haspass = haspass & !lineDevPassword->text().simplified().isEmpty();
   }
   pushLogin->setEnabled(haspass);
+}
+
+void LoginWidget::slotUsersChanged(){
+  setUsernames(USERS->users());
+}
+
+void LoginWidget::slotUserUpdated(QString user, QString stat){
+  qDebug() << "User status update:" << user << stat;
+  //basic list first
+  for(int i=0; i<idL.length(); i++){
+    if(idL[i]!=user){ continue; }
+    listUsers->setItemText(i, USERS->displayname(user) + " ("+stat+")");
+    listUserBig->item(i)->setText( USERS->displayname(user) + " ("+stat+")");
+  }
+  //setUsernames(USERS->users()); //DUMB refresh - need to make this smarter later on
 }
 
 //-----------------------------
@@ -377,21 +400,25 @@ void LoginWidget::setUsernames(QStringList uList){
     idL.clear();
     listUsers->clear();
     listUserBig->clear();
-  }else{
+  }else if(uList != idL){
     updating = true;
     //Make sure that the two user widgets are identical
     listUsers->clear();
+    listUserBig->clear();
     for(int i=0; i<uList.length(); i++){
-      if(uList[i].contains("::::")){ 
+      //if(!USERS->isReady(uList[i])){ continue; }
+      if(!USERS->status(uList[i]).isEmpty()){ 
         //This is a special personacrypt user - also needs additional device password
-        listUsers->addItem(uList[i].section("::::",0,0), "persona");  //set internal flag
-        uList[i] = uList[i].section("::::",0,0); //remove this flag for other widgets
+        listUsers->addItem(USERS->displayname(uList[i])+" ("+USERS->status(uList[i])+")", "persona");  //set internal flag
+        listUserBig->addItem(USERS->displayname(uList[i])+" ("+USERS->status(uList[i])+")");
+        //uList[i] = uList[i].section("::::",0,0); //remove this flag for other widgets
       }else{
-        listUsers->addItem(uList[i], "normal"); //just show this name (nothing special)
+        listUsers->addItem(USERS->displayname(uList[i]), "normal"); //just show this name (nothing special)
+        listUserBig->addItem(USERS->displayname(uList[i]));
       }
     }
-    listUserBig->clear();
-    listUserBig->addItems(uList);
+   
+    //listUserBig->addItems(uList);
     idL.clear();
     idL = uList; //save for later
     listUsers->setCurrentIndex(0);

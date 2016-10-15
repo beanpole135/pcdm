@@ -22,6 +22,7 @@ Sub-classed QProcess for starting an XSession Process
 #include "pcdm-xprocess.h"
 
 #define DEBUG 0
+extern UserList *USERS;
 
 XProcess::XProcess() : QProcess(0) {
   //initialize the variables
@@ -47,9 +48,9 @@ void XProcess::loginToXSession(QString username, QString password, QString deskt
   //Setup the variables
   xuser = username;
   xpwd = password;
-  xhome = Backend::getUserHomeDir(xuser);
+  xhome = USERS->homedir(xuser);
   xcmd = Backend::getDesktopBinary(desktop);
-  xshell = Backend::getUserShell(xuser);
+  xshell = USERS->shell(xuser);
   xde = desktop;
   xlang = lang;
   xdevpass = devPassword;
@@ -91,7 +92,8 @@ bool XProcess::startXSession(){
   if( !pam_checkPW() ){ emit InvalidLogin(); pam_shutdown(); return true; }
 
   //If this has a special device password, mount the personacrypt device
-  if( !xanonlogin && !xdevpass.isEmpty() && Backend::getAvailablePersonaCryptUsers().contains(xuser) ){
+  if( !xanonlogin && !xdevpass.isEmpty() ){ //&& Backend::getAvailablePersonaCryptUsers().contains(xuser) ){
+    Backend::log(" - PersonaCrypt Login Detected");
     if( !Backend::MountPersonaCryptUser(xuser, xdevpass) ){ 
       //Could not mount the personacrypt device (invalid password?)
       xdevpass.clear(); //clear the invalid password
@@ -105,7 +107,7 @@ bool XProcess::startXSession(){
   }
 
   //Save the current user/desktop as the last login
-  Backend::saveLoginInfo(xuser,xde);
+  Backend::saveLoginInfo(xuser, xhome, xde);
 
   // Get the users uid/gid information
   struct passwd *pw;
@@ -168,8 +170,32 @@ bool XProcess::startXSession(){
   if(QFile::exists("/usr/local/bin/dbus-launch")){
     cmd.append("dbus-launch --exit-with-session "+xcmd);
   }
+
+  QString tUid, tGid, logFile;
+  tUid.setNum(pw->pw_uid);
+  tGid.setNum(pw->pw_gid);
+  logFile=xhome + "/.pcdm-startup.log";
+
+  // Locate the auth file
+  QString authfile = qgetenv("XAUTHORITY");
+  if ( authfile.isEmpty() )
+    authfile = xhome + "/.Xauthority";
+
   //Need to run a couple commands in sequence: so put them in a script file
   tOut << "#!/bin/sh\n\n";
+
+  QString PICOCLIENT = qgetenv("PICO_CLIENT_LOGIN");
+  QString PICOHOME = qgetenv("PICO_CLIENT_HOME");
+  if ( ! PICOCLIENT.isEmpty() && ! PICOHOME.isEmpty() ) {
+    // Change ownership on the Xauthority file for PICO usage
+    tOut << "rm "+authfile+"\n";
+    tOut << "ln -fs "+PICOHOME+"/.Xauthority "+authfile+"\n";
+    QProcess::execute("chown "+tUid+" "+PICOHOME+"/.Xauthority"); // Change ownership on the pico login
+  } else {
+    // Change ownership on the Xauthority file
+    QProcess::execute("chown "+tUid+":"+tGid+" "+authfile);
+  }
+
   tOut << "if [ -e '"+xhome+"/.xprofile' ] ; then\n";
   tOut << "  chmod 755 "+xhome+"/.xprofile\n";
   tOut << "  . "+xhome+"/.xprofile\n";
@@ -177,10 +203,6 @@ bool XProcess::startXSession(){
   tOut << cmd + "\n"; //+ " >" + xhome+ "/.pcdm-startup.log" + " 2>" + xhome + "/.pcdm-startup.log\n";
   tOut << "exit $?"; //Make sure we return the DE return value
 
-  QString tUid, tGid, logFile;
-  tUid.setNum(pw->pw_uid);
-  tGid.setNum(pw->pw_gid);
-  logFile=xhome + "/.pcdm-startup.log";
   cmd = "/usr/local/share/PCDM/pcdm-session "+xuser+" "+tUid+" "+tGid+" "+tFile->fileName()+" "+logFile;
   connect( this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotCleanup()) );
   tFile->setPermissions(QFile::ReadOwner | QFile::WriteOwner |QFile::ReadGroup | QFile::ReadUser | QFile::ReadOther);
@@ -243,7 +265,9 @@ void XProcess::setupSessionEnvironment(){
 
 //Stand-alone function to check a username/password combination for validity
 void XProcess::checkPW(QString user, QString pwd){
-  xuser = Backend::getUsernameFromDisplayname(user); 
+  if(USERS->isReady(user)){ xuser = user; }
+  else{ xuser = USERS->findUser(user); } //convert display name into username
+  //xuser = Backend::getUsernameFromDisplayname(user); 
   xpwd = pwd;
   bool ok = pam_checkPW();
   pam_shutdown();

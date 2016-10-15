@@ -92,6 +92,11 @@ class LoginWidget : public QGroupBox
 	void slotDesktopChanged(int);
 	void slotAnonChanged();
   	void passChanged();
+
+	//Updates to the list of users
+	void slotUsersChanged();
+	void slotUserUpdated(QString, QString);
+
   signals:
 	//Emits these signals whenever a login request is detected
 	void loginRequested(QString user, QString password);

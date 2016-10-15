@@ -39,9 +39,9 @@ int main(int argc, char ** argv)
   strcpy(xlog, argv[5]);
 
   // Change owner / group on XAUTHORITY file
-  xauth = getenv("XAUTHORITY");
-  if ( chown(xauth, my_uid, my_gid) != 0)
-     printf("WARNING: Failed to chown XAUTHORITY");
+  //xauth = getenv("XAUTHORITY");
+  //if ( chown(xauth, my_uid, my_gid) != 0)
+  //   printf("WARNING: Failed to chown XAUTHORITY");
 
   // Set the GID
   if (setgid(my_gid) < 0) {

@@ -15,6 +15,8 @@
 #include "pcdm-backend.h"
 #include "fancySwitcher.h"
 
+extern UserList *USERS;
+
 bool DEBUG_MODE=false;
 QString VIRTUALKBDBIN="/usr/local/bin/xvkbd -compact";
 
@@ -356,7 +358,7 @@ void PCDMgui::slotScreensChanged(){
 
 void PCDMgui::slotStartLogin(QString displayname, QString password){
   //Get user inputs
-  QString username = Backend::getUsernameFromDisplayname(displayname);
+  QString username = USERS->findUser(displayname); //Backend::getUsernameFromDisplayname(displayname);
   QString desktop;
   if(simpleDESwitcher){
     desktop = loginW->currentDE();
@@ -365,7 +367,7 @@ void PCDMgui::slotStartLogin(QString displayname, QString password){
   }
   QString devPassword;
   bool anonymous = loginW->isAnonymous();
-  if(!anonymous && pcCurrent.contains(username)){
+  if(!anonymous && !USERS->status(username).isEmpty()){ //pcCurrent.contains(username)){
     //personacrypt user - also pull device password
     devPassword = loginW->currentDevicePassword();
   }
@@ -413,7 +415,7 @@ void PCDMgui::slotLoginFailure(){
 void PCDMgui::slotUserChanged(QString newuser){
   if( !newuser.isEmpty() ){
     //Try to load the custom user icon
-    QString tmpIcon = Backend::getUserHomeDir(newuser) + "/.loginIcon.png";
+    QString tmpIcon = USERS->homedir(newuser)+"/.loginIcon.png"; //Backend::getUserHomeDir(newuser) + "/.loginIcon.png";
     if(!QFile::exists(tmpIcon) ){ tmpIcon= currentTheme->itemIcon("user"); }
     if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/user.png"; }
     QSize tmpsz = currentTheme->itemIconSize("user");
@@ -547,17 +549,17 @@ void PCDMgui::slotLocaleChanged(QString langCode){
 
 void PCDMgui::LoadAvailableUsers(){
   if(DEBUG_MODE){ qDebug() << "Update Users:"; }
-  pcAvail = Backend::getRegisteredPersonaCryptUsers();
+  //pcAvail = Backend::getRegisteredPersonaCryptUsers();
   //qDebug() << "Loading Users:" << pcAvail << sysAvail << pcCurrent;
-  QStringList userlist = Backend::getSystemUsers(false);
-  if(userlist.isEmpty()){ 
+  //QStringList userlist = USERS->users(); //Backend::getSystemUsers(false);
+  /*if(userlist.isEmpty()){ 
     //Fallback method in case no valid system users could be found
     Backend::allowUidUnder1K(true); 
     userlist = Backend::getSystemUsers(false);
-  }
+  }*/
   //qDebug() << " - System:" << userlist;
   QString lastUser;
-  if(!pcAvail.isEmpty()){ 
+  /*if(!pcAvail.isEmpty()){ 
     QStringList pcnow = Backend::getAvailablePersonaCryptUsers(); 
     if(DEBUG_MODE){ qDebug() << "PC (avail, now):" << pcAvail << pcnow; }
     if(pcnow.length() > pcCurrent.length()){
@@ -575,30 +577,31 @@ void PCDMgui::LoadAvailableUsers(){
 	userlist.removeAll(pcAvail[i]);
       }
     }
-    pcCurrent = pcnow; //for comparison later
+    pcCurrent = pcnow; //for comparison later*/
     //Need to convert all the usernames into the Display Names now
-    for(int i=0; i<userlist.length(); i++){
-      if(pcnow.contains(userlist[i])){
-	//Device connected - put the special flag on the end
-        userlist[i] = Backend::getDisplayNameFromUsername(userlist[i])+"::::personacrypt";
+    /*for(int i=0; i<userlist.length(); i++){
+      if(!USERS->isReady(userlist[i]) ){ userlist.removeAt(i); i--; continue; }
+      if( !USERS->status(userlist[i]).isEmpty() ){ //pcnow.contains(userlist[i])){
+	//PersonaCrypt Device connected - put the special flag on the end
+        userlist[i] = USERS->displayname(userlist[i])+"::::personacrypt"; //Backend::getDisplayNameFromUsername(userlist[i])+"::::personacrypt";
       }else{
-	userlist[i] = Backend::getDisplayNameFromUsername(userlist[i]);
+	userlist[i] = USERS->displayname(userlist[i]); //Backend::getDisplayNameFromUsername(userlist[i]);
       }
-    }
-  }else{
-    userlist = Backend::getSystemUsers(); //Just pull the entire display name list
-  }
-  if(DEBUG_MODE){ qDebug() << "UserList (names):" << userlist << sysAvail; }
+    }*/
+  /*}else{
+    userlist = USERS->users(); //Backend::getSystemUsers(); //Just pull the entire display name list
+  }*/
+  //if(DEBUG_MODE){ qDebug() << "UserList (names):" << userlist << sysAvail; }
   //Add the usernames to the login widget (if different)
-  if(userlist != sysAvail || sysAvail.isEmpty() ){
-    loginW->setUsernames(userlist); //add in the detected users
-    sysAvail = userlist; //save for later
+  //if(userlist != sysAvail || sysAvail.isEmpty() ){
+    //loginW->setUsernames(userlist); //add in the detected users
+    //sysAvail = userlist; //save for later
     //Whenever we reset the internal list, also need to reset which user has focus
     if(lastUser.isEmpty()){ lastUser = Backend::getLastUser(); }
     if(!lastUser.isEmpty()){ //set the previously used user
-    	loginW->setCurrentUser(Backend::getDisplayNameFromUsername(lastUser)); 
+    	loginW->setCurrentUser(USERS->displayname(lastUser)); 
     }	  
-  }
+  //}
   
 }
 
@@ -678,7 +681,7 @@ void PCDMgui::retranslateUi(){
     //Get the new desktop list (translated)
     QStringList deList = Backend::getAvailableDesktops(); //priority ordered
     QString lastDE;
-    if(!loginW->currentUsername().isEmpty()){ lastDE = Backend::getLastDE(loginW->currentUsername()); }
+    if(!loginW->currentUsername().isEmpty()){ lastDE = Backend::getLastDE(loginW->currentUsername(), USERS->homedir(loginW->currentUsername()) ); }
     if(DEBUG_MODE){ qDebug() << "DE's:" << deList << lastDE; }
     if(lastDE.isEmpty()){ lastDE = deList[0]; }
     //Organize the desktop list alphabetically by filename

@@ -19,7 +19,7 @@
 #include <sys/wait.h>
 #include <unistd.h>
 
-#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
+//#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
 #define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin")
 #define TMPAUTHFILE QString("/var/tmp/.PCDMAuth")
 #define TMPSTOPFILE QString("/var/tmp/.PCDMstop")
@@ -30,13 +30,11 @@
 #include "pcdm-xprocess.h"
 #include "pcdm-logindelay.h"
 
-
-//Make sure that prefix is set
-//#ifndef prefix
-//#define prefix "/usr/local/"
-//#endif
-
 //bool USECLIBS=false;
+
+
+//Global classes
+UserList *USERS = 0;
 
 //Setup any qDebug/qWarning/qError messages to get saved into this log file directly
 QFile logfile("/var/log/PCDM.log");
@@ -102,7 +100,13 @@ int runSingleSession(int argc, char *argv[]){
   
   Config::loadConfigFile(confFile);
   // Now set the backend functionality of which usernames are allowed
-  Backend::allowUidUnder1K(Config::allowUnder1KUsers(), Config::excludedUserList());
+  if(USERS==0){ 
+    USERS = new UserList();
+    USERS->allowUnder1K(Config::allowUnder1KUsers());
+    USERS->excludeUsers(Config::excludedUserList());
+    USERS->updateList(); //now start the probe so things are ready on demand
+  }
+  //Backend::allowUidUnder1K(Config::allowUnder1KUsers(), Config::excludedUserList());
   //qDebug() << "Config File Loaded:" << QString::number(clock.elapsed())+" ms";
   // Startup the main application
   QApplication a(argc,argv); 
@@ -144,7 +148,7 @@ int runSingleSession(int argc, char *argv[]){
 
   QProcess compositor;
   if ( QFile::exists("/usr/local/bin/compton") ) {
-    compositor.startDetached("/usr/local/bin/compton", QStringList() << "-b" );
+    compositor.start("/usr/local/bin/compton");
   }
     
   // *** STARTUP THE PROGRAM ***
@@ -154,7 +158,7 @@ int runSingleSession(int argc, char *argv[]){
     //Setup the Auto Login
     QString user = Backend::getALUsername();
     QString pwd = Backend::getALPassword();
-    QString dsk = Backend::getLastDE(user);
+    QString dsk = Backend::getLastDE(user, "");
     if( user.isEmpty() || dsk.isEmpty() || QFile::exists("/var/db/personacrypt/"+user+".key") ){
 	//Invalid inputs (or a PersonaCrypt user)
 	 goodAL=false;   
@@ -208,6 +212,7 @@ int runSingleSession(int argc, char *argv[]){
     retCode = a.exec();
    }//end special retCode==-1 check (restart GUI)
   }  // end of PCDM GUI running
+  USERS->stopUpdates();
   //Wait for the desktop session to finish before exiting
   if(compositor.state()==QProcess::Running){ compositor.terminate(); }
     desktop.waitForSessionClosed(); 

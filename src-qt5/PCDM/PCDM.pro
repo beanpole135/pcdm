@@ -117,4 +117,10 @@ conf.extra=cp pcdm.conf $(INSTALL_ROOT)/usr/local/etc/pcdm.conf.dist && chmod 60
 session.path=/usr/local/share/PCDM
 session.extra=cc -o pcdm-session src/pcdm-session.c && strip pcdm-session && install -m 755 pcdm-session $(INSTALL_ROOT)/usr/local/share/PCDM/
 
-INSTALLS += target session conf dotrans
+startpico.path=/usr/local/bin
+startpico.extra=install -m 755 src/start-pcdm-pico $(INSTALL_ROOT)/usr/local/bin
+
+picosudo.path=/usr/local/etc/sudoers.d/
+picosudo.extra=install -m 644 src/pico-sudoers $(INSTALL_ROOT)/usr/local/etc/sudoers.d/
+
+INSTALLS += target session conf dotrans startpico picosudo
