@@ -65,7 +65,7 @@
     </message>
     <message>
         <source> Seconds</source>
-        <translation>  Sekund</translation>
+        <translation> Sekund</translation>
     </message>
     <message>
         <source>Display available users</source>
