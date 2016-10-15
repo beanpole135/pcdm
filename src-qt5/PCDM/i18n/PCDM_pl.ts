@@ -119,11 +119,11 @@
     </message>
     <message>
         <source>Tip: Make sure that caps-lock is turned off.</source>
-        <translation>Sugestia: Miej pewność że CAPSLOCK nie jest włączony</translation>
+        <translation>Sugestia: Upewnij się że caps-lock jest wyłączony.</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Restart</translation>
+        <translation>Uruchom ponownie</translation>
     </message>
     <message>
         <source>Shut Down</source>
@@ -143,7 +143,7 @@
     </message>
     <message>
         <source>Username/Password combination is invalid, please try again.</source>
-        <translation>Kombinacja nazwy użytkownika/hasła jest niepoprawna, spróbuj jeszcze raz</translation>
+        <translation>Kombinacja użytkownik/hasło jest niepoprawna, spróbuj jeszcze raz.</translation>
     </message>
     <message>
         <source>System Shutdown</source>
