@@ -134,6 +134,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
     else if(info[5].contains("nonexistent") || info[5].contains("/empty") || info[5].isEmpty() ){bad=true;}
     // uid > 0
     else if(info[2].toInt() < 1){bad=true;} //don't show the root user
+    else if(info[0].indexOf("picoauth") != -1){bad=true;} //don't show pico connect users
     //Check that the name/description does not contain "server"
     else if(info[2].toInt() < 1000){
 	if(!allowunder1kUID){ bad = true;} //ignore anything under UID 1000
