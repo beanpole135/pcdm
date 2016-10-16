@@ -28,6 +28,7 @@ void Config::loadDefaults(){
   confStruct << "false";					// [11] Allow anonymous login
   confStruct << "false";					// [12] Allow UID's under 1000
   confStruct << "";						// [13] Excluded user names
+  confStruct << "false";					// [14] Enable VGL
   return;
 }
 
@@ -63,6 +64,7 @@ void Config::readConfigFile(QString filePath){
       else if(var=="ALLOW_STEALTH_LOGIN"){ confStruct[11] = val; }
       else if(var=="ALLOW_UID_UNDER_1K"){ confStruct[12] = val; }
       else if(var=="EXCLUDED_USERS"){ val = val.remove(" "); confStruct[13] = val; }
+      else if(var=="ENABLE_VGL"){ confStruct[14] = val; }
       else{}
       
     }
@@ -95,12 +97,18 @@ QString Config::xSessionsImageDir(){
 bool Config::useAutoLogin(){
   //qDebug() << "confStruct[3]:" << confStruct[3];
   if(confStruct[3].toLower()=="true"){ return true; }
-  else{ return false; }	
+  else{ return false; }
+}
+
+bool Config::enableVGL(){
+  //qDebug() << "confStruct[14]:" << confStruct[14];
+  if(confStruct[14].toLower()=="true"){ return true; }
+  else{ return false; }
 }
 
 bool Config::allowUnder1KUsers(){
   if(confStruct[12].toLower()=="true"){ return true; }
-  else{ return false; }  
+  else{ return false; }
 }
 
 QStringList Config::excludedUserList(){
