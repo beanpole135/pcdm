@@ -656,6 +656,7 @@ void PCDMgui::retranslateUi(){
     //Get the current DPI and add options to switch
     QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
       int dpi = QApplication::primaryScreen()->physicalDotsPerInch();
+      qDebug() << "Current Screen DPI:" << dpi;
        connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
        QAction *tmpA = dpimenu->addAction(tr("High (4K)")); tmpA->setWhatsThis("196");
           if(dpi==196){ tmpA->setEnabled(false); }
@@ -669,10 +670,15 @@ void PCDMgui::retranslateUi(){
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
     if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
-    if( QString(getlogin()).isEmpty()){
+    QString clog = QString(getlogin());
+    int uid = getuid();
+    qDebug() << "Current User:" << clog << uid;
+    if( uid==0  && (clog=="root" || clog.isEmpty()) ){
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
     systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
+    }else{
+      
     }
     systemButton->setMenu(systemMenu);
   //The main login widget
