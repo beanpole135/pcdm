@@ -604,12 +604,13 @@ void Backend::loadDPIpreference(){
   QString dpi = "96";
   if(file.open(QIODevice::ReadOnly) ){
     QTextStream in(&file);
-    dpi = in.readLine();
+    dpi = in.readLine().simplified();
     file.close();
   }else{
     return;
   }
   if(dpi.toInt()>47){
+    qDebug() << "Setting DPI:" << dpi;
     QProcess::execute("xrandr --dpi "+dpi);
   }
 }

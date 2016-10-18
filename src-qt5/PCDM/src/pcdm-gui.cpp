@@ -655,24 +655,24 @@ void PCDMgui::retranslateUi(){
     systemMenu->clear();	
     //Get the current DPI and add options to switch
     QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
-      int dpi = QApplication::primaryScreen()->physicalDotsPerInch();
+      int dpi = QApplication::primaryScreen()->physicalDotsPerInchX();
       qDebug() << "Current Screen DPI:" << dpi;
        connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
        QAction *tmpA = dpimenu->addAction(tr("High (4K)")); tmpA->setWhatsThis("196");
-          if(dpi==196){ tmpA->setEnabled(false); }
+          if(dpi>=170){ tmpA->setEnabled(false); }
         tmpA = dpimenu->addAction(tr("Medium")); tmpA->setWhatsThis("144");
-          if(dpi==144){ tmpA->setEnabled(false); }
+          if(dpi>=120 && dpi<170){ tmpA->setEnabled(false); }
         tmpA = dpimenu->addAction(tr("Standard")); tmpA->setWhatsThis("96");
-          if(dpi==96){ tmpA->setEnabled(false); }
+          if(dpi>=72 && dpi<120){ tmpA->setEnabled(false); }
         tmpA = dpimenu->addAction(tr("Low ")); tmpA->setWhatsThis("48");
-          if(dpi==48){ tmpA->setEnabled(false); }
+          if(dpi<72){ tmpA->setEnabled(false); }
     systemMenu->addMenu(dpimenu);
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
     if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
     QString clog = QString(getlogin());
     int uid = getuid();
-    qDebug() << "Current User:" << clog << uid;
+    //qDebug() << "Current User:" << clog << uid;
     if( uid==0  && (clog=="root" || clog.isEmpty()) ){
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
