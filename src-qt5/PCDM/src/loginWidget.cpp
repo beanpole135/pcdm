@@ -400,7 +400,7 @@ void LoginWidget::setUsernames(QStringList uList){
     listUsers->clear();
     listUserBig->clear();
     for(int i=0; i<uList.length(); i++){
-      //if(!USERS->isReady(uList[i])){ continue; }
+      if(!USERS->isReady(uList[i])){ uList.removeAt(i); i--; continue; }
       if(!USERS->status(uList[i]).isEmpty()){ 
         //This is a special personacrypt user - also needs additional device password
         listUsers->addItem(USERS->displayname(uList[i])+" ("+USERS->status(uList[i])+")", "persona");  //set internal flag

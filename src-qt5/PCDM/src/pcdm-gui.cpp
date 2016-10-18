@@ -9,11 +9,14 @@
 #include <QGraphicsPixmapItem>
 #include <QStyle>
 #include <QTranslator>
+#include <QScreen>
 //#include <pcbsd-utils.h>
 
 #include "pcdm-gui.h"
 #include "pcdm-backend.h"
 #include "fancySwitcher.h"
+
+#include <unistd.h>
 
 extern UserList *USERS;
 
@@ -652,18 +655,25 @@ void PCDMgui::retranslateUi(){
     systemMenu->clear();	
     //Get the current DPI and add options to switch
     QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
+      int dpi = QApplication::primaryScreen()->physicalDotsPerInch();
        connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
        QAction *tmpA = dpimenu->addAction(tr("High (4K)")); tmpA->setWhatsThis("196");
+          if(dpi==196){ tmpA->setEnabled(false); }
         tmpA = dpimenu->addAction(tr("Medium")); tmpA->setWhatsThis("144");
+          if(dpi==144){ tmpA->setEnabled(false); }
         tmpA = dpimenu->addAction(tr("Standard")); tmpA->setWhatsThis("96");
+          if(dpi==96){ tmpA->setEnabled(false); }
         tmpA = dpimenu->addAction(tr("Low ")); tmpA->setWhatsThis("48");
+          if(dpi==48){ tmpA->setEnabled(false); }
     systemMenu->addMenu(dpimenu);
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
+    if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
+    if( QString(getlogin()).isEmpty()){
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
     systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
-    if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
+    }
     systemButton->setMenu(systemMenu);
   //The main login widget
   if(hostname.isEmpty()){

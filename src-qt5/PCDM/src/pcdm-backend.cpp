@@ -60,6 +60,7 @@ void UserList::updateList(){
 QStringList UserList::users(){
   QStringList keys = HASH.keys().filter("/name");
   for(int i=0; i<keys.length(); i++){ keys[i] = keys[i].section("/",0,0); }
+  keys.sort();
   return keys;
 }
 
