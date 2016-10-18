@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Set our values for PCDM
+export PICO_CLIENT_LOGIN=$(whoami)
+export PICO_CLIENT_HOME="${HOME}"
+
+cd $HOME
+chmod 660 .Xauthority
+
+sudo -E /usr/local/bin/PCDM-session
+
+echo "Killing SSH login..."
+ps -auwwx | grep 'sshd' | grep "$PICO_CLIENT_LOGIN@notty" | awk '{print $2}' | xargs kill -9
+
+exit 0

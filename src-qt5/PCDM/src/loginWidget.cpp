@@ -334,7 +334,13 @@ void LoginWidget::slotUsersChanged(){
 
 void LoginWidget::slotUserUpdated(QString user, QString stat){
   qDebug() << "User status update:" << user << stat;
-  setUsernames(USERS->users()); //DUMB refresh - need to make this smarter later on
+  //basic list first
+  for(int i=0; i<idL.length(); i++){
+    if(idL[i]!=user){ continue; }
+    listUsers->setItemText(i, USERS->displayname(user) + " ("+stat+")");
+    listUserBig->item(i)->setText( USERS->displayname(user) + " ("+stat+")");
+  }
+  //setUsernames(USERS->users()); //DUMB refresh - need to make this smarter later on
 }
 
 //-----------------------------
@@ -394,7 +400,7 @@ void LoginWidget::setUsernames(QStringList uList){
     idL.clear();
     listUsers->clear();
     listUserBig->clear();
-  }else{
+  }else if(uList != idL){
     updating = true;
     //Make sure that the two user widgets are identical
     listUsers->clear();

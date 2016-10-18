@@ -1,7 +1,9 @@
 bin/PCDM-session
 bin/pc-dmconf
+bin/start-pcdm-pico
 %%ETCDIR%%.conf.dist
 etc/rc.d/pcdm
+etc/sudoers.d/pico-sudoers
 sbin/PCDMd
 share/PCDM/i18n/PCDM_af.qm
 share/PCDM/i18n/PCDM_ar.qm

@@ -150,6 +150,11 @@ int runSingleSession(int argc, char *argv[]){
   if ( QFile::exists("/usr/local/bin/compton") ) {
     compositor.start("/usr/local/bin/compton");
   }
+
+  // Check if VirtualGL is in use, open up the system for GL rendering if so
+  if ( Config::enableVGL() ) {
+    system("xhost +");
+  }
     
   // *** STARTUP THE PROGRAM ***
   bool goodAL = false; //Flag for whether the autologin was successful
@@ -212,6 +217,7 @@ int runSingleSession(int argc, char *argv[]){
     retCode = a.exec();
    }//end special retCode==-1 check (restart GUI)
   }  // end of PCDM GUI running
+  USERS->stopUpdates();
   //Wait for the desktop session to finish before exiting
   if(compositor.state()==QProcess::Running){ compositor.terminate(); }
     desktop.waitForSessionClosed(); 

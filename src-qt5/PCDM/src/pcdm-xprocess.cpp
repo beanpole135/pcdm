@@ -170,8 +170,32 @@ bool XProcess::startXSession(){
   if(QFile::exists("/usr/local/bin/dbus-launch")){
     cmd.append("dbus-launch --exit-with-session "+xcmd);
   }
+
+  QString tUid, tGid, logFile;
+  tUid.setNum(pw->pw_uid);
+  tGid.setNum(pw->pw_gid);
+  logFile=xhome + "/.pcdm-startup.log";
+
+  // Locate the auth file
+  QString authfile = qgetenv("XAUTHORITY");
+  if ( authfile.isEmpty() )
+    authfile = xhome + "/.Xauthority";
+
   //Need to run a couple commands in sequence: so put them in a script file
   tOut << "#!/bin/sh\n\n";
+
+  QString PICOCLIENT = qgetenv("PICO_CLIENT_LOGIN");
+  QString PICOHOME = qgetenv("PICO_CLIENT_HOME");
+  if ( ! PICOCLIENT.isEmpty() && ! PICOHOME.isEmpty() ) {
+    // Change ownership on the Xauthority file for PICO usage
+    tOut << "rm "+authfile+"\n";
+    tOut << "ln -fs "+PICOHOME+"/.Xauthority "+authfile+"\n";
+    QProcess::execute("chown "+tUid+" "+PICOHOME+"/.Xauthority"); // Change ownership on the pico login
+  } else {
+    // Change ownership on the Xauthority file
+    QProcess::execute("chown "+tUid+":"+tGid+" "+authfile);
+  }
+
   tOut << "if [ -e '"+xhome+"/.xprofile' ] ; then\n";
   tOut << "  chmod 755 "+xhome+"/.xprofile\n";
   tOut << "  . "+xhome+"/.xprofile\n";
@@ -179,10 +203,6 @@ bool XProcess::startXSession(){
   tOut << cmd + "\n"; //+ " >" + xhome+ "/.pcdm-startup.log" + " 2>" + xhome + "/.pcdm-startup.log\n";
   tOut << "exit $?"; //Make sure we return the DE return value
 
-  QString tUid, tGid, logFile;
-  tUid.setNum(pw->pw_uid);
-  tGid.setNum(pw->pw_gid);
-  logFile=xhome + "/.pcdm-startup.log";
   cmd = "/usr/local/share/PCDM/pcdm-session "+xuser+" "+tUid+" "+tGid+" "+tFile->fileName()+" "+logFile;
   connect( this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotCleanup()) );
   tFile->setPermissions(QFile::ReadOwner | QFile::WriteOwner |QFile::ReadGroup | QFile::ReadUser | QFile::ReadOther);
