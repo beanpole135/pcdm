@@ -4,6 +4,13 @@
 export PICO_CLIENT_LOGIN=$(whoami)
 export PICO_CLIENT_HOME="${HOME}"
 
+# Create any pulseaudio settings
+if [ -e "${HOME}/pcookie" ]; then
+  echo "Enabling PULSEAUDIO..."
+  export PICO_PULSE_COOKIE="${PICO_CLIENT_HOME}/pcookie"
+  export PULSE_SERVER="`echo ${SSH_CONNECTION} | cut -d ' ' -f 1`"
+fi
+
 cd $HOME
 chmod 660 .Xauthority
 

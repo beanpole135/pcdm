@@ -190,6 +190,13 @@ bool XProcess::startXSession(){
     // Change ownership on the Xauthority file for PICO usage
     tOut << "rm "+authfile+"\n";
     tOut << "ln -fs "+PICOHOME+"/.Xauthority "+authfile+"\n";
+    QString PICOPULSE = qgetenv("PICO_PULSE_COOKIE");
+    // Check if PULSE is enabled
+    if ( ! PICOPULSE.isEmpty() ) {
+      tOut << "mkdir -p "+xhome+"/.config/pulse 2>/dev/null\n";
+      tOut << "cp "+PICOPULSE+" "+xhome+"/.config/pulse/cookie\n";
+      tOut << "chown "+tUid+":"+tGid+" " +xhome+"/.config/pulse/cookie\n";
+    }
     QProcess::execute("chown "+tUid+" "+PICOHOME+"/.Xauthority"); // Change ownership on the pico login
   } else {
     // Change ownership on the Xauthority file
