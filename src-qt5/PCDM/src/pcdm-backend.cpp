@@ -170,7 +170,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
         HASH.insert(info[0]+"/home", info[5].simplified());
         HASH.insert(info[0]+"/shell",shell);
 	if(allPC->contains(info[0])){
-          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
         }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
       }
       //qDebug() << " - Done with user info";
