@@ -2,14 +2,24 @@
 # Copyright (c) 2016 Joe Maloney <jmaloney@ixsystems.com>
 # Released under the 2-clause BSD license.
 
-command=/usr/local/bin/startx
+command="/usr/local/sbin/PCDMd"
 pid=/var/run/PCDMd.pid
-command_args="$PCDMd_args /usr/local/bin/PCDM-session"
+command_args=""
 name="TrueOS Display Manager"
 
 depend() {
-	need urandom dbus syscons moused
+	need urandom dbus syscons
 	after bootmisc
+}
+
+status() {
+  #return 0 if already running, 1 otherwise
+  if [ ! -f ${pid} ]; then
+    return 1;
+  elif [ `pgrep -q -F ${pid}` ]; then
+    return 1;
+  fi
+  return 0
 }
 
 start() {
@@ -17,29 +27,27 @@ start() {
   if [ "`kenv noxorg 2>/dev/null`" = "YES" ] ; then
      return 0
   fi
-
-  echo "Starting PCDM."
-
-  (
-    iter=0
-    while [ -e /var/run/nologin ]; do 
-        if [ ${iter} -eq 60 ]; then
-            break
-        fi
-        sleep 1
-        iter=$(expr ${iter} + 1)
-    done
-
-    #Start the PCDM login daemon
-    if [ ! -e /var/run/nologin ]; then
-      if [ -e /var/tmp/.PCDMstop ]; then 
-        rm /var/tmp/.PCDMstop
-      fi
-      ${command} ${command_args} 
-    fi
-  ) &
+  # Check if this is already running
+  status
+  if [ $? -eq 0 ]; then
+    return 0;
+  fi
+  echo "Starting PCDM"
+  #Start the PCDM login daemon
+  if [ ! -e /var/run/nologin ]; then
+    start-stop-daemon --start --exec "${command}" --name pcdm --pidfile ${pid} ${command_args}
+    return $?
+  fi
+  return 1;
 }
 
-stop_post() {
-	${command} stop
+stop() {
+      #Make sure PCDMd knows that we intend to stop X
+      ${command} stop
+      #Now stop all PCDM sessions
+      killall PCDM-session #
+      if [ -f ${pid} ]; then
+        rm ${pid}
+      fi
+      return 0;
 }
