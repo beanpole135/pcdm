@@ -18,42 +18,41 @@ command="/usr/local/sbin/PCDMd"
 pidfile="/var/run/PCDMd.pid"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
+status_cmd="{name}_status"
 
 load_rc_config ${name}
 : ${pcdm_enable:=no} #default to not start pcdm automatically
 
+pcdm_status(){
+  #returns 0 if running, 1 if not
+  if [ ! -f ${pidfile} ]; then
+    return 1
+  elif [ `pgrep -q -F ${pidfile}` ]; then
+    return 1
+  fi
+  return 0
+}
+
 pcdm_start()
 {
   if ! checkyesno pcdm_enable ; then
-     return 0
+     return 1
   fi
 
   # Check if boot-loader set option to skip xorg
   if [ "`kenv noxorg 2>/dev/null`" = "YES" ] ; then
      return 0
   fi
-
+  #check if PCDMd is already running
+  pcdm_status
+  if [ 0 -eq $? ]; then
+    return 0
+  fi
   echo "Starting PCDM."
-
-  (
-    iter=0
-    while [ -e /var/run/nologin ]; do 
-	if [ ${iter} -eq 60 ]; then
-	    break
-	fi
-	sleep 1
-	iter=$(expr ${iter} + 1)
-    done
-
-    #Start the PCDM login daemon
-    if [ ! -e /var/run/nologin ]; then
-      if [ -e /var/tmp/.PCDMstop ]; then 
-        rm /var/tmp/.PCDMstop
-      fi
-      ${command} ${pcdm_flags} 
-    fi
-  ) &
-
+  #Start the PCDM login daemon
+  if [ ! -e /var/run/nologin ]; then
+    ${command} ${pcdm_flags} 
+  fi
 }
 
 pcdm_stop()
@@ -61,5 +60,6 @@ pcdm_stop()
   #Send the PCDM daemon the signal not to start a new session after this one finishes
   ${command} stop
 }
+
 
 run_rc_command "$1"
