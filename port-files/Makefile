@@ -24,6 +24,8 @@ USE_QT5=        core gui network svg multimedia imageformats \
 USES=           qmake
 USE_OPENRC_SUBR=pcdm-openrc
 
+SUB_FILES=	pkg-deinstall pkg-install
+
 USE_GITHUB=	yes
 GH_ACCOUNT=	trueos
 GH_PROJECT=	pcdm
