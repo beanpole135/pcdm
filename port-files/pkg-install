@@ -4,7 +4,6 @@
 PREFIX=${PKG_PREFIX-/usr/local}
 
 if [ "$2" != "POST-INSTALL" ] ; then
-   rc-update add pcdm default
    exit 0
 fi
 
