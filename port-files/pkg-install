@@ -15,6 +15,7 @@ fi
 
 if [ ! -e "${PREFIX}/etc/pcdm.conf" ] ; then
   install -m 644 ${PREFIX}/etc/pcdm.conf.dist ${PREFIX}/etc/pcdm.conf
+  rc-update add pcdm default
 fi
 
 exit 0
