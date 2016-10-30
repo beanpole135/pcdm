@@ -8,7 +8,7 @@ PREFIX=${PKG_PREFIX-/usr/local}
 case $2 in
 DEINSTALL)
 	if [ -e /sbin/rc-update }; then
-	/sbin/rc-update delete pcdm-openrc default
+	/sbin/rc-update delete pcdm default
 	fi
 	;;
 esac

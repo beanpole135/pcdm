@@ -8,7 +8,7 @@ PREFIX=${PKG_PREFIX-/usr/local}
 case $2 in
 POST-INSTALL)
 	if [ -e /sbin/rc-update }; then
-	/sbin/rc-update add pcdm-openrc default
+	/sbin/rc-update add pcdm default
 	fi
 	;;
 esac
