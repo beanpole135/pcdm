@@ -4,6 +4,7 @@
 PREFIX=${PKG_PREFIX-/usr/local}
 
 if [ "$2" != "POST-INSTALL" ] ; then
+   rc-update add pcdm default
    exit 0
 fi
 
@@ -15,7 +16,6 @@ fi
 
 if [ ! -e "${PREFIX}/etc/pcdm.conf" ] ; then
   install -m 644 ${PREFIX}/etc/pcdm.conf.dist ${PREFIX}/etc/pcdm.conf
-  rc-update add pcdm default
 fi
 
 exit 0
