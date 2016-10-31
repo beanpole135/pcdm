@@ -362,6 +362,7 @@ void PCDMgui::slotScreensChanged(){
 void PCDMgui::slotStartLogin(QString displayname, QString password){
   //Get user inputs
   QString username = USERS->findUser(displayname); //Backend::getUsernameFromDisplayname(displayname);
+  if(username.isEmpty() && USERS->users().contains(displayname)){ username = displayname; } //gave the real username
   QString desktop;
   if(simpleDESwitcher){
     desktop = loginW->currentDE();
