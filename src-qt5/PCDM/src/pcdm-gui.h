@@ -63,6 +63,7 @@ private slots:
     void slotLocaleChanged(QString);
     void LoadAvailableUsers();
     void ChangeDPI(QAction*);
+    void resetVideoDriver();
 
 private:
     //Objects
