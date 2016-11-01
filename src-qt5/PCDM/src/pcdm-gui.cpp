@@ -251,11 +251,11 @@ void PCDMgui::createGUIfromTheme(){
     if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/usbdevice.png"; }
     loginW->changeButtonIcon("device", tmpIcon, tmpsz);
     // - refresh button icon
-    tmpIcon = currentTheme->itemIcon("refresh");
-    tmpsz = currentTheme->itemIconSize("refresh");
-    if(!tmpsz.isValid()){ tmpsz = defIconSize; }
-    if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/refresh.png"; }
-    loginW->changeButtonIcon("refresh", tmpIcon, tmpsz);
+    //tmpIcon = currentTheme->itemIcon("refresh");
+    //tmpsz = currentTheme->itemIconSize("refresh");
+    //if(!tmpsz.isValid()){ tmpsz = defIconSize; }
+    //if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/refresh.png"; }
+    //loginW->changeButtonIcon("refresh", tmpIcon, tmpsz);
     //Enable/disable the password view functionality
     loginW->allowPasswordView( Config::allowPasswordView() );
     loginW->allowUserSelection( Config::allowUserSelection() );

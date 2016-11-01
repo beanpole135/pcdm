@@ -68,7 +68,7 @@ class LoginWidget : public QGroupBox
 	QToolButton *pushLogin;
 	QToolButton *pushViewPassword;
 	QToolButton *pushUserIcon, *userIcon;
-	QToolButton *pushRefresh;
+	//QToolButton *pushRefresh;
 	QLabel *deIcon, *devIcon, *nousers;
 	QCheckBox *checkAnon;
 	bool updating;
