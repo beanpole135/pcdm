@@ -48,6 +48,8 @@ void Config::readConfigFile(QString filePath){
       line = line.section("#",0,0).simplified(); //cut any comments off the end of the line
       QString var = line.section("=",0,0).simplified(); // get the variable
       QString val = line.section("=",1,1).simplified(); // get the value
+      val.replace('"', ""); // Remove "
+      val.replace("'", ""); // Remove '
       
       //Parse the Configuration File
       if(var=="THEME_FILE"){ confStruct[0] = val; }
