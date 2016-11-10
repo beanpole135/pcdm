@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="PCDM_pt_BR">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -68,31 +68,31 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor conecte seu dispositivo PersonaCrypt para iniciar o procedimento de login.</translation>
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sessão Stealth</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
-        <translation type="unfinished"></translation>
+        <translation>Usar um diretório home temporário (que é excluído no log out)</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar</translation>
     </message>
     <message>
         <source>Refresh available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar usuários disponíveis</translation>
     </message>
     <message>
         <source>Device encryption key</source>
-        <translation type="unfinished"></translation>
+        <translation>Chave de criptografia do dispositivo</translation>
     </message>
     <message>
         <source>Device encryption key (personacrypt users only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Chave de criptografia do dispositivo (usuários do PersonaCrypt somente)</translation>
     </message>
 </context>
 <context>
@@ -167,31 +167,31 @@
     </message>
     <message>
         <source>Change locale (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alterar locale (%1)</translation>
     </message>
     <message>
         <source>Change DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Alterar DPI</translation>
     </message>
     <message>
         <source>High (4K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Alta (4K)</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Média</translation>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Padrão</translation>
     </message>
     <message>
         <source>Low </source>
-        <translation type="unfinished"></translation>
+        <translation>Baixa </translation>
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation type="unfinished"></translation>
+        <translation>Atualizar PCDM</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>PCDM Automatic Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Login Automático PCDM</translation>
     </message>
 </context>
 <context>
