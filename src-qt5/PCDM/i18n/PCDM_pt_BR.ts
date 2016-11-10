@@ -72,7 +72,7 @@
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation>Sessão Stealth</translation>
+        <translation>Sessão Anônima</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
