@@ -6,15 +6,24 @@
 PCDMCONF="/usr/local/etc/pcdm.conf"
 BASEPCDMAUTHFILE="/var/tmp/.PCDMAuth"
 STOPFILE="/var/tmp/.PCDMstop"
-
+PIDFILE="/var/run/PCDMd.pid"
 if [ -e "$STOPFILE" ] ; then rm $STOPFILE; fi
 
 #Quick check that this is not the "stop" command
 if [ "${1}" = "stop" ]; then
   touch ${STOPFILE}
   exit
+elif  [ -f ${STOPFILE} ]; then
+  rm ${STOPFILE}
 fi
 
+if [ -f ${PIDFILE} ]; then
+  pgrep -q -F ${PIDFILE}
+  if [ 0 -eq $? ]; then
+    echo "PCDMd is already running!!"
+    return 0;
+  fi
+fi
 # Stupid I know, remove me later when i915kms isn't so finiky
 sleep 5
 
@@ -60,6 +69,7 @@ fi
 # Now start the X Server
 #echo "  [PCDM] Starting Xorg init"
 touch /var/tmp/.PCDMAutoLogin # Allow Auto-Login the first time PCDM starts
+(
 while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   if [ -e /usr/local/bin/pc-checkxdisplay ]; then
      /usr/local/bin/pc-checkxdisplay
@@ -115,3 +125,6 @@ done
 #fi
 #Remove the stopfile if it exists
 rm ${STOPFILE}
+) &
+echo $! > ${PIDFILE}
+return 0

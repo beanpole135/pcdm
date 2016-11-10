@@ -9,11 +9,14 @@
 #include <QGraphicsPixmapItem>
 #include <QStyle>
 #include <QTranslator>
+#include <QScreen>
 //#include <pcbsd-utils.h>
 
 #include "pcdm-gui.h"
 #include "pcdm-backend.h"
 #include "fancySwitcher.h"
+
+#include <unistd.h>
 
 extern UserList *USERS;
 
@@ -248,11 +251,11 @@ void PCDMgui::createGUIfromTheme(){
     if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/usbdevice.png"; }
     loginW->changeButtonIcon("device", tmpIcon, tmpsz);
     // - refresh button icon
-    tmpIcon = currentTheme->itemIcon("refresh");
-    tmpsz = currentTheme->itemIconSize("refresh");
-    if(!tmpsz.isValid()){ tmpsz = defIconSize; }
-    if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/refresh.png"; }
-    loginW->changeButtonIcon("refresh", tmpIcon, tmpsz);
+    //tmpIcon = currentTheme->itemIcon("refresh");
+    //tmpsz = currentTheme->itemIconSize("refresh");
+    //if(!tmpsz.isValid()){ tmpsz = defIconSize; }
+    //if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/refresh.png"; }
+    //loginW->changeButtonIcon("refresh", tmpIcon, tmpsz);
     //Enable/disable the password view functionality
     loginW->allowPasswordView( Config::allowPasswordView() );
     loginW->allowUserSelection( Config::allowUserSelection() );
@@ -359,6 +362,7 @@ void PCDMgui::slotScreensChanged(){
 void PCDMgui::slotStartLogin(QString displayname, QString password){
   //Get user inputs
   QString username = USERS->findUser(displayname); //Backend::getUsernameFromDisplayname(displayname);
+  if(username.isEmpty() && USERS->users().contains(displayname)){ username = displayname; } //gave the real username
   QString desktop;
   if(simpleDESwitcher){
     desktop = loginW->currentDE();
@@ -549,59 +553,12 @@ void PCDMgui::slotLocaleChanged(QString langCode){
 
 void PCDMgui::LoadAvailableUsers(){
   if(DEBUG_MODE){ qDebug() << "Update Users:"; }
-  //pcAvail = Backend::getRegisteredPersonaCryptUsers();
-  //qDebug() << "Loading Users:" << pcAvail << sysAvail << pcCurrent;
-  //QStringList userlist = USERS->users(); //Backend::getSystemUsers(false);
-  /*if(userlist.isEmpty()){ 
-    //Fallback method in case no valid system users could be found
-    Backend::allowUidUnder1K(true); 
-    userlist = Backend::getSystemUsers(false);
-  }*/
-  //qDebug() << " - System:" << userlist;
   QString lastUser;
-  /*if(!pcAvail.isEmpty()){ 
-    QStringList pcnow = Backend::getAvailablePersonaCryptUsers(); 
-    if(DEBUG_MODE){ qDebug() << "PC (avail, now):" << pcAvail << pcnow; }
-    if(pcnow.length() > pcCurrent.length()){
-      //New personacrypt user available - switch to that
-      for(int i=0; i<pcnow.length(); i++){
-        if( !pcCurrent.contains(pcnow[i]) ){ lastUser = pcnow[i]; break; }
-      }
-    }
-    if(DEBUG_MODE){ qDebug() << " - Now:" << pcnow << lastUser; }
-    //Start with the system users
-    //userlist = sysAvail; //personacrypt users will always be included in the system users
-    for(int i=0; i<pcAvail.length(); i++){
-      if(!pcnow.contains(pcAvail[i]) && !Config::allowAnonLogin()){
-        //Device is not connected - hide this user (no anonymous logins either)
-	userlist.removeAll(pcAvail[i]);
-      }
-    }
-    pcCurrent = pcnow; //for comparison later*/
-    //Need to convert all the usernames into the Display Names now
-    /*for(int i=0; i<userlist.length(); i++){
-      if(!USERS->isReady(userlist[i]) ){ userlist.removeAt(i); i--; continue; }
-      if( !USERS->status(userlist[i]).isEmpty() ){ //pcnow.contains(userlist[i])){
-	//PersonaCrypt Device connected - put the special flag on the end
-        userlist[i] = USERS->displayname(userlist[i])+"::::personacrypt"; //Backend::getDisplayNameFromUsername(userlist[i])+"::::personacrypt";
-      }else{
-	userlist[i] = USERS->displayname(userlist[i]); //Backend::getDisplayNameFromUsername(userlist[i]);
-      }
-    }*/
-  /*}else{
-    userlist = USERS->users(); //Backend::getSystemUsers(); //Just pull the entire display name list
-  }*/
-  //if(DEBUG_MODE){ qDebug() << "UserList (names):" << userlist << sysAvail; }
-  //Add the usernames to the login widget (if different)
-  //if(userlist != sysAvail || sysAvail.isEmpty() ){
-    //loginW->setUsernames(userlist); //add in the detected users
-    //sysAvail = userlist; //save for later
     //Whenever we reset the internal list, also need to reset which user has focus
     if(lastUser.isEmpty()){ lastUser = Backend::getLastUser(); }
     if(!lastUser.isEmpty()){ //set the previously used user
     	loginW->setCurrentUser(USERS->displayname(lastUser)); 
     }	  
-  //}
   
 }
 
@@ -609,6 +566,14 @@ void PCDMgui::ChangeDPI(QAction *act){
   if(act->whatsThis().isEmpty()){ return; }
   Backend::setDPIpreference(act->whatsThis());
   slotUpdateGUI(); //need to re-load the X session/UI now
+}
+
+void PCDMgui::resetVideoDriver(){
+    QFile flag("/var/.runxsetup");
+    if( !flag.exists() ){
+      if( flag.open(QIODevice::WriteOnly) ){ flag.close(); } //just enough to create the file - no contents
+    }
+    QCoreApplication::exit(0); //need to go all the way out to the PCDMd routine
 }
 
 void PCDMgui::slotChangeKeyboardLayout(){
@@ -652,18 +617,33 @@ void PCDMgui::retranslateUi(){
     systemMenu->clear();	
     //Get the current DPI and add options to switch
     QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
+      int dpi = QApplication::primaryScreen()->physicalDotsPerInchX();
+      qDebug() << "Current Screen DPI:" << dpi;
        connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
-       QAction *tmpA = dpimenu->addAction(tr("High (4K)")); tmpA->setWhatsThis("196");
-        tmpA = dpimenu->addAction(tr("Medium")); tmpA->setWhatsThis("144");
-        tmpA = dpimenu->addAction(tr("Standard")); tmpA->setWhatsThis("96");
-        tmpA = dpimenu->addAction(tr("Low ")); tmpA->setWhatsThis("48");
+       QAction *tmpA = dpimenu->addAction(tr("High (4K, ~196 DPI)")); tmpA->setWhatsThis("196");
+          if(dpi>=170){ tmpA->setEnabled(false); }
+        tmpA = dpimenu->addAction(tr("Medium (~144 DPI)")); tmpA->setWhatsThis("144");
+          if(dpi>=120 && dpi<170){ tmpA->setEnabled(false); }
+        tmpA = dpimenu->addAction(tr("Standard (~96 DPI)")); tmpA->setWhatsThis("96");
+          if(dpi>=72 && dpi<120){ tmpA->setEnabled(false); }
+        tmpA = dpimenu->addAction(tr("Low (~48 DPI)")); tmpA->setWhatsThis("48");
+          if(dpi<72){ tmpA->setEnabled(false); }
     systemMenu->addMenu(dpimenu);
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
-    systemMenu->addSeparator();
-    systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
-    systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
     if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
+    QString clog = QString(getlogin());
+    int uid = getuid();
+    //qDebug() << "Current User:" << clog << uid;
+    if( uid==0  && (clog=="root" || clog.isEmpty()) ){
+      systemMenu->addSeparator();
+      systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
+      systemMenu->addSeparator();
+      systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
+      systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
+    }else{
+      
+    }
     systemButton->setMenu(systemMenu);
   //The main login widget
   if(hostname.isEmpty()){

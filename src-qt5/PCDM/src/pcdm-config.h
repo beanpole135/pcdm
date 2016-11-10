@@ -27,6 +27,7 @@ public:
   static QString xSessionsImageDir();
   static QString loginScriptsDir();
   static bool useAutoLogin(); 		//returns whether auto-login is enabled
+  static bool enableVGL(); 		//returns whether VGL is enabled or not
   static bool allowUnder1KUsers();
   static QStringList excludedUserList();
   static QString autoLoginUsername();	//returns username to log into automatically

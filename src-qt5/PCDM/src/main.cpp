@@ -150,6 +150,11 @@ int runSingleSession(int argc, char *argv[]){
   if ( QFile::exists("/usr/local/bin/compton") ) {
     compositor.start("/usr/local/bin/compton");
   }
+
+  // Check if VirtualGL is in use, open up the system for GL rendering if so
+  if ( Config::enableVGL() ) {
+    system("xhost +");
+  }
     
   // *** STARTUP THE PROGRAM ***
   bool goodAL = false; //Flag for whether the autologin was successful

@@ -65,6 +65,7 @@ void UserList::stopUpdates(){
 QStringList UserList::users(){
   QStringList keys = HASH.keys().filter("/name");
   for(int i=0; i<keys.length(); i++){ keys[i] = keys[i].section("/",0,0); }
+  keys.sort();
   return keys;
 }
 
@@ -94,8 +95,11 @@ QString UserList::shell(QString user){
 
 QString UserList::status(QString user){
   if(!HASH.contains(user+"/status")){
-    if(HASH.contains(user+"/pcstat")){ return HASH.value(user+"/pcstat"); }
-    else{ return ""; }
+    if(HASH.contains(user+"/pcstat")){ 
+      QString stat= HASH.value(user+"/pcstat");
+      if(stat!="ready"){ return stat; }
+      else{ return ""; } //don't show the internal flag for a device which is ready
+    }else{ return ""; }
   }
   return HASH.value(user+"/status");
 }
@@ -169,7 +173,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
         HASH.insert(info[0]+"/home", info[5].simplified());
         HASH.insert(info[0]+"/shell",shell);
 	if(allPC->contains(info[0])){
-          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ok" : "disconnected");
+          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
         }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
       }
       //qDebug() << " - Done with user info";
@@ -603,12 +607,13 @@ void Backend::loadDPIpreference(){
   QString dpi = "96";
   if(file.open(QIODevice::ReadOnly) ){
     QTextStream in(&file);
-    dpi = in.readLine();
+    dpi = in.readLine().simplified();
     file.close();
   }else{
     return;
   }
   if(dpi.toInt()>47){
+    qDebug() << "Setting DPI:" << dpi;
     QProcess::execute("xrandr --dpi "+dpi);
   }
 }
