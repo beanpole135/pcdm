@@ -92,7 +92,7 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   # Remove our X success marker
   if [ -e "/var/tmp/.pcdm-x-started" ] ; then rm /var/tmp/.pcdm-x-started; fi
   echo "  [PCDM] Starting PCDM-session"
-  xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS
+  xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS vt9
      if [ $? != 0 -a  ! -e "/var/tmp/.pcdm-x-started"] ; then
         # Looks like X failed to start...
         if [ ! -e "/var/tmp/.pcdm-x-failed" ] ; then
