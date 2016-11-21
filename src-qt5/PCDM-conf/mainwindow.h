@@ -59,6 +59,8 @@ private:
 	QString getValFromSHFile(QString envFile, QString envVal);
 	QStringList runShellCommand(QString cmd);
 
+	void loadAvailableThemes();
+
 public slots:
     void slotSingleInstance();
 
