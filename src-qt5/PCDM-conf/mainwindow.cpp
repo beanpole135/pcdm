@@ -34,6 +34,7 @@
 #include <QProcessEnvironment>
 #include <QFile>
 #include <QTextStream>
+#include <QDir>
 
 #define DM_CONFIG_FILE QString("/usr/local/etc/pcdm.conf")
 
@@ -134,10 +135,19 @@ void MainWindow::initUI()
     if(allowU1K.toLower() == "true"){
       ui->groupAllowUnder1K->setChecked(true);
     }   
+    //Theme setting
+    loadAvailableThemes(); //update the combobox first
+    QString theme = getValFromSHFile(DM_CONFIG_FILE, "THEME_FILE");
+    int index = ui->combo_themes->findData(theme);
+    if(index>=0){ ui->combo_themes->setCurrentIndex(index);  ui->radio_theme_bundle->setChecked(true); }
+    else{ ui->line_theme_custom->setText(theme); ui->radio_theme_custom->setChecked(true); }
+
     //Update the UI appropriately
     itemChanged();
     ui->SaveButton->setEnabled(false); //re-disable the save button because nothing has changed yet
     
+
+
     //Now setup all the signals/slots for updating the UI appropriately
     connect( ui->AutoLoginEnabledCB, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->UsersList, SIGNAL(currentIndexChanged(int)), this, SLOT(itemChanged()) );
@@ -147,6 +157,9 @@ void MainWindow::initUI()
     connect( ui->checkShowUsers, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->checkAllowStealth, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->groupAllowUnder1K, SIGNAL(toggled(bool)), this, SLOT(itemChanged()) );
+    connect( ui->radio_theme_bundle, SIGNAL(toggled(bool)), this, SLOT(itemChanged()) );
+    connect( ui->radio_theme_custom, SIGNAL(toggled(bool)), this, SLOT(itemChanged()) );
+    connect( ui->combo_themes, SIGNAL(currentIndexChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->line_exuser, SIGNAL(returnPressed()), this, SLOT(on_tool_exuser_add_clicked()) );
 }
 
@@ -399,6 +412,23 @@ QStringList MainWindow::runShellCommand(QString cmd){
 }
 
 ///////////////////////////////////////////////////////////////////////////////
+void MainWindow::loadAvailableThemes(){
+  ui->combo_themes->clear();
+  QDir themedir("/usr/local/share/PCDM/themes");
+  QStringList dirs = themedir.entryList(QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
+  QStringList themefiles;
+  for(int i=0; i<dirs.length(); i++){
+    themedir.cd(dirs[i]);
+      QStringList files = themedir.entryList(QStringList() << "*.theme", QDir::Files, QDir::Name);
+      for(int j=0; j<files.length(); j++){ themefiles << themedir.absoluteFilePath(files[j]); }
+    themedir.cdUp();
+  }
+  //Now add the theme files to the combo box
+  for(int i=0; i<themefiles.length(); i++){
+    ui->combo_themes->addItem( themefiles[i].section("/",-1).section(".theme",0,-2), themefiles[i]);
+  }
+}
+///////////////////////////////////////////////////////////////////////////////
 void MainWindow::on_SaveButton_clicked()
 {
     bool ok;
@@ -472,6 +502,15 @@ void MainWindow::on_SaveButton_clicked()
     }
     exusers.removeDuplicates();
     setConfFileValue(DM_CONFIG_FILE,"EXCLUDED_USERS", "EXCLUDED_USERS="+exusers.join(","), -1);
+ 
+    QString theme;
+    if(ui->radio_theme_bundle->isChecked()){
+      theme = ui->combo_themes->currentData().toString();
+    }else{
+      theme = ui->line_theme_custom->text();
+    }
+    if(!theme.isEmpty()){ setConfFileValue(DM_CONFIG_FILE,"THEME_FILE", "THEME_FILE="+theme, -1); }
+
     // Lastly make sure we set perms
     system("chmod 600 " + DM_CONFIG_FILE.toLatin1());
     ui->SaveButton->setEnabled(false);

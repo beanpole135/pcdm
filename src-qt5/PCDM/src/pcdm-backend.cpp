@@ -98,7 +98,7 @@ QString UserList::status(QString user){
     if(HASH.contains(user+"/pcstat")){ 
       QString stat= HASH.value(user+"/pcstat");
       if(stat!="ready"){ return stat; }
-      else{ return ""; } //don't show the internal flag for a device which is ready
+      else{ return tr("Ready"); } //don't show the internal flag for a device which is ready
     }else{ return ""; }
   }
   return HASH.value(user+"/status");
