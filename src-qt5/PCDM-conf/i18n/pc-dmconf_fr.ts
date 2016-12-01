@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_fr">
 <context>
     <name>MainWindow</name>
     <message>
@@ -29,7 +29,7 @@
     </message>
     <message>
         <source>Please enter the login password for this user</source>
-        <translation>S&apos;il vous plaît entrer le mot de passe de connexion pour cet utilisateur</translation>
+        <translation>S'il vous plaît entrer le mot de passe de connexion pour cet utilisateur</translation>
     </message>
     <message>
         <source>Enable Remote Desktop (VNC)</source>
@@ -40,12 +40,12 @@
         <translation>Divers</translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
-        <translation>Activer le bouton &quot;Afficher le mot de passe&quot;</translation>
+        <source>Enable "show password" button</source>
+        <translation>Activer le bouton "Afficher le mot de passe"</translation>
     </message>
     <message>
         <source>Please enter the remote login password</source>
-        <translation>S&apos;il vous plaît entrer le mot de passe de connexion à distance</translation>
+        <translation>S'il vous plaît entrer le mot de passe de connexion à distance</translation>
     </message>
     <message>
         <source>Missing Config File</source>
@@ -53,7 +53,7 @@
     </message>
     <message>
         <source>The PCDM configuration file could not be found: %1</source>
-        <translation>Le fichier de configuration de PCDM n&apos;as pu être trouvé: %1</translation>
+        <translation>Le fichier de configuration de PCDM n'as pu être trouvé: %1</translation>
     </message>
     <message>
         <source>This application will now close</source>
@@ -81,26 +81,26 @@
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser les Utilisateurs avec une UID inférieure à 1000</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateurs Supplémentaires Exclus</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>…</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Autoriser les Sessions Furtives</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devriez exécuter ce programme en tant que superutilisateur</translation>
     </message>
 </context>
 </TS>
