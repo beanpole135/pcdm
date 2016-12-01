@@ -74,6 +74,10 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   if [ -e /usr/local/bin/pc-checkxdisplay ]; then
      /usr/local/bin/pc-checkxdisplay
   fi
+  if [ ! -e /etc/machine-id ]; then
+    #detect/prevent Qt from crashing if the DBUS id file is non existant
+    dbus-uuidgen --ensure
+  fi
   # Randomize the authorization file location
   PCDMAUTHFILE=${BASEPCDMAUTHFILE}-`openssl rand -hex 10`
   # Make sure the authorization file does not exist
