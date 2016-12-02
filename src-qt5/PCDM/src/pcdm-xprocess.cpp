@@ -167,7 +167,7 @@ bool XProcess::startXSession(){
   QTextStream tOut(tFile);
 
   // Configure the DE startup command
-  if(QFile::exists("/usr/local/bin/dbus-launch")){
+  if(QFile::exists("/usr/local/bin/dbus-launch") && !xcmd.contains("lumina-desktop") ){
     cmd.append("dbus-launch --exit-with-session "+xcmd);
   }
 
