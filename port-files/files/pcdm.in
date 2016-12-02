@@ -8,8 +8,8 @@ command_args=""
 name="TrueOS Display Manager"
 
 depend() {
-	need urandom syscons moused
-	after bootmisc
+	need urandom
+	after bootmisc syscons moused
 }
 
 status() {
