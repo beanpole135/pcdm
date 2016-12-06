@@ -71,7 +71,7 @@ fi
 touch /var/tmp/.PCDMAutoLogin # Allow Auto-Login the first time PCDM starts
 (
 while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
-  if [ ! -e /etc/machine-id || ! -e /var/db/dbus/machine-id ]; then
+  if [ ! -e /etc/machine-id ] || [ ! -e /var/db/dbus/machine-id ]; then
     #detect/prevent Qt from crashing if the DBUS id file is non existant
     dbus-uuidgen --ensure
   fi
