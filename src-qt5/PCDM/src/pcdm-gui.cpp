@@ -621,13 +621,13 @@ void PCDMgui::retranslateUi(){
       qDebug() << "Current Screen DPI:" << dpi;
        connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
        QAction *tmpA = dpimenu->addAction(tr("High (4K, ~196 DPI)")); tmpA->setWhatsThis("196");
-          if(dpi>=170){ tmpA->setEnabled(false); }
+          if(dpi>=170){ tmpA->setEnabled(true); }
         tmpA = dpimenu->addAction(tr("Medium (~144 DPI)")); tmpA->setWhatsThis("144");
-          if(dpi>=120 && dpi<170){ tmpA->setEnabled(false); }
+          if(dpi>=120 && dpi<170){ tmpA->setEnabled(true); }
         tmpA = dpimenu->addAction(tr("Standard (~96 DPI)")); tmpA->setWhatsThis("96");
-          if(dpi>=72 && dpi<120){ tmpA->setEnabled(false); }
+          if(dpi>=72 && dpi<120){ tmpA->setEnabled(true); }
         tmpA = dpimenu->addAction(tr("Low (~48 DPI)")); tmpA->setWhatsThis("48");
-          if(dpi<72){ tmpA->setEnabled(false); }
+          if(dpi<72){ tmpA->setEnabled(true); }
     systemMenu->addMenu(dpimenu);
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
