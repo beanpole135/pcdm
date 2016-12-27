@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="PCDM_pl">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -68,31 +68,31 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation type="unfinished"></translation>
+        <translation>Aby rozpocząć procedurę logowania, podłącz swoje urządzenie PersonaCrypt.</translation>
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesja anonimowa</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
-        <translation type="unfinished"></translation>
+        <translation>Użyj tymczasowego katalogu domowego. Katalog ten jest usuwany na zakończenie sesji</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Odśwież</translation>
     </message>
     <message>
         <source>Refresh available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Odśwież listę użytkowników</translation>
     </message>
     <message>
         <source>Device encryption key</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz szyfrujący urządzenia</translation>
     </message>
     <message>
         <source>Device encryption key (personacrypt users only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Klucz szyfrujący urządzenia (użytkownicy PersonaCrypt)</translation>
     </message>
 </context>
 <context>
@@ -119,11 +119,11 @@
     </message>
     <message>
         <source>Tip: Make sure that caps-lock is turned off.</source>
-        <translation>Sugestia: Miej pewność że CAPSLOCK nie jest włączony</translation>
+        <translation>Sugestia: Upewnij się że caps-lock jest wyłączony.</translation>
     </message>
     <message>
         <source>Restart</source>
-        <translation>Restart</translation>
+        <translation>Uruchom ponownie</translation>
     </message>
     <message>
         <source>Shut Down</source>
@@ -143,7 +143,7 @@
     </message>
     <message>
         <source>Username/Password combination is invalid, please try again.</source>
-        <translation>Kombinacja nazwy użytkownika/hasła jest niepoprawna, spróbuj jeszcze raz</translation>
+        <translation>Kombinacja użytkownik/hasło jest niepoprawna, spróbuj jeszcze raz.</translation>
     </message>
     <message>
         <source>System Shutdown</source>
@@ -167,31 +167,31 @@
     </message>
     <message>
         <source>Change locale (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień język (%1)</translation>
     </message>
     <message>
         <source>Change DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Zmień DPI</translation>
     </message>
     <message>
         <source>High (4K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Wysokie (4K)</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Średnie</translation>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardowe</translation>
     </message>
     <message>
         <source>Low </source>
-        <translation type="unfinished"></translation>
+        <translation>Niskie </translation>
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation type="unfinished"></translation>
+        <translation>Odśwież PCDM</translation>
     </message>
 </context>
 <context>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>PCDM Automatic Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Automatyczne logowanie PCDM</translation>
     </message>
 </context>
 <context>

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_es">
 <context>
     <name>MainWindow</name>
     <message>
@@ -10,13 +10,11 @@
     </message>
     <message>
         <source>Auto login</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Login automatico</translation>
     </message>
     <message>
         <source>Enable auto login</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Habilitar login automatico</translation>
     </message>
     <message>
         <source>Auto login user</source>
@@ -25,8 +23,7 @@
     </message>
     <message>
         <source>Remote login</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Login remoto</translation>
     </message>
     <message>
         <source>Password Request</source>
@@ -40,8 +37,7 @@
     </message>
     <message>
         <source>Enable Remote Desktop (VNC)</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Habilitar Escritorio Remoto (VNC)</translation>
     </message>
     <message>
         <source>Misc</source>
@@ -49,9 +45,8 @@
             </translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
-        <translation type="unfinished">
-            </translation>
+        <source>Enable "show password" button</source>
+        <translation type="unfinished">Habilitar boton "mostrar contraseña"</translation>
     </message>
     <message>
         <source>Please enter the remote login password</source>
@@ -65,8 +60,7 @@
     </message>
     <message>
         <source>The PCDM configuration file could not be found: %1</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>El archivo de configuracion PCDM no se encontro: %1</translation>
     </message>
     <message>
         <source>This application will now close</source>
@@ -75,51 +69,46 @@
     </message>
     <message>
         <source>Time Delay</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Tiempo de Retraso</translation>
     </message>
     <message>
         <source> Seconds</source>
-        <translation type="unfinished">
-            </translation>
+        <translation> Segundos</translation>
     </message>
     <message>
         <source>Display available users</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>Mostrar usuarios disponibles</translation>
     </message>
     <message>
         <source>&amp;Apply</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>&amp;Aplicar</translation>
     </message>
     <message>
         <source>&amp;Close</source>
-        <translation type="unfinished">
-            </translation>
+        <translation>&amp;Cerrar</translation>
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir Usuarios Validos con UID arriba de 1000</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuarios Adicionales Excluidos</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir Sesiones Ocultas</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>Debes ejecutar esta aplicacion como root</translation>
     </message>
 </context>
 </TS>

@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_pt_BR">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,8 +40,8 @@
         <translation>Diversos</translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
-        <translation>Habilitar o botão &quot;exibir senha&quot;</translation>
+        <source>Enable "show password" button</source>
+        <translation>Habilitar o botão "exibir senha"</translation>
     </message>
     <message>
         <source>Please enter the remote login password</source>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir Usuários Válidos com UID menor que 1000</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
@@ -89,18 +89,18 @@
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Permitir Sessões Anônimas</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>Você deve executar este aplicativo como root</translation>
     </message>
 </context>
 </TS>

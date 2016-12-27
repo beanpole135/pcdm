@@ -32,11 +32,13 @@ start() {
   if [ $? -eq 0 ]; then
     return 0;
   fi
-  echo "Starting PCDM"
+  ebegin "Starting PCDM"
   #Start the PCDM login daemon
   if [ ! -e /var/run/nologin ]; then
     start-stop-daemon --start --exec "${command}" --name pcdm --pidfile ${pid} ${command_args}
-    return $?
+    status=$?
+    eend $status
+    return $status
   fi
   return 1;
 }
