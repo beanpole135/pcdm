@@ -24,7 +24,7 @@ private:
 
 public:
   ThemeStruct(){}
-  ~ThemeStruct();
+  ~ThemeStruct(){}
   //How to fill a structure with items
   void loadThemeFile(QString);
   //import/export functions for passing items between different theme structures
@@ -46,4 +46,3 @@ public:
 };
 
 #endif
-

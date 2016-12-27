@@ -119,7 +119,7 @@ int runSingleSession(int argc, char *argv[]){
     splash.setPixmap( QPixmap(Config::splashscreen()) ); //load the splashscreen file
   }
   splash.show();*/
-  QCoreApplication::processEvents(); //Process the splash screen event immediately
+  //QCoreApplication::processEvents(); //Process the splash screen event immediately
   //qDebug() << "SplashScreen Started:" << QString::number(clock.elapsed())+" ms";
   //Initialize the xprocess
   XProcess desktop;
@@ -170,7 +170,9 @@ int runSingleSession(int argc, char *argv[]){
     }else{
 	//Run the time delay for the autologin attempt
 	if(Config::autoLoginDelay() > 1){
-	  loginDelay dlg(Config::autoLoginDelay(), user);
+	  ThemeStruct ctheme;
+             ctheme.loadThemeFile(Config::themeFile());
+	  loginDelay dlg(Config::autoLoginDelay(), user, ctheme.itemValue("background") );
 	  //splash.close();
 	  dlg.start();
 	    dlg.activateWindow();

@@ -13,7 +13,7 @@ namespace Ui{
 class loginDelay : public QDialog{
 	Q_OBJECT
 public:
-	loginDelay(int seconds, QString username);
+	loginDelay(int seconds, QString username, QString wallpaper = "");
 	~loginDelay();
 
 	void start();
@@ -22,6 +22,7 @@ public:
 
 private:
 	Ui::loginDelay *ui; //designer file
+	QString backgroundImage;
 	QTimer *delay;
 	QList<QWidget*> screens;
 

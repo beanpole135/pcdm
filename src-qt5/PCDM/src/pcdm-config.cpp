@@ -11,7 +11,7 @@
 QStringList confStruct;
 
 
-//******** PRIVATE FUNCTIONS *************
+// ******** PRIVATE FUNCTIONS *************
 void Config::loadDefaults(){
   confStruct.clear();
   confStruct << "/usr/local/share/PCDM/pcdm.theme";	// [0] Theme File Path
@@ -74,7 +74,7 @@ void Config::readConfigFile(QString filePath){
   conf.close();
 }
 
-//******** PUBLIC FUNCTIONS **************
+// ******** PUBLIC FUNCTIONS **************
 void Config::loadConfigFile(QString filePath){
   loadDefaults();
   if(!QFile::exists(filePath)){

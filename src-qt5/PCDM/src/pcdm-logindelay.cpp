@@ -3,10 +3,12 @@
 
 #include <QPoint>
 #include <QDesktopWidget>
+#include <QFile>
 
-loginDelay::loginDelay(int seconds, QString username) : QDialog(0, Qt::Dialog | Qt::WindowStaysOnTopHint), ui(new Ui::loginDelay){
+loginDelay::loginDelay(int seconds, QString username, QString wallpaper) : QDialog(0, Qt::Dialog | Qt::WindowStaysOnTopHint), ui(new Ui::loginDelay){
   ui->setupUi(this); //load the designer files
   continueLogin = false; //in case it is closed early somehow
+  backgroundImage = wallpaper; //save for later
   //Now setup the display
   ui->label_username->setText(username);
   ui->progressBar->setRange(0,seconds);
@@ -61,11 +63,12 @@ void loginDelay::fillScreens(){
     QDesktopWidget *DE = QApplication::desktop();
     screens.clear();
     //Generate the background style sheet
-    QString tmpIcon = ":/images/backgroundimage.jpg"; //always use the defult PCDM image (don't load theme for auto-login)
+    QString tmpIcon = ":/images/backgroundimage.jpg"; //the defult PCDM image (don't load theme for auto-login fallback)
     QString bgstyle = "QWidget#BGSCREEN{border-image: url(BGIMAGE) stretch;}"; 
-      bgstyle.replace("BGIMAGE", tmpIcon);
+      //Now apply the default/desired wallpaper image as needed
+      if(backgroundImage.isEmpty() || !QFile::exists(backgroundImage)){ bgstyle.replace("BGIMAGE", tmpIcon);}
+      else{ bgstyle.replace("BGIMAGE", backgroundImage);}
     //Now apply the background to all the screens   
-
     for(int i=0; i<DE->screenCount(); i++){
         //Just show a generic QWidget with the proper background image on every screen
 	QWidget *screen = new QWidget(0, Qt::Window | Qt::WindowTransparentForInput | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnBottomHint);
