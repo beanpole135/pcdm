@@ -12,7 +12,7 @@ depend() {
 	after bootmisc syscons moused
 }
 
-status() {
+check_running() {
   #return 0 if already running, 1 otherwise
   if [ ! -f ${pid} ]; then
     return 1;
@@ -28,7 +28,7 @@ start() {
      return 0
   fi
   # Check if this is already running
-  status
+  check_running
   if [ $? -eq 0 ]; then
     return 0;
   fi
