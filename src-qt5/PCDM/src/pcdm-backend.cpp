@@ -73,6 +73,7 @@ QString UserList::findUser(QString displayname){
   QStringList keys = HASH.keys().filter("/name");
   for(int i=0; i<keys.length(); i++){
     if(HASH.value(keys[i])==displayname){ return keys[i].section("/",0,0); }
+    else if(keys[i].section("/",0,0)==displayname){ return displayname; }   //Just in case the username was passed through instead of the displayname
   }
   return ""; //no match found
 }
