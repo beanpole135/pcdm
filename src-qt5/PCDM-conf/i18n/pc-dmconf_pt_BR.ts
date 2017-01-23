@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="pc-dmconf_pt_BR">
 <context>
@@ -85,7 +85,7 @@
     </message>
     <message>
         <source>Additional Excluded Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Usuários Excluídos Adicionais</translation>
     </message>
     <message>
         <source>...</source>
