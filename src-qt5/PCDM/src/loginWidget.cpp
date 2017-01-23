@@ -41,21 +41,22 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   	listUserBig->setSelectionMode(QAbstractItemView::SingleSelection);
   listUsers = new QComboBox(this);
   	listUsers->setFocusPolicy(Qt::NoFocus); //big one gets keyboard focus instead
+  lineUsername = new QLineEdit(this);
+	lineUsername->setFocusPolicy(Qt::StrongFocus);
   linePassword = new QLineEdit(this);
   	linePassword->setFocusPolicy(Qt::StrongFocus);
   lineDevPassword = new QLineEdit(this);
 	lineDevPassword->setFocusPolicy(Qt::StrongFocus);
-  lineUsername = new QLineEdit;
-	lineUsername->setFocusPolicy(Qt::StrongFocus);
-  pushLogin = new QToolButton;
+
+  pushLogin = new QToolButton(this);
 	QAction* tmp1 = new QAction(this);
 	pushLogin->setDefaultAction( tmp1 );
 	pushLogin->setFocusPolicy(Qt::StrongFocus);
-  pushViewPassword = new QToolButton;
+  pushViewPassword = new QToolButton(this);
 	QAction* tmp2 = new QAction(this);
 	pushViewPassword->setDefaultAction( tmp2 );
 	pushViewPassword->setFocusPolicy(Qt::NoFocus);
-  pushUserIcon = new QToolButton;
+  pushUserIcon = new QToolButton(this);
 	QAction* tmp3 = new QAction(this);
 	pushUserIcon->setDefaultAction( tmp3 );
 	pushUserIcon->setFocusPolicy(Qt::NoFocus);
@@ -372,8 +373,11 @@ bool LoginWidget::isAnonymous(){
 }
 
 void LoginWidget::setCurrentUser(QString id){
-  if(idL.isEmpty()){ return; }
-  
+  if(!showUsers){
+    lineUsername->setFocus(); //Just set the focus properly
+    return;
+  }else if(idL.isEmpty()){ return; }
+  qDebug() << "Set Current User:" << id << idL << userSelected << showUsers;
   int index = idL.indexOf(id);
   if(index == -1){
     qDebug() << "LoginWidget: Item does not exist -" << id;
@@ -383,6 +387,7 @@ void LoginWidget::setCurrentUser(QString id){
     updateWidget();
     emit UserChanged(id);
   }
+  resetFocus();
 }
 
 void LoginWidget::setCurrentDE(QString de){
@@ -527,11 +532,11 @@ void LoginWidget::retranslateUi(){
 
 void LoginWidget::resetFocus(QString item){
   //Check for appropriate action if not specified
-  if(idL.isEmpty()){ return; } //no users available
   if(item.isEmpty() && userSelected && showUsers){ item="password"; }
-  else if(item.isEmpty() && (!userSelected || !showUsers) ){ item="userlist"; }
+  else if(item.isEmpty() ){ item="userlist"; }
   //Set the proper keyboard focus
-  if(item == "userlist"){
+  Backend::log("Reset Focus: "+item+", ShowUsers: "+ (showUsers ? "true":"false") +", User Selected: "+ (userSelected ? "true":"false") );
+  if(item == "userlist" || !showUsers || !userSelected){
     if(!showUsers){ lineUsername->setFocus(); }
     else if(userSelected){ listUsers->setFocus(); }
     else{ listUserBig->setFocus(); }

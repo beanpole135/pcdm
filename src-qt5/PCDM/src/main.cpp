@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
  while(neverquit){
   if(runonce){ neverquit = false; }
   qDebug() << " -- PCDM Session Starting...";
-  int sid = -1;
+  /*int sid = -1;
   int pid = fork();
   if(pid < 0){
     qDebug() << "Error: Could not fork the PCDM session";
@@ -270,14 +270,14 @@ int main(int argc, char *argv[])
   }else if( pid ==0 ){
     //New Child Process
     sid = setsid(); //start a session
-    qDebug() << "-- Session ID:" << sid;
+    qDebug() << "-- Session ID:" << sid;*/
     int retCode = runSingleSession(argc,argv);
     qDebug() << "-- PCDM Session Ended --";
     //check for special exit code
     if(retCode == -1){ neverquit=true; } //make sure we go around again at least once
     else if(retCode != 0){ neverquit=false; }
     //Now kill the shild process (whole session)
-    qDebug() << "Exiting child process";
+    /*qDebug() << "Exiting child process";
     exit(3);
   }else{ 
     //Parent (calling) process
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
     waitpid(sid,&status,0); //wait for the child (session) to finish
     //NOTE: the parent will eventually become a login-watcher daemon process that
     //   can spawn multiple child sessions on different TTY displays
-  }
+  }*/
   qDebug() << "-- PCDM Session Ended --";
   if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE) ){ neverquit = false; } 
  }

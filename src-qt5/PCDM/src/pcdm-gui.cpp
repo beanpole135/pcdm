@@ -417,13 +417,18 @@ void PCDMgui::slotLoginFailure(){
 }
 
 void PCDMgui::slotUserChanged(QString newuser){
+  QSize tmpsz = currentTheme->itemIconSize("user");
+  if(!tmpsz.isValid()){ tmpsz = defIconSize; }
+
   if( !newuser.isEmpty() ){
     //Try to load the custom user icon
     QString tmpIcon = USERS->homedir(newuser)+"/.loginIcon.png"; //Backend::getUserHomeDir(newuser) + "/.loginIcon.png";
     if(!QFile::exists(tmpIcon) ){ tmpIcon= currentTheme->itemIcon("user"); }
     if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/user.png"; }
-    QSize tmpsz = currentTheme->itemIconSize("user");
-    if(!tmpsz.isValid()){ tmpsz = defIconSize; }
+    loginW->changeButtonIcon("display",tmpIcon, tmpsz);
+  }else{
+    QString tmpIcon= currentTheme->itemIcon("user");
+    if(!QFile::exists(tmpIcon) || tmpIcon.isEmpty() ){ tmpIcon=":/images/user.png"; }
     loginW->changeButtonIcon("display",tmpIcon, tmpsz);
   }
 }
