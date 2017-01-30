@@ -209,6 +209,7 @@ bool XProcess::startXSession(){
   tOut << "  chmod 755 "+xhome+"/.xprofile\n";
   tOut << "  . "+xhome+"/.xprofile\n";
   tOut << "fi\n";
+  tOut << Backend::resetKbdCmd() + "\n";
   tOut << cmd + "\n"; //+ " >" + xhome+ "/.pcdm-startup.log" + " 2>" + xhome + "/.pcdm-startup.log\n";
   tOut << "exit $?"; //Make sure we return the DE return value
 

@@ -95,6 +95,7 @@ public:
     static QStringList keyLayouts();
     static QStringList keyVariants(const QString &layout, QStringList &savedKeyVariants);
     static bool changeKbMap(QString model, QString layout, QString variant);
+    static QString resetKbdCmd(); //read the default settings, and return the command to run to re-set those settings
     static QStringList languages();
     static void openLogFile(QString);
     static void log(QString); 

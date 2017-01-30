@@ -519,6 +519,20 @@ bool Backend::changeKbMap(QString model, QString layout, QString variant)
    return ok;
 }
 
+QString Backend::resetKbdCmd(){
+  //This will return the command to re-set the current keyboard settings
+  QString lang, keymodel, keylayout, keyvariant;
+  Backend::readDefaultSysEnvironment(lang, keymodel, keylayout, keyvariant);
+  //Generate the command
+  QStringList args;
+  if(!keymodel.isEmpty()){  args << "-model" << keymodel; }
+  if(!keylayout.isEmpty()){ args << "-layout" << keylayout; }
+  if(!keyvariant.isEmpty()){ args << "-variant" << keyvariant; }
+  if(args.isEmpty()){ return ""; } //nothing to reset
+  QString cmd = "setxkbmap "+args.join(" ");
+  return cmd;
+}
+
 QStringList Backend::languages()
 {
     QStringList _languages;
