@@ -637,17 +637,17 @@ void PCDMgui::retranslateUi(){
     systemMenu->addSeparator();
     systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
     if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
-    QString clog = QString(getlogin());
+    bool picosession = !qgetenv("PICO_CLIENT_LOGIN").isEmpty();
     int uid = getuid();
-    //qDebug() << "Current User:" << clog << uid;
-    if( uid==0  && (clog=="root" || clog.isEmpty()) ){
+    //qDebug() << "Current User:" << uid << picosession;
+    if( uid==0 ){
       systemMenu->addSeparator();
       systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
-      systemMenu->addSeparator();
-      systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
-      systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
-    }else{
-      
+      if( !picosession ) {
+        systemMenu->addSeparator();
+        systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
+        systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
+      }
     }
     systemButton->setMenu(systemMenu);
   //The main login widget
