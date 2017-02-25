@@ -205,11 +205,11 @@ bool XProcess::startXSession(){
     QProcess::execute("chown "+tUid+":"+tGid+" "+authfile);
   }
 
+  tOut << Backend::resetKbdCmd() + "\n"; //do this before sourcing .xprofile - in case there is a user-override set there
   tOut << "if [ -e '"+xhome+"/.xprofile' ] ; then\n";
   tOut << "  chmod 755 "+xhome+"/.xprofile\n";
   tOut << "  . "+xhome+"/.xprofile\n";
   tOut << "fi\n";
-  tOut << Backend::resetKbdCmd() + "\n";
   tOut << cmd + "\n"; //+ " >" + xhome+ "/.pcdm-startup.log" + " 2>" + xhome + "/.pcdm-startup.log\n";
   tOut << "exit $?"; //Make sure we return the DE return value
 
