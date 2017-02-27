@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="pc-dmconf_de">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,8 +40,8 @@
         <translation>Verschiedenes</translation>
     </message>
     <message>
-        <source>Enable &quot;show password&quot; button</source>
-        <translation>&quot;Zeige Passwort&quot;-Knopf aktivieren</translation>
+        <source>Enable "show password" button</source>
+        <translation>"Zeige Passwort"-Knopf aktivieren</translation>
     </message>
     <message>
         <source>Please enter the remote login password</source>
@@ -69,7 +69,7 @@
     </message>
     <message>
         <source>Display available users</source>
-        <translation>Zeige verfügbare Nutzer an</translation>
+        <translation>Verfügbare Benutzer anzeigen</translation>
     </message>
     <message>
         <source>&amp;Apply</source>
@@ -81,26 +81,26 @@
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation type="unfinished"></translation>
+        <translation>Gültige Benutzer mit UID unter 1000 erlauben</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
-        <translation type="unfinished"></translation>
+        <translation>Zusätzliche ausgeschlossene Benutzer</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation>...</translation>
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation type="unfinished"></translation>
+        <translation>Heimliche Sitzungen erlauben</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation type="unfinished"></translation>
+        <translation>Sie sollten diese Anwendung als root ausführen</translation>
     </message>
 </context>
 </TS>
