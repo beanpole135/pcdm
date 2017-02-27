@@ -279,7 +279,7 @@ void LoginWidget::slotUserSelected(){
   updateWidget();
   linePassword->setFocus();
   if(listUsers->currentText().isEmpty() || idL.length()<1){ return; }
-  qDebug() << "User Selected:" << listUsers->currentText();
+  //qDebug() << "User Selected:" << listUsers->currentText();
   emit UserSelected(idL.at(listUsers->currentIndex()));//listUsers->currentText());
 }
 
@@ -334,7 +334,7 @@ void LoginWidget::slotUsersChanged(){
 }
 
 void LoginWidget::slotUserUpdated(QString user, QString stat){
-  qDebug() << "User status update:" << user << stat;
+  //qDebug() << "User status update:" << user << stat;
   //basic list first
   for(int i=0; i<idL.length(); i++){
     if(idL[i]!=user){ continue; }
@@ -377,7 +377,7 @@ void LoginWidget::setCurrentUser(QString id){
     lineUsername->setFocus(); //Just set the focus properly
     return;
   }else if(idL.isEmpty()){ return; }
-  qDebug() << "Set Current User:" << id << idL << userSelected << showUsers;
+  //qDebug() << "Set Current User:" << id << idL << userSelected << showUsers;
   int index = idL.indexOf(id);
   if(index == -1){
     qDebug() << "LoginWidget: Item does not exist -" << id;

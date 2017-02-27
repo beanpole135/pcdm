@@ -37,6 +37,7 @@ UserList::UserList(QObject *parent) : QObject(parent){
     connect(userTimer, SIGNAL(timeout()), this, SLOT(startUserProc()) );
   //Setup other default values
   allowunder1kUID = false;
+  allowroot = false;
 }
 
 UserList::~UserList(){
@@ -45,6 +46,10 @@ UserList::~UserList(){
 
 void UserList::allowUnder1K(bool allow){
   allowunder1kUID = allow;
+}
+
+void UserList::allowRootUser(bool allow){
+  allowroot = allow;
 }
 
 void UserList::excludeUsers(QStringList exclude){
@@ -138,7 +143,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
     // User Home Dir
     else if(info[5].contains("nonexistent") || info[5].contains("/empty") || info[5].isEmpty() ){bad=true;}
     // uid > 0
-    else if(info[2].toInt() < 1){bad=true;} //don't show the root user
+    else if(info[2].toInt() < 1){bad=!allowroot;} //don't show the root user
     else if(info[0].indexOf("picoauth") != -1){bad=true;} //don't show pico connect users
     //Check that the name/description does not contain "server"
     else if(info[2].toInt() < 1000){
@@ -222,6 +227,11 @@ void UserList::userProcFinished(){
   if(HASH.keys().isEmpty() && !allowunder1kUID){ 
     allowunder1kUID = true; 
     startUserProc(); //run this process again with the larger "pool" of possible users
+    return;
+  }else if(HASH.keys().isEmpty() && !allowroot){
+    //Still no available users - permit the root user to login as a last-ditch effort
+    allowroot = true; 
+    startUserProc(); 
     return;
   }
   if(!allpcusers.isEmpty()){  

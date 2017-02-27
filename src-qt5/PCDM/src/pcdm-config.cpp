@@ -29,6 +29,7 @@ void Config::loadDefaults(){
   confStruct << "false";					// [12] Allow UID's under 1000
   confStruct << "";						// [13] Excluded user names
   confStruct << "false";					// [14] Enable VGL
+  confStruct << "false";					// [15] Allow root user to login
   return;
 }
 
@@ -67,6 +68,7 @@ void Config::readConfigFile(QString filePath){
       else if(var=="ALLOW_UID_UNDER_1K"){ confStruct[12] = val; }
       else if(var=="EXCLUDED_USERS"){ val = val.remove(" "); confStruct[13] = val; }
       else if(var=="ENABLE_VGL"){ confStruct[14] = val; }
+      else if(var=="ALLOW_ROOT"){ confStruct[15] = val; }
       else{}
       
     }
@@ -110,6 +112,11 @@ bool Config::enableVGL(){
 
 bool Config::allowUnder1KUsers(){
   if(confStruct[12].toLower()=="true"){ return true; }
+  else{ return false; }
+}
+
+bool Config::allowRootUser(){
+  if(confStruct[15].toLower()=="true"){ return true; }
   else{ return false; }
 }
 

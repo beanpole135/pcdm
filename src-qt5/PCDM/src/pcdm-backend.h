@@ -41,6 +41,7 @@ public:
 
 	//Environment setting functions
 	void allowUnder1K(bool allow); //flag to allow/show UID's under 1000 if other data checks out
+	void allowRootUser(bool allow); //flag to permit login with the system "root" user (uid 0)
 	void excludeUsers(QStringList exclude); //particular users which should always be excluded if their UID < 1000
 
 	//Main start function (returns almost instantly)
@@ -63,7 +64,7 @@ private:
 	QHash<QString,QString> HASH;
 
 	//Special flags for running user scans
-	bool allowunder1kUID;
+	bool allowunder1kUID, allowroot;
 	QStringList excludedUsers;
 
 	bool parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC); //returns true if data changed, and removes itself from oldusers as needed

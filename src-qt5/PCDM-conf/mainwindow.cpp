@@ -123,7 +123,13 @@ void MainWindow::initUI()
     if( showusers != "TRUE" && !showusers.isEmpty() ){
       ui->checkShowUsers->setChecked(false);
     }
-    
+
+    ui->checkAllowRoot->setChecked(false); //PCDM defaults to false
+    QString allowroot = getValFromSHFile(DM_CONFIG_FILE, "ALLOW_ROOT");
+    if(allowroot.toLower() == "true"){
+      ui->checkAllowRoot->setChecked(true);
+    }
+   
     ui->checkAllowStealth->setChecked(false); //PCDM defaults to false
     QString allowstealth = getValFromSHFile(DM_CONFIG_FILE, "ALLOW_STEALTH_LOGIN");
     if(allowstealth.toLower() == "true"){
@@ -155,6 +161,7 @@ void MainWindow::initUI()
     connect( ui->EnableVNC, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->checkShowPW, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->checkShowUsers, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
+    connect(ui->checkAllowRoot, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->checkAllowStealth, SIGNAL(stateChanged(int)), this, SLOT(itemChanged()) );
     connect( ui->groupAllowUnder1K, SIGNAL(toggled(bool)), this, SLOT(itemChanged()) );
     connect( ui->radio_theme_bundle, SIGNAL(toggled(bool)), this, SLOT(itemChanged()) );
@@ -485,6 +492,11 @@ void MainWindow::on_SaveButton_clicked()
 	setConfFileValue(DM_CONFIG_FILE, "SHOW_SYSTEM_USERS", "SHOW_SYSTEM_USERS=TRUE", -1);
     }else{
 	setConfFileValue(DM_CONFIG_FILE, "SHOW_SYSTEM_USERS", "SHOW_SYSTEM_USERS=FALSE", -1);
+    }
+    if(ui->checkAllowRoot->isChecked()){
+	setConfFileValue(DM_CONFIG_FILE, "ALLOW_ROOT", "ALLOW_ROOT=TRUE", -1);
+    }else{
+	setConfFileValue(DM_CONFIG_FILE, "ALLOW_ROOT", "ALLOW_ROOT=FALSE", -1);
     }
     if(ui->checkAllowStealth->isChecked()){
 	setConfFileValue(DM_CONFIG_FILE, "ALLOW_STEALTH_LOGIN", "ALLOW_STEALTH_LOGIN=TRUE", -1);

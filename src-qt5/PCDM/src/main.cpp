@@ -103,6 +103,7 @@ int runSingleSession(int argc, char *argv[]){
   if(USERS==0){ 
     USERS = new UserList();
     USERS->allowUnder1K(Config::allowUnder1KUsers());
+    USERS->allowRootUser(Config::allowRootUser());
     USERS->excludeUsers(Config::excludedUserList());
     USERS->updateList(); //now start the probe so things are ready on demand
   }

@@ -80,7 +80,7 @@ void XProcess::waitForSessionClosed(){
 
 bool XProcess::startXSession(){
   //Returns true if the session can continue, or false if it needs to be closed down
-
+  qDebug() << "Starting X Session:" << xuser << xcmd << xhome << xde;
   //Check that the necessary info to start the session is available
   if( xuser.isEmpty() || xcmd.isEmpty() || xhome.isEmpty() || xde.isEmpty() ){
     emit InvalidLogin();  //Make sure the GUI knows that it was a failure
@@ -304,11 +304,14 @@ bool XProcess::pam_checkPW(){
   bool result = false;
   int ret;
   //Initialize PAM
-  ret = pam_start("login", cUser, &pamc, &pamh);
+  //qDebug() << "Starting PAM:" << xuser << tmp << xpwd << tmp2;
+  if(xuser=="root"){ ret = pam_start("system", cUser, &pamc, &pamh); }
+  else{ ret = pam_start("login", cUser, &pamc, &pamh); }
   if( ret == PAM_SUCCESS ){
     pam_started = true; //flag that pam is started
     //Place the user-supplied password into the structure 
     ret = pam_set_item(pamh, PAM_AUTHTOK, cPassword);
+    if(ret != PAM_SUCCESS){ pam_logFailure(ret); return false; }
     //Set the TTY 
     //ret = pam_set_item(pamh, PAM_TTY, "pcdm-terminal");
     //Authenticate with PAM
@@ -317,11 +320,12 @@ bool XProcess::pam_checkPW(){
       //Check for valid, unexpired account and verify access restrictions
       ret = pam_acct_mgmt(pamh,0);
       if( ret == PAM_SUCCESS ){ result = true; }
+      else{ pam_logFailure(ret); }
     
     }else{
       pam_logFailure(ret);
     }
-  }
+  }else{ qCritical() << "Could not start PAM"; }
   //return verification result
   return result;	
 }
@@ -348,7 +352,8 @@ bool XProcess::pam_stopSession(){
 
 void XProcess::pam_logFailure(int ret){
   //Interpret a PAM error message and log it
-  Backend::log("PAM Error: " + QString::number(ret));
+  qWarning() << "PAM Error:" << ret;
+  //Backend::log("PAM Error: " + QString::number(ret));
   switch( ret ){
   case PAM_ABORT:
     Backend::log(" - PAM abort error");

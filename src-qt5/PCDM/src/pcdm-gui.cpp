@@ -362,6 +362,7 @@ void PCDMgui::slotScreensChanged(){
 void PCDMgui::slotStartLogin(QString displayname, QString password){
   //Get user inputs
   QString username = USERS->findUser(displayname); //Backend::getUsernameFromDisplayname(displayname);
+  //qDebug() << "Login Attempt:" << displayname << username;
   if(username.isEmpty() && USERS->users().contains(displayname)){ username = displayname; } //gave the real username
   QString desktop;
   if(simpleDESwitcher){
@@ -382,6 +383,7 @@ void PCDMgui::slotStartLogin(QString displayname, QString password){
   if(!simpleDESwitcher){ deSwitcher->setEnabled(false); }
   toolbar->setEnabled(false);
   //Try to login
+  //qDebug() << "Attempting Login:" << username << desktop << lang << anonymous;
   emit xLoginAttempt(username, password, desktop, lang , devPassword,anonymous);
   //Return signals are connected to the slotLogin[Success/Failure] functions
   
