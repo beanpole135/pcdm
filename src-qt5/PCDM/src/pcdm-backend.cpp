@@ -11,6 +11,7 @@
 #include <QDebug>
 #include <QStringList>
 #include <QCoreApplication>
+#include <QDateTime>
 
 #include "pcdm-backend.h"
 #include "pcdm-config.h"
@@ -245,7 +246,7 @@ void UserList::userProcFinished(){
 }
 
 void UserList::syncProcFinished(){
-  //qDebug() << "Sync Proc Finished";
+  qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
   QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
   //qDebug() << "Sync Proc Data:" << data;
   for(int i=0; i<data.length(); i++){
@@ -254,6 +255,7 @@ void UserList::syncProcFinished(){
     if(HASH.contains(user+"/name")){
       if(HASH.value(user+"/status")!=stat){
         HASH.insert(user+"/status", stat);
+        qDebug() << " - User Status Changed:" << user;
         emit UserStatusChanged(user, stat);
       }
     }
@@ -272,7 +274,7 @@ void UserList::startSyncProc(){
   }
   if(syncProc->state()==QProcess::Running){ return; } //already running
   if(syncTimer->isActive()){ syncTimer->stop(); }
-  qDebug() << "Starting Sync Proc";
+  //qDebug() << "Starting Sync Proc";
   syncProc->start();
 }
 
