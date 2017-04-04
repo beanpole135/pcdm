@@ -198,7 +198,7 @@ void UserList::userProcFinished(){
   QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
   QStringList activepcusers; 
   if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
-  //qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
+  qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
   //Parse the user data
   QStringList data = QString::fromUtf8(userProc->readAllStandardOutput()).split("\n");
   //qDebug() << " - Data lines:" << data.length();
@@ -225,7 +225,8 @@ void UserList::userProcFinished(){
     if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ 
       qDebug() << "PC User Disconnected" << oldpcusers[i];
       HASH.insert(oldpcusers[i]+"/pcstat", "disconnected"); 
-      HASH.insert(oldpcusers[i]+"/status",""); 
+      if(HASH.contains(oldpcusers[i]+"/status")){ HASH.remove(oldpcusers[i]+"/status"); }
+      changed = true;
     }
   }
   if(userTimer->isActive()){ userTimer->stop(); }
@@ -242,7 +243,7 @@ void UserList::userProcFinished(){
   if(!allpcusers.isEmpty()){  
     startSyncProc(); //need to probe PC users now
   }
-  //qDebug() << " - End Of Probe: " << users();
+  qDebug() << " - End Of Probe: " << users();
   userTimer->start();
   if(changed){ 
     emit UsersChanged(); 
@@ -250,17 +251,17 @@ void UserList::userProcFinished(){
 }
 
 void UserList::syncProcFinished(){
-  //qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
+  qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
   QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
-  //qDebug() << "Sync Proc Data:" << data;
+  qDebug() << "Sync Proc Data:" << data;
   //QStringList usersChanged;
   for(int i=0; i<data.length(); i++){
     QString user = data[i].section(" on ",0,0);
     QString stat = data[i].section("(",1,1).section(")",0,0);
     //usersChanged << user; //flag this as an updated user status
     if(HASH.contains(user+"/name")){
-      if(HASH.value(user+"/status")!=stat){
-        HASH.insert(user+"/status", stat);
+      if(HASH.value(user+"/pcstat")!=stat){
+        HASH.insert(user+"/pcstat", stat);
         qDebug() << " - PC User Status Changed:" << user;
         emit UserStatusChanged(user, stat);
       }
