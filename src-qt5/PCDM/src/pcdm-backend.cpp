@@ -222,7 +222,11 @@ void UserList::userProcFinished(){
     changed = true;
   }
   for(int i=0; i<oldpcusers.length(); i++){
-    if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ HASH.remove(oldpcusers[i]+"/pcstat"); }
+    if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ 
+      qDebug() << "PC User Disconnected" << oldpcusers[i];
+      HASH.insert(oldpcusers[i]+"/pcstat", "disconnected"); 
+      HASH.insert(oldpcusers[i]+"/status",""); 
+    }
   }
   if(userTimer->isActive()){ userTimer->stop(); }
   if(HASH.keys().isEmpty() && !allowunder1kUID){ 
@@ -246,20 +250,30 @@ void UserList::userProcFinished(){
 }
 
 void UserList::syncProcFinished(){
-  qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
+  //qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
   QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
   //qDebug() << "Sync Proc Data:" << data;
+  //QStringList usersChanged;
   for(int i=0; i<data.length(); i++){
     QString user = data[i].section(" on ",0,0);
     QString stat = data[i].section("(",1,1).section(")",0,0);
+    //usersChanged << user; //flag this as an updated user status
     if(HASH.contains(user+"/name")){
       if(HASH.value(user+"/status")!=stat){
         HASH.insert(user+"/status", stat);
-        qDebug() << " - User Status Changed:" << user;
+        qDebug() << " - PC User Status Changed:" << user;
         emit UserStatusChanged(user, stat);
       }
     }
   }
+  //Now go through and update all the PC user status's that were *not* returned by PC
+  /*QStringList uList = users();
+  for(int i=0; i<uList.length(); i++){
+    if(usersChanged.contains(uList[i])){ continue; } //already changed
+    else if(HASH.value(uList[i]+"/status") == ""){ continue; } //not a personacrypt user
+    else{ HASH.insert(uList[i]+"/status","Disconnected"); }
+  }*/
+
   //Now clean up the process
   //syncProc->deleteLater();
   //syncProc = 0;
