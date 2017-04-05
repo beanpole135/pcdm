@@ -96,7 +96,7 @@ The TrueOS Project also has a [Subreddit](https://www.reddit.com/r/TrueOS/) for 
 
 The TrueOS Project also maintains a number of social media accounts you can watch:
 
-* Twitter: https://twitter.com/TrueOS_Project/
 * Facebook: https://www.facebook.com/groups/4210443834/
-* TrueOS Blog: https://www.trueos.org/blog/
 * Linkedin: http://www.linkedin.com/groups?gid=1942544
+* TrueOS Blog: https://www.trueos.org/blog/
+* Twitter: https://twitter.com/TrueOS_Project/
