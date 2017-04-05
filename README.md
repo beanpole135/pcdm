@@ -21,7 +21,7 @@ This section describes where you can find more information about TrueOS and its 
 
 ## TrueOS Project Documentation
 
-A number of [Sphinx](http://www.sphinx-doc.org/en/stable/) generated reStructuredText handbooks are available to introduce you to the TrueOS, Lumina, and SysAdm projects. These handbooks are open-source, and users are always encouraged to open GitHub issues or fix any errors they find in the documentation.
+A number of [Sphinx](http://www.sphinx-doc.org/en/stable/) generated reStructuredText handbooks are available to introduce you to the TrueOS, Lumina, and SysAdm projects. These handbooks are open source, and users are always encouraged to open GitHub issues or fix any errors they find in the documentation.
 
 ### TrueOS Handbook
 
@@ -38,16 +38,15 @@ TrueOS users are encouraged to review the Lumina documentation, as the Lumina De
 
 Due to complexity of this project, SysAdm documentation is split into three different guides:
 
-1. API Reference Guide (https://api.sysadm.us/getstarted.html)
-The Application Programming Interface (API) Reference Guide is a comprehensive library of all API calls and WebSocket requests for SysAdm. In addition to documenting all SysAdm subsystems and classes, the Guide provides detailed examples of requests and responses, authentication, and SSL certificate management. This guide is constantly updated, ensuring it provides accurate information at all times.
+1. **API Reference Guide** (https://api.sysadm.us/getstarted.html)
 
-2. Client Handbook (https://sysadm.us/handbook/client/)
+The Application Programming Interface (API) Reference Guide is a comprehensive library of all API calls and WebSocket requests for SysAdm. In addition to documenting all SysAdm subsystems and classes, the guide provides detailed examples of requests and responses, authentication, and SSL certificate management. This guide is constantly updated, ensuring it provides accurate information at all times.
 
-The SysAdm Client Handbook documents all aspects of the SysAdm client, as well as describing of the PC-BSD system utilities is replaces. Detailed descriptions of utilities such as Appcafe, Life Preserver, and the Boot Environment Manager are contained here, as well as a general guide to using these utilities.
+2. **Client Handbook** (https://sysadm.us/handbook/client/)
 
-TrueOS users are encouraged to reference this guide, as the SysAdm client is included with TrueOS.
+The SysAdm Client Handbook documents all aspects of the SysAdm client, as well as describing of the PC-BSD system utilities is replaces. Detailed descriptions of utilities such as Appcafe, Life Preserver, and the Boot Environment Manager are contained here, as well as a general guide to using these utilities. TrueOS users are encouraged to reference this guide, as the SysAdm client is included with TrueOS.
 
-3. Server Handbook (https://sysadm.us/handbook/server/introduction.html)
+3. **Server Handbook** (https://sysadm.us/handbook/server/introduction.html)
 
 The Server Handbook is a basic installation guide, walking new users through the process of initializing SysAdm with a bridge and server connection.
 
@@ -72,7 +71,7 @@ The TrueOS community has a wide variety of chat channels and forum options avail
 
 ### Discourse
 
-TrueOS  has a [Discourse channel](https://discourse.trueos.org/) managed concurrently with the TrueOS Subreddit. Functionally similar to the subreddit, a new user will need to sign up with Discourse in order to create posts, but it is possible to view posts without an account.
+TrueOS has a [Discourse channel](https://discourse.trueos.org/) managed concurrently with the TrueOS Subreddit. New users need to sign up with Discourse in order to create posts, but it is possible to view posts without an account.
 
 ### Gitter
 
