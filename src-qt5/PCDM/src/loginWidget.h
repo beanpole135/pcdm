@@ -28,6 +28,8 @@
 #include <QAbstractItemView>
 #include <QCheckBox>
 
+class CapsLockIndicator;
+
 class LoginWidget : public QGroupBox
 {
 	Q_OBJECT
@@ -71,6 +73,7 @@ class LoginWidget : public QGroupBox
 	//QToolButton *pushRefresh;
 	QLabel *deIcon, *devIcon, *nousers;
 	QCheckBox *checkAnon;
+	CapsLockIndicator *capsLockIndicator;
 	bool updating;
 
 	QStringList idL, desktopIcons, desktopInfo;

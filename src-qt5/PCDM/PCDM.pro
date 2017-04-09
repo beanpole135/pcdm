@@ -16,6 +16,7 @@ SOURCES += src/main.cpp \
            src/dialogKeyboard.cpp \
            src/dialogLocale.cpp \
            src/loginWidget.cpp \
+           src/capslockindicator.cpp \
 	   src/pcdm-logindelay.cpp
 
 HEADERS += src/pcdm-gui.h \
@@ -28,6 +29,7 @@ HEADERS += src/pcdm-gui.h \
            src/dialogKeyboard.h \
            src/dialogLocale.h \
            src/loginWidget.h \
+           src/capslockindicator.h \
 	   src/pcdm-logindelay.h
            
 FORMS += src/dialogKeyboard.ui \
