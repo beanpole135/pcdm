@@ -452,8 +452,9 @@ void PCDMgui::slotShutdownComputer(){
   verify.setWindowTitle(tr("System Shutdown"));
   verify.setText(tr("You are about to shut down the system."));
   verify.setInformativeText(tr("Are you sure?"));
-  verify.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  verify.setDefaultButton(QMessageBox::No);
+  verify.addButton(tr("Shutdown"), QMessageBox::AcceptRole);
+  verify.addButton(QMessageBox::Cancel);
+  verify.setDefaultButton(QMessageBox::Cancel);
   int ret = verify.exec();
 
   if(ret == QMessageBox::Yes){
