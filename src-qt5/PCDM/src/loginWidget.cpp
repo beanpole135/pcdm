@@ -107,7 +107,7 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   connect(listDE,SIGNAL(currentIndexChanged(int)),this,SLOT(slotDesktopChanged(int)) );
   connect(checkAnon, SIGNAL(stateChanged(int)), this, SLOT(slotAnonChanged()) );
   //connect(pushRefresh, SIGNAL(clicked()), this, SIGNAL(refreshUsers()) );
-  connect(lineUsername, SIGNAL(editingFinished()), this, SLOT(updateWidget()) );
+  connect(lineUsername, SIGNAL(editingFinished()), this, SLOT(slotUserSelected()) );
   connect(linePassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   connect(lineDevPassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   allowPasswordView(allowPWVisible); //setup signal/slots for pushViewPassword
@@ -211,7 +211,7 @@ void LoginWidget::updateWidget(){
 void LoginWidget::keyPressEvent(QKeyEvent *e){
   if(nousers->isVisible()){ return; }
   if( (e->key()==Qt::Key_Enter) || (e->key()==Qt::Key_Return) ){
-    if(userSelected || linePassword->hasFocus() ){ //!showUsers){
+    if(userSelected || linePassword->hasFocus() || lineDevPassword->hasFocus() ){
       slotTryLogin();
     }else if(!showUsers && lineUsername->hasFocus()){
       linePassword->setFocus();
@@ -267,11 +267,10 @@ void LoginWidget::slotChooseUser(int i){
 }
 
 void LoginWidget::slotUserSelected(){
-  /*if(!showUsers){
-    //Show/hide the device password box depending on if this user is a PC user
-    lineDevPassword->setVisible();
+  if(!showUsers){
+    updateWidget();    
     return;
-  }*/
+  }
 
   if(userSelected){ //make sure the big user widget is updated as well
     listUserBig->setCurrentRow( listUsers->currentIndex() );
