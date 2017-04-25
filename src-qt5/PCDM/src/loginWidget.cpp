@@ -107,6 +107,7 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   connect(listDE,SIGNAL(currentIndexChanged(int)),this,SLOT(slotDesktopChanged(int)) );
   connect(checkAnon, SIGNAL(stateChanged(int)), this, SLOT(slotAnonChanged()) );
   //connect(pushRefresh, SIGNAL(clicked()), this, SIGNAL(refreshUsers()) );
+  connect(lineUsername, SIGNAL(editingFinished()), this, SLOT(updateWidget()) );
   connect(linePassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   connect(lineDevPassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   allowPasswordView(allowPWVisible); //setup signal/slots for pushViewPassword
@@ -171,8 +172,9 @@ void LoginWidget::updateWidget(){
     lineUsername->setVisible(true);
     linePassword->setVisible(true);
     checkAnon->setVisible(allowAnon);
-    lineDevPassword->setVisible( true );
-    devIcon->setVisible( true );
+    lineDevPassword->setVisible( !USERS->status(lineUsername->text()).isEmpty() );
+    devIcon->setVisible( !USERS->status(lineUsername->text()).isEmpty() );
+    checkAnon->setVisible(allowAnon && USERS->status(lineUsername->text()).isEmpty());
     pushLogin->setVisible(true);
     pushViewPassword->setVisible(true);
     //pushRefresh->setVisible(false);
@@ -209,8 +211,10 @@ void LoginWidget::updateWidget(){
 void LoginWidget::keyPressEvent(QKeyEvent *e){
   if(nousers->isVisible()){ return; }
   if( (e->key()==Qt::Key_Enter) || (e->key()==Qt::Key_Return) ){
-    if(userSelected || !showUsers){
+    if(userSelected || linePassword->hasFocus() ){ //!showUsers){
       slotTryLogin();
+    }else if(!showUsers && lineUsername->hasFocus()){
+      linePassword->setFocus();
     }else{
       slotUserSelected();     
     }
@@ -263,6 +267,12 @@ void LoginWidget::slotChooseUser(int i){
 }
 
 void LoginWidget::slotUserSelected(){
+  /*if(!showUsers){
+    //Show/hide the device password box depending on if this user is a PC user
+    lineDevPassword->setVisible();
+    return;
+  }*/
+
   if(userSelected){ //make sure the big user widget is updated as well
     listUserBig->setCurrentRow( listUsers->currentIndex() );
   }else{ //make sure the small user widget is updated as well
