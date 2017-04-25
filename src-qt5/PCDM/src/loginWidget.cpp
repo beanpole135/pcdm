@@ -410,11 +410,43 @@ void LoginWidget::setCurrentDE(QString de){
 }
 
 void LoginWidget::setUsernames(QStringList uList){
+  //qDebug() << "Set Usernames:" << uList;
   if(uList.isEmpty()){ 
     idL.clear();
     listUsers->clear();
     listUserBig->clear();
-  }else if(uList != idL){
+    return;
+  }
+  bool firstfill = idL.isEmpty();
+  //Remove any non-attached PC users from the list
+  for(int i=0; i<uList.length(); i++){
+    if(!USERS->isReady(uList[i])){ uList.removeAt(i); i--; continue; }
+  }
+  //qDebug() << "[USERS READY]" << uList;
+  //Remove any users which are no longer valid
+  for(int i=0; i<idL.length(); i++){
+    if( !uList.contains(idL[i]) ){ 
+      listUsers->removeItem(i);
+      delete listUserBig->takeItem(i);
+      idL.removeAt(i);
+      i--;
+    }
+  }
+  //Now add in (or update) the other users
+  for(int i=0; i<uList.length(); i++){
+    QString txt = USERS->displayname(uList[i])+" ("+USERS->status(uList[i])+")";
+    if(txt.endsWith("()")){ txt = txt.section("()",0,-2).simplified(); } //no status - clean it up in string
+    if(i<idL.length() &&uList[i]==idL[i]){
+      //User already listed - just update text
+      listUsers->setItemText(i,txt);
+      listUserBig->item(i)->setText(txt);
+    }else{
+      //New user - add to lists
+      listUsers->insertItem(i, txt, (USERS->status(uList[i]).isEmpty() ? "" : "persona") );
+      listUserBig->insertItem(i,txt);
+    }
+  }
+/*else if(uList != idL){
     updating = true;
     //Make sure that the two user widgets are identical
     listUsers->clear();
@@ -431,19 +463,21 @@ void LoginWidget::setUsernames(QStringList uList){
         listUserBig->addItem(USERS->displayname(uList[i]));
       }
     }
-   
+   */
     //listUserBig->addItems(uList);
-    idL.clear();
+    //idL.clear();
     idL = uList; //save for later
-    listUsers->setCurrentIndex(0);
-    listUserBig->setCurrentRow(0);
-    //Automatically select the user if there is only one
-    updating = false; //done
-    if(uList.length() == 1){
-      //qDebug() << "Single User System Detected";
-      slotUserSelected();	 
+    if(firstfill){
+      listUsers->setCurrentIndex(0);
+      listUserBig->setCurrentRow(0);
+      //Automatically select the user if there is only one
+      //updating = false; //done
+      if(uList.length() == 1){
+        //qDebug() << "Single User System Detected";
+        slotUserSelected();	 
+      }
     }
-  }
+  //}
   updateWidget();
 }
 

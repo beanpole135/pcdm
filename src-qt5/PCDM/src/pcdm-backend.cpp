@@ -34,7 +34,7 @@ UserList::UserList(QObject *parent) : QObject(parent){
     syncTimer->setInterval(15000); //15 seconds between status updates minimum
     connect(syncTimer, SIGNAL(timeout()), this, SLOT(startSyncProc()) );
   userTimer = new QTimer(this);
-    userTimer->setInterval(30000); //30 seconds between personacrypt user scans
+    userTimer->setInterval(10000); //10 seconds between personacrypt user scans
     connect(userTimer, SIGNAL(timeout()), this, SLOT(startUserProc()) );
   //Setup other default values
   allowunder1kUID = false;
@@ -118,7 +118,7 @@ bool UserList::isReady(QString user){
 }
 
 //Private
-bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC){
+bool UserList::parseUserLine(QString line, QStringList *oldusers, const QStringList *allPC, const QStringList *activePC){
   //returns true if data changed, and removes itself from oldusers as needed
   //qDebug() << "Parse Line:" << line;
   //if(line.endsWith("\n")){ line.chop(1); }
@@ -160,7 +160,7 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
     bool change = false;
     //See if it failed any checks
     if(!bad){
-      //qDebug() << "Good User:" << info;
+      //qDebug() << "Good User:" << info << allPC->contains(info[0]) << activePC->contains(info[0]);
       if(fixshell){ shell = "/bin/csh"; }
       //Add this user to the lists if it is good
       change = !oldusers->contains(info[0]);
@@ -171,8 +171,9 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, QStringList *a
        else if(HASH.value(info[0]+"/home")!=info[5].simplified()){ change = true; }
        else if(HASH.value(info[0]+"/shell")!=shell){ change = true; }
         if(allPC->contains(info[0])){
-          HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
-        }else if(HASH.contains(info[0]+"/pcstat")){ HASH.remove(info[0]+"/pcstat"); }
+          change = HASH.value(info[0]+"/pcstat") != (activePC->contains(info[0]) ? "ready" : "disconnected");
+          //HASH.insert(info[0]+"/pcstat", activePC->contains(info[0]) ? "ready" : "disconnected");
+        }else if(HASH.contains(info[0]+"/pcstat")){ change = true; }
       }
       if(change){ //need to update the hash
         //qDebug() << " - Change info in HASH:" << info;
@@ -198,7 +199,7 @@ void UserList::userProcFinished(){
   QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
   QStringList activepcusers; 
   if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
-  qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
+  //qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
   //Parse the user data
   QStringList data = QString::fromUtf8(userProc->readAllStandardOutput()).split("\n");
   //qDebug() << " - Data lines:" << data.length();
@@ -223,7 +224,7 @@ void UserList::userProcFinished(){
   }
   for(int i=0; i<oldpcusers.length(); i++){
     if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ 
-      qDebug() << "PC User Disconnected" << oldpcusers[i];
+      //qDebug() << "PC User Disconnected" << oldpcusers[i];
       HASH.insert(oldpcusers[i]+"/pcstat", "disconnected"); 
       if(HASH.contains(oldpcusers[i]+"/status")){ HASH.remove(oldpcusers[i]+"/status"); }
       changed = true;
@@ -243,7 +244,7 @@ void UserList::userProcFinished(){
   if(!allpcusers.isEmpty()){  
     startSyncProc(); //need to probe PC users now
   }
-  qDebug() << " - End Of Probe: " << users();
+  //qDebug() << " - End Of Probe: " << users();
   userTimer->start();
   if(changed){ 
     emit UsersChanged(); 
@@ -251,9 +252,9 @@ void UserList::userProcFinished(){
 }
 
 void UserList::syncProcFinished(){
-  qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
+  //qDebug() << "Sync Proc Finished:" << QDateTime::currentDateTime().toString();
   QStringList data = QString::fromUtf8(syncProc->readAllStandardOutput() ).split("\n");
-  qDebug() << "Sync Proc Data:" << data;
+  //qDebug() << "Sync Proc Data:" << data;
   //QStringList usersChanged;
   for(int i=0; i<data.length(); i++){
     QString user = data[i].section(" on ",0,0);

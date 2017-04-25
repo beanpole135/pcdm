@@ -67,7 +67,7 @@ private:
 	bool allowunder1kUID, allowroot;
 	QStringList excludedUsers;
 
-	bool parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC); //returns true if data changed, and removes itself from oldusers as needed
+	bool parseUserLine(QString line, QStringList *oldusers, const QStringList *allPC, const QStringList *activePC); //returns true if data changed, and removes itself from oldusers as needed
 
 private slots:
 	void userProcFinished();
