@@ -269,6 +269,7 @@ void XProcess::setupSessionEnvironment(){
   environ.insert("HOME",xhome); //Set the users home directory
   environ.insert("SHELL",xshell); //Set the user's default shell
   environ.insert("PCDM_SESSION", Backend::getNLDesktopName(xde).toUpper() ); //List the desktop environment that is being started
+  environ.insert("QT_AUTO_SCREEN_SCALE_FACTOR","1"); //make sure to enable Qt5 auto-detect DPI
   this->setProcessEnvironment(environ);
   this->setWorkingDirectory(xhome); //set the current directory to the user's home directory
 }
