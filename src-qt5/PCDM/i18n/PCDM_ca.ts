@@ -68,7 +68,7 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation>Si us plau, connecteu el dispositiu de PersonaCrypt per començar els procediments d'entrada</translation>
+        <translation>Si us plau, connecteu el dispositiu de PersonaCrypt per començar els procediments d'entrada.</translation>
     </message>
     <message>
         <source>Stealth Session</source>
@@ -260,7 +260,7 @@
     </message>
     <message>
         <source>Apply</source>
-        <translation>Aplica-ho</translation>
+        <translation>Aplica-la</translation>
     </message>
     <message>
         <source>Cancel</source>
