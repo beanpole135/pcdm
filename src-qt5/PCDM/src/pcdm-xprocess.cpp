@@ -68,7 +68,7 @@ bool XProcess::isRunning(){
 }
 
 void XProcess::waitForSessionClosed(){
-  // CAUTION!! 
+  // CAUTION!!
   // This function will pause the calling program to wait for the session to end!
   if( isRunning() ){ this->waitForFinished(-1); }
 
@@ -87,22 +87,22 @@ bool XProcess::startXSession(){
     return true;
   }
   //Backend::log("Starting up Desktop environment ("+xcmd+") as user ("+xuser+")");
-  
+
   //Check for PAM username/password validity
   if( !pam_checkPW() ){ emit InvalidLogin(); pam_shutdown(); return true; }
 
   //If this has a special device password, mount the personacrypt device
   if( !xanonlogin && !xdevpass.isEmpty() ){ //&& Backend::getAvailablePersonaCryptUsers().contains(xuser) ){
     Backend::log(" - PersonaCrypt Login Detected");
-    if( !Backend::MountPersonaCryptUser(xuser, xdevpass) ){ 
+    if( !Backend::MountPersonaCryptUser(xuser, xdevpass) ){
       //Could not mount the personacrypt device (invalid password?)
       xdevpass.clear(); //clear the invalid password
-      emit InvalidLogin(); pam_shutdown(); return true; 
+      emit InvalidLogin(); pam_shutdown(); return true;
     }else{
       //overwrite the password in memory, but leave it flagged (not empty)
       if(DEBUG){ qDebug() << "Mounted PersonaCrypt Device"; }
       xdevpass.clear();
-      xdevpass = "PersonaCrypt"; 
+      xdevpass = "PersonaCrypt";
     }
   }
 
