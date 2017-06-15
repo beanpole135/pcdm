@@ -123,10 +123,10 @@ bool UserList::parseUserLine(QString line, QStringList *oldusers, const QStringL
   //qDebug() << "Parse Line:" << line;
   //if(line.endsWith("\n")){ line.chop(1); }
   //Remove all users that have:
-  static QStringList filter; 
+  static QStringList filter;
    if(filter.isEmpty()){ filter << "server" << "daemon" << "database" << "system"<< "account"<<"pseudo"; }
   //List any shells which are still valid - if not installed fall back on csh
-  static QStringList validShells; 
+  static QStringList validShells;
   if(validShells.isEmpty()){ validShells << "/usr/local/bin/zsh" << "/usr/local/bin/fish" << "/usr/local/bin/bash"; }
   //Now load the information
   QStringList info = line.section("\n",0,0).split(":"); //FIELDS: <username, *, uid, gid, comment, home, shell>
@@ -197,7 +197,7 @@ void UserList::userProcFinished(){
   QStringList oldpcusers = HASH.keys().filter("/pcstat");
     for(int i=0; i<oldpcusers.length(); i++){ oldpcusers[i] = oldpcusers[i].section("/",0,0); }
   QStringList allpcusers = Backend::getRegisteredPersonaCryptUsers();
-  QStringList activepcusers; 
+  QStringList activepcusers;
   if(!allpcusers.isEmpty()){ activepcusers = Backend::getAvailablePersonaCryptUsers(); }
   //qDebug() << "User Probe Finished:" << cusers << oldpcusers << allpcusers << activepcusers;
   //Parse the user data
@@ -217,37 +217,37 @@ void UserList::userProcFinished(){
   for(int i=0; i<cusers.length(); i++){
     //qDebug() << "Remove User Data from HASH:" << cusers[i];
     QStringList keys = HASH.keys().filter(cusers[i]+"/");
-    for(int j=0; j<keys.length(); j++){ 
-      if(keys[j].startsWith(cusers[i]+"/")){ HASH.remove(keys[j]); } 
+    for(int j=0; j<keys.length(); j++){
+      if(keys[j].startsWith(cusers[i]+"/")){ HASH.remove(keys[j]); }
     }
     changed = true;
   }
   for(int i=0; i<oldpcusers.length(); i++){
-    if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){ 
+    if(!allpcusers.contains(oldpcusers[i]) && HASH.contains(oldpcusers[i]+"/pcstat") ){
       //qDebug() << "PC User Disconnected" << oldpcusers[i];
-      HASH.insert(oldpcusers[i]+"/pcstat", "disconnected"); 
+      HASH.insert(oldpcusers[i]+"/pcstat", "disconnected");
       if(HASH.contains(oldpcusers[i]+"/status")){ HASH.remove(oldpcusers[i]+"/status"); }
       changed = true;
     }
   }
   if(userTimer->isActive()){ userTimer->stop(); }
-  if(HASH.keys().isEmpty() && !allowunder1kUID){ 
-    allowunder1kUID = true; 
+  if(HASH.keys().isEmpty() && !allowunder1kUID){
+    allowunder1kUID = true;
     startUserProc(); //run this process again with the larger "pool" of possible users
     return;
   }else if(HASH.keys().isEmpty() && !allowroot){
     //Still no available users - permit the root user to login as a last-ditch effort
-    allowroot = true; 
-    startUserProc(); 
+    allowroot = true;
+    startUserProc();
     return;
   }
-  if(!allpcusers.isEmpty()){  
+  if(!allpcusers.isEmpty()){ 
     startSyncProc(); //need to probe PC users now
   }
   //qDebug() << " - End Of Probe: " << users();
   userTimer->start();
-  if(changed){ 
-    emit UsersChanged(); 
+  if(changed){
+    emit UsersChanged();
   }
 }
 
@@ -317,7 +317,7 @@ void UserList::startUserProc(){
 //========================
 //      STATIC FUNCTIONS
 //========================
-QStringList Backend::getAvailableDesktops(){  
+QStringList Backend::getAvailableDesktops(){
   if(instXNameList.isEmpty()){ loadXSessionsData(); }
   QStringList out = instXNameList;
   return out;
@@ -335,7 +335,7 @@ QString Backend::getNLDesktopName(QString xName){
   if(instXNameList.isEmpty()){ loadXSessionsData(); }
   int index = instXNameList.indexOf(xName);
   if(index == -1){ Backend::log("PCDM: Invalid Desktop Name: " +xName); return ""; }
-  return instXDEList[index];	
+  return instXDEList[index];
 }
 
 QString Backend::getDesktopIcon(QString xName){
