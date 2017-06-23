@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1">
+<TS version="2.1" language="es">
 <context>
     <name>FancySwitcher</name>
     <message>
@@ -68,11 +68,11 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation type="unfinished"></translation>
+        <translation>Por favor conecte su dispositivo de PersonaCrypt para comenzar el procedimiento de login.</translation>
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Sesión Sigiloso</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
