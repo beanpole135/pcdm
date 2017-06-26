@@ -100,7 +100,7 @@
     <name>QObject</name>
     <message>
         <source>You should run this application as root</source>
-        <translation>Hauríeu d'executar aquesta aplicació com a root.</translation>
+        <translation>Hauríeu d'executar aquesta aplicació com a arrel.</translation>
     </message>
 </context>
 </TS>
