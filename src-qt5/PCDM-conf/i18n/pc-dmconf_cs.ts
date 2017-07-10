@@ -53,11 +53,11 @@
     </message>
     <message>
         <source>The PCDM configuration file could not be found: %1</source>
-        <translation>Soubor s nastaveními PCDM nebyl nalezen: %1</translation>
+        <translation>Soubor s nastaveními správce displeje PCDM nebyl nalezen: %1</translation>
     </message>
     <message>
         <source>This application will now close</source>
-        <translation>Tato aplikace nyní bude uzavřena</translation>
+        <translation>Tato aplikace bude nyní uzavřena</translation>
     </message>
     <message>
         <source>Time Delay</source>
@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>Allow Valid Users with UID under 1000</source>
-        <translation>Umožnit platné uživatele s identifikátorem (UID) nižším než 1000</translation>
+        <translation>Umožnit platné uživatele i s identifikátorem (UID) nižším než 1000</translation>
     </message>
     <message>
         <source>Additional Excluded Users</source>
@@ -93,7 +93,7 @@
     </message>
     <message>
         <source>Allow Stealth Sessions</source>
-        <translation>Umožnit dočasné relace</translation>
+        <translation>Umožnit dočasná sezení</translation>
     </message>
 </context>
 <context>
