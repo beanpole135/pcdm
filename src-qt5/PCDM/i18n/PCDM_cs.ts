@@ -28,7 +28,7 @@
     </message>
     <message>
         <source>Select an alternate user and clear the password field</source>
-        <translation>Vyberte jiného uživatele a vymažte obsah kolonky s heslem</translation>
+        <translation>Vybrat jiného uživatele a vymazat obsah kolonky s heslem</translation>
     </message>
     <message>
         <source>Select this user</source>
@@ -40,7 +40,7 @@
     </message>
     <message>
         <source>Login to the system with the current user and password</source>
-        <translation>Přihlásit do systému se stávajícím uživatelem a heslem</translation>
+        <translation>Přihlásit do systému stávajícím uživatelským jménem a heslem</translation>
     </message>
     <message>
         <source>Password</source>
@@ -48,11 +48,11 @@
     </message>
     <message>
         <source>Hold to view the currently entered password</source>
-        <translation>Podržte pro zobrazení právě zadaného hesla</translation>
+        <translation>Podržením kliknutí zobrazíte právě zadané heslo</translation>
     </message>
     <message>
         <source>Login password for the selected user</source>
-        <translation>Přihlašovací heslo pro označeného uživatele</translation>
+        <translation>Heslo pro přihlášení právě označeného uživatele</translation>
     </message>
     <message>
         <source>Available users</source>
@@ -76,7 +76,7 @@
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
-        <translation>Použít dočasnou domovskou složku která bude po odhlášení smazána.</translation>
+        <translation>Použít dočasnou domovskou složku která bude po odhlášení smazána)</translation>
     </message>
     <message>
         <source>Refresh</source>
@@ -92,7 +92,7 @@
     </message>
     <message>
         <source>Device encryption key (personacrypt users only)</source>
-        <translation>Klíč k šifrovanému zařízení (pouze uživatelé personacrypt)</translation>
+        <translation>Klíč k šifrovanému zařízení (pouze uživatelé PersonaCrypt)</translation>
     </message>
 </context>
 <context>
@@ -111,7 +111,7 @@
     </message>
     <message>
         <source>Change Keyboard Layout</source>
-        <translation>Změnit rozložení klávesnice</translation>
+        <translation>Změnit rozvržení klávesnice</translation>
     </message>
     <message>
         <source>System</source>
@@ -131,7 +131,7 @@
     </message>
     <message>
         <source>Close PCDM</source>
-        <translation>Zavřít PCDM</translation>
+        <translation>Zavřít správce displeje PCDM</translation>
     </message>
     <message>
         <source>Shutdown the computer</source>
@@ -171,7 +171,7 @@
     </message>
     <message>
         <source>Change DPI</source>
-        <translation>Změnit rozlišení na palec</translation>
+        <translation>Změnit rozlišení na jednotku fyz. rozměru obrazovky (DPI)</translation>
     </message>
     <message>
         <source>High (4K)</source>
@@ -191,7 +191,7 @@
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation>Znovu načíst PCDM</translation>
+        <translation>Znovu načíst správce displeje PCDM</translation>
     </message>
 </context>
 <context>
