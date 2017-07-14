@@ -1,0 +1,11 @@
+*.o
+ui*.h
+qrc*.cpp
+qrc*.o
+moc_*.cpp
+*.qm
+.qmake.stash
+Makefile
+PCDM-session
+pcdm-session
+pc-dmconf

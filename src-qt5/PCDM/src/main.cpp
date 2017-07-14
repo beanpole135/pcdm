@@ -245,11 +245,11 @@ int runSingleSession(int argc, char *argv[]){
     }
   }
 
+
   //Clean up Code
   delete &desktop;
   delete &a;
   //delete &splash;
-
 
   return retCode;
 }

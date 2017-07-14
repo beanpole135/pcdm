@@ -72,6 +72,7 @@ ADDSPACER=horizontal::[2,2]
 # Login Widget User List: QComboBox & QListWidget
 # Login Widget Password Entry: QLineEdit
 # Login Widget Background/Frame: QGroupBox
+# Login Widget Caps Lock Indicator: CapsLockIndicator
 # Desktop Environment Icon Display: QGraphicsView
 # Desktop Environment Selector Buttons: QPushButton
 # Header Image: QLabel
@@ -85,6 +86,7 @@ QWidget{
 	font-size: 12pt;
 	font-family: Caladea;
 }
+CapsLockIndicator { color: white; }
 QListWidget{
 	font-size: 14pt;
 	color: black;

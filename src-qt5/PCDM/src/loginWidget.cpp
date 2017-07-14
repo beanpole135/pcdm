@@ -9,6 +9,7 @@ Sub-classed widget for inputting login information
 */
 
 #include "loginWidget.h"
+#include "capslockindicator.h"
 #include "pcdm-backend.h"
 
 extern UserList *USERS;
@@ -47,6 +48,7 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   	linePassword->setFocusPolicy(Qt::StrongFocus);
   lineDevPassword = new QLineEdit(this);
 	lineDevPassword->setFocusPolicy(Qt::StrongFocus);
+  capsLockIndicator = new CapsLockIndicator(this);
 
   pushLogin = new QToolButton(this);
 	QAction* tmp1 = new QAction(this);
@@ -82,6 +84,7 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
         hlayout3->addWidget(lineUsername);
       flayout->addRow(pushUserIcon, hlayout3);
       flayout->addRow(pushViewPassword, linePassword);
+      flayout->addRow(capsLockIndicator);
       flayout->addRow(devIcon, lineDevPassword);
       flayout->addRow(deIcon,listDE);
     vlayout->addSpacing(15);
@@ -210,6 +213,9 @@ void LoginWidget::updateWidget(){
 
 void LoginWidget::keyPressEvent(QKeyEvent *e){
   if(nousers->isVisible()){ return; }
+  if(e->key() == Qt::Key_CapsLock) {
+    capsLockIndicator->setCapsLockOn(!capsLockIndicator->capsLockOn());
+  }
   if( (e->key()==Qt::Key_Enter) || (e->key()==Qt::Key_Return) ){
     if(userSelected || linePassword->hasFocus() || lineDevPassword->hasFocus() ){
       slotTryLogin();
@@ -562,6 +568,7 @@ void LoginWidget::retranslateUi(){
   listUsers->setToolTip(tr("Available users"));
   listUserBig->setToolTip(tr("Available users"));
   linePassword->setToolTip(tr("Login password for the selected user"));
+  capsLockIndicator->retranslateUi();
   if(showUsers){ lineDevPassword->setToolTip(tr("Device encryption key")); }
   else{ lineDevPassword->setToolTip(tr("Device encryption key (personacrypt users only)")); }
   listDE->setToolTip(tr("Available desktop environments"));
