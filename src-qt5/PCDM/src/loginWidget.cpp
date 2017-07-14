@@ -110,6 +110,7 @@ LoginWidget::LoginWidget(QWidget* parent) : QGroupBox(parent)
   connect(listDE,SIGNAL(currentIndexChanged(int)),this,SLOT(slotDesktopChanged(int)) );
   connect(checkAnon, SIGNAL(stateChanged(int)), this, SLOT(slotAnonChanged()) );
   //connect(pushRefresh, SIGNAL(clicked()), this, SIGNAL(refreshUsers()) );
+  connect(lineUsername, SIGNAL(editingFinished()), this, SLOT(slotUserSelected()) );
   connect(linePassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   connect(lineDevPassword, SIGNAL(textChanged(const QString&)), this, SLOT(passChanged()) );
   allowPasswordView(allowPWVisible); //setup signal/slots for pushViewPassword
@@ -174,8 +175,9 @@ void LoginWidget::updateWidget(){
     lineUsername->setVisible(true);
     linePassword->setVisible(true);
     checkAnon->setVisible(allowAnon);
-    lineDevPassword->setVisible( true );
-    devIcon->setVisible( true );
+    lineDevPassword->setVisible( !USERS->status(lineUsername->text()).isEmpty() );
+    devIcon->setVisible( !USERS->status(lineUsername->text()).isEmpty() );
+    checkAnon->setVisible(allowAnon && USERS->status(lineUsername->text()).isEmpty());
     pushLogin->setVisible(true);
     pushViewPassword->setVisible(true);
     //pushRefresh->setVisible(false);
@@ -215,8 +217,10 @@ void LoginWidget::keyPressEvent(QKeyEvent *e){
     capsLockIndicator->setCapsLockOn(!capsLockIndicator->capsLockOn());
   }
   if( (e->key()==Qt::Key_Enter) || (e->key()==Qt::Key_Return) ){
-    if(userSelected || !showUsers){
+    if(userSelected || linePassword->hasFocus() || lineDevPassword->hasFocus() ){
       slotTryLogin();
+    }else if(!showUsers && lineUsername->hasFocus()){
+      linePassword->setFocus();
     }else{
       slotUserSelected();     
     }
@@ -269,6 +273,11 @@ void LoginWidget::slotChooseUser(int i){
 }
 
 void LoginWidget::slotUserSelected(){
+  if(!showUsers){
+    updateWidget();    
+    return;
+  }
+
   if(userSelected){ //make sure the big user widget is updated as well
     listUserBig->setCurrentRow( listUsers->currentIndex() );
   }else{ //make sure the small user widget is updated as well
@@ -407,11 +416,43 @@ void LoginWidget::setCurrentDE(QString de){
 }
 
 void LoginWidget::setUsernames(QStringList uList){
+  //qDebug() << "Set Usernames:" << uList;
   if(uList.isEmpty()){ 
     idL.clear();
     listUsers->clear();
     listUserBig->clear();
-  }else if(uList != idL){
+    return;
+  }
+  bool firstfill = idL.isEmpty();
+  //Remove any non-attached PC users from the list
+  for(int i=0; i<uList.length(); i++){
+    if(!USERS->isReady(uList[i])){ uList.removeAt(i); i--; continue; }
+  }
+  //qDebug() << "[USERS READY]" << uList;
+  //Remove any users which are no longer valid
+  for(int i=0; i<idL.length(); i++){
+    if( !uList.contains(idL[i]) ){ 
+      listUsers->removeItem(i);
+      delete listUserBig->takeItem(i);
+      idL.removeAt(i);
+      i--;
+    }
+  }
+  //Now add in (or update) the other users
+  for(int i=0; i<uList.length(); i++){
+    QString txt = USERS->displayname(uList[i])+" ("+USERS->status(uList[i])+")";
+    if(txt.endsWith("()")){ txt = txt.section("()",0,-2).simplified(); } //no status - clean it up in string
+    if(i<idL.length() &&uList[i]==idL[i]){
+      //User already listed - just update text
+      listUsers->setItemText(i,txt);
+      listUserBig->item(i)->setText(txt);
+    }else{
+      //New user - add to lists
+      listUsers->insertItem(i, txt, (USERS->status(uList[i]).isEmpty() ? "" : "persona") );
+      listUserBig->insertItem(i,txt);
+    }
+  }
+/*else if(uList != idL){
     updating = true;
     //Make sure that the two user widgets are identical
     listUsers->clear();
@@ -428,19 +469,21 @@ void LoginWidget::setUsernames(QStringList uList){
         listUserBig->addItem(USERS->displayname(uList[i]));
       }
     }
-   
+   */
     //listUserBig->addItems(uList);
-    idL.clear();
+    //idL.clear();
     idL = uList; //save for later
-    listUsers->setCurrentIndex(0);
-    listUserBig->setCurrentRow(0);
-    //Automatically select the user if there is only one
-    updating = false; //done
-    if(uList.length() == 1){
-      //qDebug() << "Single User System Detected";
-      slotUserSelected();	 
+    if(firstfill){
+      listUsers->setCurrentIndex(0);
+      listUserBig->setCurrentRow(0);
+      //Automatically select the user if there is only one
+      //updating = false; //done
+      if(uList.length() == 1){
+        //qDebug() << "Single User System Detected";
+        slotUserSelected();	 
+      }
     }
-  }
+  //}
   updateWidget();
 }
 

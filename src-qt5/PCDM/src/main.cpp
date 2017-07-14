@@ -75,7 +75,7 @@ int runSingleSession(int argc, char *argv[]){
         dir.mkpath("/var/log");
       }
     logfile.open(QIODevice::WriteOnly | QIODevice::Append);
-  //Backend::openLogFile("/var/log/PCDM.log"); 
+  //Backend::openLogFile("/var/log/PCDM.log");
 
   //qDebug() << "Backend Checks Finished:" << QString::number(clock.elapsed())+" ms";
   Backend::loadDPIpreference();
@@ -89,18 +89,18 @@ int runSingleSession(int argc, char *argv[]){
   //Check for the flag to try and auto-login
   bool ALtriggered = false;
   if(QFile::exists(TMPAUTOLOGINFILE)){ ALtriggered=true; QFile::remove(TMPAUTOLOGINFILE); }
-  
-  //QString changeLang; 
+
+  //QString changeLang;
   // Load the configuration file
   QString confFile = "/usr/local/etc/pcdm.conf";
-  if(!QFile::exists(confFile)){ 
+  if(!QFile::exists(confFile)){
     qDebug() << "PCDM: Configuration file missing:"<<confFile<<"\n  - Using default configuration";
     QFile::copy(":samples/pcdm.conf", confFile);
   }
-  
+
   Config::loadConfigFile(confFile);
   // Now set the backend functionality of which usernames are allowed
-  if(USERS==0){ 
+  if(USERS==0){
     USERS = new UserList();
     USERS->allowUnder1K(Config::allowUnder1KUsers());
     USERS->allowRootUser(Config::allowRootUser());
@@ -110,7 +110,7 @@ int runSingleSession(int argc, char *argv[]){
   //Backend::allowUidUnder1K(Config::allowUnder1KUsers(), Config::excludedUserList());
   //qDebug() << "Config File Loaded:" << QString::number(clock.elapsed())+" ms";
   // Startup the main application
-  QApplication a(argc,argv); 
+  QApplication a(argc,argv);
     //Setup Log File
     qInstallMessageHandler(MessageOutput);
   int retCode = 0; //used for UI/application return
@@ -124,14 +124,14 @@ int runSingleSession(int argc, char *argv[]){
   //qDebug() << "SplashScreen Started:" << QString::number(clock.elapsed())+" ms";
   //Initialize the xprocess
   XProcess desktop;
-  
+
   // Check what directory our app is in
     QString appDir = "/usr/local/share/PCDM";
     // Load the translator
     QTranslator translator;
     QString langCode = lang;
     //Check for a language change detected
-    //if ( ! changeLang.isEmpty() )       
+    //if ( ! changeLang.isEmpty() )
        //langCode = changeLang;
     //Load the proper locale for the translator
     if ( QFile::exists(appDir + "/i18n/PCDM_" + langCode + ".qm" ) ) {
@@ -156,7 +156,7 @@ int runSingleSession(int argc, char *argv[]){
   if ( Config::enableVGL() ) {
     system("xhost +");
   }
-    
+
   // *** STARTUP THE PROGRAM ***
   bool goodAL = false; //Flag for whether the autologin was successful
   // Start the autologin procedure if applicable
@@ -167,10 +167,10 @@ int runSingleSession(int argc, char *argv[]){
     QString dsk = Backend::getLastDE(user, "");
     if( user.isEmpty() || dsk.isEmpty() || QFile::exists("/var/db/personacrypt/"+user+".key") ){
 	//Invalid inputs (or a PersonaCrypt user)
-	 goodAL=false;   
+	 goodAL=false;
     }else{
 	//Run the time delay for the autologin attempt
-	if(Config::autoLoginDelay() > 1){
+	if(Config::autoLoginDelay() >= 0){
 	  ThemeStruct ctheme;
              ctheme.loadThemeFile(Config::themeFile());
 	  loginDelay dlg(Config::autoLoginDelay(), user, ctheme.itemValue("background") );
@@ -184,6 +184,7 @@ int runSingleSession(int argc, char *argv[]){
 	}
 	//now start the autologin if appropriate
 	if(goodAL){
+            //qDebug() << "Starting AutoLogin:" << user;
 	  desktop.loginToXSession(user,pwd, dsk,lang,"",false);
 	  //splash.close();
 	  if(desktop.isRunning()){
@@ -206,13 +207,13 @@ int runSingleSession(int argc, char *argv[]){
     //qDebug() << "Main GUI Created:" << QString::number(clock.elapsed())+" ms";
     //splash.finish(&w); //close the splash when the GUI starts up
 
-    //Setup the signals/slots to startup the desktop session 
+    //Setup the signals/slots to startup the desktop session
     QObject::connect( &w,SIGNAL(xLoginAttempt(QString,QString,QString,QString, QString, bool)), &desktop,SLOT(loginToXSession(QString,QString,QString,QString, QString,bool)) ); 
     //Setup the signals/slots for return information for the GUI
     QObject::connect( &desktop, SIGNAL(InvalidLogin()), &w, SLOT(slotLoginFailure()) );
     QObject::connect( &desktop, SIGNAL(started()), &w, SLOT(slotLoginSuccess()) );
     QObject::connect( &desktop, SIGNAL(ValidLogin()), &w, SLOT(slotLoginSuccess()) );
-    
+
     //qDebug() << "Showing GUI:" << QString::number(clock.elapsed())+" ms";
     w.show();
 
@@ -223,7 +224,7 @@ int runSingleSession(int argc, char *argv[]){
   USERS->stopUpdates();
   //Wait for the desktop session to finish before exiting
   if(compositor.state()==QProcess::Running){ compositor.terminate(); }
-    desktop.waitForSessionClosed(); 
+    desktop.waitForSessionClosed();
     qDebug() << "PCDM Session finished";
     logfile.close();
   //splash.show(); //show the splash screen again
@@ -238,12 +239,18 @@ int runSingleSession(int argc, char *argv[]){
     QCoreApplication::processEvents();
     //Pause for a few seconds to prevent starting a new session during a shutdown
     wTime = QTime::currentTime().addSecs(30);
-    while( QTime::currentTime() < wTime ){ 
+    while( QTime::currentTime() < wTime ){
       //Keep processing events during the wait (for splashscreen)
-      QCoreApplication::processEvents(QEventLoop::AllEvents, 100); 
+      QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
   }
-  
+
+
+  //Clean up Code
+  delete &desktop;
+  delete &a;
+  //delete &splash;
+
   return retCode;
 }
 
@@ -253,7 +260,7 @@ int main(int argc, char *argv[])
  bool runonce = true;  //Always set this for now until the internal repeater works properly
  setenv("MM_CHARSET", "UTF-8", 1); //ensure UTF-8 text formatting
  if(argc==2){ if( QString(argv[1]) == "-once"){ runonce = true; } }
-  
+
  while(neverquit){
   if(runonce){ neverquit = false; }
   qDebug() << " -- PCDM Session Starting...";
@@ -274,7 +281,7 @@ int main(int argc, char *argv[])
     //Now kill the shild process (whole session)
     /*qDebug() << "Exiting child process";
     exit(3);
-  }else{ 
+  }else{
     //Parent (calling) process
     int status;
     sleep(2);
@@ -283,7 +290,7 @@ int main(int argc, char *argv[])
     //   can spawn multiple child sessions on different TTY displays
   }*/
   qDebug() << "-- PCDM Session Ended --";
-  if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE) ){ neverquit = false; } 
+  if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE) ){ neverquit = false; }
  }
  return 0;
 }

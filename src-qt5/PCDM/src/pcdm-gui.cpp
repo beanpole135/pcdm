@@ -668,7 +668,8 @@ void PCDMgui::retranslateUi(){
     //Get the new desktop list (translated)
     QStringList deList = Backend::getAvailableDesktops(); //priority ordered
     QString lastDE;
-    if(!loginW->currentUsername().isEmpty()){ lastDE = Backend::getLastDE(loginW->currentUsername(), USERS->homedir(loginW->currentUsername()) ); }
+    QString user = USERS->findUser(loginW->currentUsername());
+    if(!user.isEmpty()){ lastDE = Backend::getLastDE(user, USERS->homedir(user) ); }
     if(DEBUG_MODE){ qDebug() << "DE's:" << deList << lastDE; }
     if(lastDE.isEmpty()){ lastDE = deList[0]; }
     //Organize the desktop list alphabetically by filename

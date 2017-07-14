@@ -57,7 +57,7 @@ public:
 	QString shell(QString user);
 	QString status(QString user);
 	bool isReady(QString user); //always true unless a personacrypt user
-	
+
 private:
 	QProcess *syncProc, *userProc;
 	QTimer *syncTimer, *userTimer;
@@ -67,12 +67,12 @@ private:
 	bool allowunder1kUID, allowroot;
 	QStringList excludedUsers;
 
-	bool parseUserLine(QString line, QStringList *oldusers, QStringList *allPC, QStringList *activePC); //returns true if data changed, and removes itself from oldusers as needed
+	bool parseUserLine(QString line, QStringList *oldusers, const QStringList *allPC, const QStringList *activePC); //returns true if data changed, and removes itself from oldusers as needed
 
 private slots:
 	void userProcFinished();
 	void syncProcFinished();
-	
+
 	void startSyncProc(); //start probe for personacrypt user status
 	void startUserProc(); //start probe for users
 
@@ -99,7 +99,7 @@ public:
     static QString resetKbdCmd(); //read the default settings, and return the command to run to re-set those settings
     static QStringList languages();
     static void openLogFile(QString);
-    static void log(QString); 
+    static void log(QString);
     //static QString getUserHomeDir(QString);
     //static QString getUserShell(QString);
     static void checkLocalDirs();
@@ -109,7 +109,7 @@ public:
     static QString getALUsername();
     static QString getALDesktopCmd();
     static QString getALPassword();
-    
+
     //Saved/Prior Settings
     static QString getLastUser();
     static QString getLastDE(QString, QString);
@@ -118,16 +118,16 @@ public:
     static void setDPIpreference(QString);
     static void readDefaultSysEnvironment(QString &lang, QString &keymodel, QString &keylayout, QString &keyvariant);
     static void saveDefaultSysEnvironment(QString lang, QString keymodel, QString keylayout, QString keyvariant);
-    
+
     //Personacrypt usage
     static QStringList getRegisteredPersonaCryptUsers();
     static QStringList getAvailablePersonaCryptUsers();
     static bool MountPersonaCryptUser(QString user, QString pass);
     static bool UnmountPersonaCryptUser(QString user);
-    
+
     static bool writeFile(QString fileName, QStringList contents);
-    
-private:	
+
+private:
     static void loadXSessionsData();
     static QStringList readXSessionsFile(QString, QString);
     //static void readSystemUsers(bool directfile = false);
