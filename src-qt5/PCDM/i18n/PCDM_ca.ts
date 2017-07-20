@@ -60,7 +60,7 @@
     </message>
     <message>
         <source>Login to %1</source>
-        <translation>Entra a %1</translation>
+        <translation>Entrada a %1</translation>
     </message>
     <message>
         <source>Available desktop environments</source>
