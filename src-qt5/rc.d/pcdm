@@ -18,7 +18,7 @@ command="/usr/local/sbin/PCDMd"
 pidfile="/var/run/PCDMd.pid"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
-status_cmd="{name}_status"
+status_cmd="${name}_status"
 
 load_rc_config ${name}
 : ${pcdm_enable:=no} #default to not start pcdm automatically
