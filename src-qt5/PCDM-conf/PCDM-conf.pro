@@ -38,6 +38,7 @@ TRANSLATIONS =  i18n/pc-dmconf_af.ts \
                 i18n/pc-dmconf_el.ts \
                 i18n/pc-dmconf_es.ts \
                 i18n/pc-dmconf_en_GB.ts \
+		i18n/pc-dmconf_en_AU.ts \
                 i18n/pc-dmconf_en_ZA.ts \
                 i18n/pc-dmconf_et.ts \
                 i18n/pc-dmconf_eu.ts \
