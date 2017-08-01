@@ -54,6 +54,7 @@ TRANSLATIONS =  i18n/PCDM_af.ts \
 		i18n/PCDM_en.ts \
 		i18n/PCDM_en_US.ts \
 		i18n/PCDM_en_GB.ts \
+		i18n/PCDM_en_AU.ts \
 		i18n/PCDM_en_ZA.ts \
 		i18n/PCDM_et.ts \
 		i18n/PCDM_eu.ts \
