@@ -69,7 +69,7 @@ void PCDMgui::loadTheme(){
       currentTheme->importItem( invalid[i] , defaultTheme->exportItem(invalid[i]) );
     }
   }
-  
+
 }
 
 void PCDMgui::createGUIfromTheme(){
@@ -84,16 +84,16 @@ void PCDMgui::createGUIfromTheme(){
   }else{
     //No primary set? just use the left-most one
     for(int i=0; i<screens.length(); i++){
-      if(screens[i]->x()==0){ 
+      if(screens[i]->x()==0){
 	qDebug() << " - Use Main screen:" << i;
-	mainscreen = screens[i]; 
+	mainscreen = screens[i];
       }
     }
     if(mainscreen==0){
       mainscreen = screens.first(); //fallback - just use the first screen
     }
   }
-  
+
   //Define the default icon size
   int perc = qRound(mainscreen->height()*0.035); //use 3.5% of the screen height
   defIconSize = QSize(perc,perc);
@@ -113,7 +113,7 @@ void PCDMgui::createGUIfromTheme(){
 
   //Check for whether the desktop switcher is on the toolbar or not
   simpleDESwitcher = (currentTheme->itemValue("desktop") == "simple");
-  
+
   //get the default translation directory
   if(DEBUG_MODE){ qDebug() << "Load Translations"; }
   translationDir = "/usr/local/share/PCDM/i18n/";
@@ -126,20 +126,20 @@ void PCDMgui::createGUIfromTheme(){
     if(!tmpsz.isValid()){ tmpsz = defIconSize; }
     toolbar->setIconSize( tmpsz ); //use theme size
   if(DEBUG_MODE){ qDebug() << "Create Toolbar"; }
-    //use the theme location   
+    //use the theme location
     QString tarea = currentTheme->itemValue("toolbar");
     if(tarea == "left"){
       toolbar->setGeometry(0,0,tmpsz.width(), mainscreen->height());
     }else if( tarea=="top"){
-      //this->addToolBar( Qt::TopToolBarArea, toolbar );  	   
+      //this->addToolBar( Qt::TopToolBarArea, toolbar );
       toolbar->setGeometry(0,0,mainscreen->width(), tmpsz.height());
       //toolbar->setFixedWidth(mainscreen->width());
     }else if(tarea=="right"){
       toolbar->setGeometry(mainscreen->width()-tmpsz.width(),0,tmpsz.width(), mainscreen->height());
-      //this->addToolBar( Qt::RightToolBarArea, toolbar );   	    
+      //this->addToolBar( Qt::RightToolBarArea, toolbar );
     }else{ //bottom is default
       toolbar->setGeometry(0,mainscreen->height()-tmpsz.height(),mainscreen->width(), tmpsz.height());
-      //this->addToolBar( Qt::BottomToolBarArea, toolbar ); 	
+      //this->addToolBar( Qt::BottomToolBarArea, toolbar );
       //toolbar->setFixedWidth(mainscreen->width());
     }
     //Now make sure the toolbar cannot be resize by the layout
@@ -176,7 +176,7 @@ void PCDMgui::createGUIfromTheme(){
     localeButton = new QAction( QIcon(tmpIcon),tr("Locale"),this );
     toolbar->addAction(localeButton);
     connect( localeButton, SIGNAL(triggered()), this, SLOT(slotChangeLocale()) );
-    
+
     //----Keyboard Layout Switcher
     if(DEBUG_MODE){ qDebug() << " - Create Keyboard Layout Button"; }
     tmpIcon = currentTheme->itemIcon("keyboard");
@@ -189,7 +189,7 @@ void PCDMgui::createGUIfromTheme(){
     QWidget* spacer = new QWidget();
     spacer->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Expanding);
     toolbar->addWidget(spacer);
-        
+
     //----System Shutdown/Restart
     if(DEBUG_MODE){ qDebug() << " - Create System Button"; }
     tmpIcon = currentTheme->itemIcon("system");
@@ -201,13 +201,13 @@ void PCDMgui::createGUIfromTheme(){
     toolbar->addWidget(systemButton);
     systemButton->setPopupMode( QToolButton::InstantPopup );
     systemButton->setFocusPolicy( Qt::NoFocus );
-    
+
   //Create the grid layout
   QGridLayout* grid = new QGridLayout;
   if(DEBUG_MODE){ qDebug() << "Fill Desktop Area"; }
   //Populate the grid with items
     //----Header Image
-    QLabel* header = new QLabel; 
+    QLabel* header = new QLabel;
     if( currentTheme->itemIsEnabled("header") ){
       if(DEBUG_MODE){ qDebug() << " - Create Header"; }
       tmpIcon = currentTheme->itemIcon("header");
@@ -219,7 +219,7 @@ void PCDMgui::createGUIfromTheme(){
                       currentTheme->itemLocation("header","rowspan"), \
                       currentTheme->itemLocation("header","colspan"), Qt::AlignCenter);
     }
-    
+
     //Username/Password/Login widget
     if(DEBUG_MODE){ qDebug() << " - Create Login Widget"; }
     loginW = new LoginWidget;
@@ -271,7 +271,7 @@ void PCDMgui::createGUIfromTheme(){
     connect(loginW,SIGNAL(UserSelected(QString)), this, SLOT(slotUserSelected(QString)) );
     connect(loginW,SIGNAL(UserChanged(QString)), this, SLOT(slotUserChanged(QString)) );
     connect(loginW,SIGNAL(refreshUsers()), this, SLOT(LoadAvailableUsers()) );
-    
+
     //----Desktop Environment Switcher
     if(simpleDESwitcher){
       tmpsz = currentTheme->itemIconSize("desktop");
@@ -289,7 +289,7 @@ void PCDMgui::createGUIfromTheme(){
       tmpIcon = currentTheme->itemIcon("previousde");
       if( !tmpIcon.isEmpty() && QFile::exists(tmpIcon) ){ deSwitcher->changeButtonIcon("back", tmpIcon); }
       //Figure out if we need to smooth out the animation
-      deSwitcher->setNumberAnimationFrames("4"); 
+      deSwitcher->setNumberAnimationFrames("4");
       //NOTE: A transparent widget background slows the full animation to a crawl with a stretched background image
 
       grid->addWidget( deSwitcher, currentTheme->itemLocation("desktop","row"), \
@@ -313,7 +313,7 @@ void PCDMgui::createGUIfromTheme(){
 
   //Connect the grid to the leftmost screen widget
   mainscreen->setLayout(grid);
-    
+
   //Now translate the UI and set all the text
   if(DEBUG_MODE){ qDebug() << " - Fill GUI with data"; }
   //retranslateUi();
@@ -328,7 +328,7 @@ void PCDMgui::fillScreens(){
     //Set a background image on any other available screens
     QDesktopWidget *DE = QApplication::desktop();
     screens.clear();
-    //Now apply the background to all the other screens   
+    //Now apply the background to all the other screens
     // - Keep track of the total width/height of all screens combined (need to set the QMainWindow to this size)
     int wid, high;
     wid = high = 0;
@@ -351,11 +351,11 @@ void PCDMgui::fillScreens(){
     }
     this->setGeometry(0,0,wid,high);
     this->activateWindow();
-    QCursor::setPos( DE->screenGeometry(0).center() );	  
+    QCursor::setPos( DE->screenGeometry(0).center() );
 }
 
 void PCDMgui::slotScreensChanged(){
-  //Restart the GUI 
+  //Restart the GUI
   QApplication::exit(-1); //special code to restart the GUI-only
 }
 
@@ -386,7 +386,7 @@ void PCDMgui::slotStartLogin(QString displayname, QString password){
   //qDebug() << "Attempting Login:" << username << desktop << lang << anonymous;
   emit xLoginAttempt(username, password, desktop, lang , devPassword,anonymous);
   //Return signals are connected to the slotLogin[Success/Failure] functions
-  
+
 }
 
 void PCDMgui::slotLoginSuccess(){
@@ -408,7 +408,7 @@ void PCDMgui::slotLoginFailure(){
     notice.setDefaultButton(QMessageBox::Ok);
     notice.setFocus(Qt::PopupFocusReason);
     notice.exec();
-  
+
   //Re-Enable user input
   this->activateWindow();
   loginW->setEnabled(true);
@@ -494,7 +494,7 @@ void PCDMgui::slotUpdateGUI(){
   for(int i=0; i<screens.length(); i++){ screens[i]->close(); } //close all the other screens
   //QProcess::execute("touch /var/tmp/.PCDMstop"); //turn off the daemon as well
   QCoreApplication::exit(0);
-  close();	
+  close();
 }
 
 void PCDMgui::slotChangeLocale(){
@@ -521,15 +521,15 @@ void PCDMgui::slotLocaleChanged(QString langCode){
       	Backend::log("Desired locale is not a valid translation: " + langCode);
       	return;
       }else{
-        translationFile = translationDir+"qt_"+langCode+".qm";	    
+        translationFile = translationDir+"qt_"+langCode+".qm";
       }
     }else{
-      translationFile = translationDir+"PCDM_"+langCode+".qm";	    
+      translationFile = translationDir+"PCDM_"+langCode+".qm";
     }
   }else{
     translationFile = translationDir+"PCDM_"+langCode+".qm";
-  }	
-	
+  }
+
   Backend::log("Changing localization to " + langCode);
 
   //Alternate method for changing Locale
@@ -544,14 +544,14 @@ void PCDMgui::slotLocaleChanged(QString langCode){
 
   if(m_translator->load(translationFile)){
     Backend::log("Install the new translator: "+translationFile);
-    QCoreApplication::installTranslator(m_translator);	  
+    QCoreApplication::installTranslator(m_translator);
   }else if(langCode=="en_US"){
     m_translator = new QTranslator(); //make sure it is completely empty
     QCoreApplication::installTranslator(m_translator);
   }
   //Re-draw the interface
   retranslateUi();
-  
+
   Backend::log("Current Locale after change: " + this->locale().name() );
   //Now save the locale to the system file
   QString lang, kMod, kLay, kVar;
@@ -565,9 +565,8 @@ void PCDMgui::LoadAvailableUsers(){
     //Whenever we reset the internal list, also need to reset which user has focus
     if(lastUser.isEmpty()){ lastUser = Backend::getLastUser(); }
     if(!lastUser.isEmpty()){ //set the previously used user
-    	loginW->setCurrentUser(USERS->displayname(lastUser)); 
-    }	  
-  
+    	loginW->setCurrentUser(USERS->displayname(lastUser));
+    }
 }
 
 void PCDMgui::ChangeDPI(QAction *act){
