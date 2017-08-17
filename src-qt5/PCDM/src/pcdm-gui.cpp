@@ -457,7 +457,7 @@ void PCDMgui::slotShutdownComputer(){
   verify.setDefaultButton(QMessageBox::Cancel);
   int ret = verify.exec();
 
-  if(ret == QMessageBox::Yes){
+  if(ret != QMessageBox::Cancel && verify.buttonRole(verify.clickedButton())==QMessageBox::AcceptRole){
     Backend::log("PCDM: Shutting down computer");
     system("shutdown -p now");
     QCoreApplication::exit(1); //flag that this is not a normal GUI close
@@ -467,13 +467,14 @@ void PCDMgui::slotShutdownComputer(){
 void PCDMgui::slotRestartComputer(){
   QMessageBox verify;
   verify.setWindowTitle(tr("System Restart"));
-  verify.setText(tr("You are about to restart the system."));
+  verify.setText(tr("You are about to shut down the system."));
   verify.setInformativeText(tr("Are you sure?"));
-  verify.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-  verify.setDefaultButton(QMessageBox::No);
+  verify.addButton(tr("Restart"), QMessageBox::AcceptRole);
+  verify.addButton(QMessageBox::Cancel);
+  verify.setDefaultButton(QMessageBox::Cancel);
   int ret = verify.exec();
 
-  if(ret == QMessageBox::Yes){
+  if(ret != QMessageBox::Cancel && verify.buttonRole(verify.clickedButton())==QMessageBox::AcceptRole){
     Backend::log("PCDM: Restarting computer");
     system("shutdown -r now");
     QCoreApplication::exit(1); //flag that this is not a normal GUI close
