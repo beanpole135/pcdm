@@ -467,7 +467,7 @@ void PCDMgui::slotShutdownComputer(){
 void PCDMgui::slotRestartComputer(){
   QMessageBox verify;
   verify.setWindowTitle(tr("System Restart"));
-  verify.setText(tr("You are about to shut down the system."));
+  verify.setText(tr("You are about to restart the system."));
   verify.setInformativeText(tr("Are you sure?"));
   verify.addButton(tr("Restart"), QMessageBox::AcceptRole);
   verify.addButton(QMessageBox::Cancel);
