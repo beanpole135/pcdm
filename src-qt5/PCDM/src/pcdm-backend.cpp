@@ -102,7 +102,7 @@ QString UserList::shell(QString user){
 
 QString UserList::status(QString user){
   if(!HASH.contains(user+"/status")){
-    if(HASH.contains(user+"/pcstat")){ 
+    if(HASH.contains(user+"/pcstat")){
       QString stat= HASH.value(user+"/pcstat");
       if(stat!="ready"){ return stat; }
       else{ return tr("Ready"); } //don't show the internal flag for a device which is ready
@@ -241,7 +241,7 @@ void UserList::userProcFinished(){
     startUserProc();
     return;
   }
-  if(!allpcusers.isEmpty()){ 
+  if(!allpcusers.isEmpty()){
     startSyncProc(); //need to probe PC users now
   }
   //qDebug() << " - End Of Probe: " << users();
@@ -352,41 +352,10 @@ QString Backend::getDesktopBinary(QString xName){
   return instXBinList[index];
 }
 
-/*void Backend::allowUidUnder1K(bool allow, QStringList excludes){
-  Over1K = !allow;
-  excludedUsers = excludes;
-  //Make sure to re-load the user list if necessary
-  readSystemUsers();
-}*/
-
-
-/*QStringList Backend::getSystemUsers(bool realnames){
-  if(usernameList.isEmpty()){
-    readSystemUsers();
-  }
-  if(realnames){
-    return displaynameList;
-  }else{
-    return usernameList;
-  }
-}*/
 
 QString Backend::getALUsername(){
   //Make sure the requested user is valid
-  //readSystemUsers(); //first read the available users on this system
   QString ruser = Config::autoLoginUsername();
-  /*int index = usernameList.indexOf(ruser);
-  if(index == -1){ //invalid username
-    //Check if a display name was given instead
-    index = displaynameList.indexOf(ruser);
-    if(index == -1){ //invalid display name
-      log("Invalid Auto-Login user requested - skipping....");
-      ruser.clear();
-    }else{
-      //use the valid username for the given display name
-      ruser = usernameList[index]; 
-    }
-  }*/
   return ruser;
 }
 
@@ -397,12 +366,12 @@ QStringList Backend::runShellCommand(QString command){
  QString outstr;
  //run each individual command
  bool ok = true;
- for(int i=0;i<cmdl.length() && ok;i++){ 
-   QProcess p;  
+ for(int i=0;i<cmdl.length() && ok;i++){
+   QProcess p;
    //Make sure we use the system environment to properly read system variables, etc.
    p.setProcessEnvironment(QProcessEnvironment::systemEnvironment());
    //Merge the output channels to retrieve all output possible
-   p.setProcessChannelMode(QProcess::MergedChannels);   
+   p.setProcessChannelMode(QProcess::MergedChannels);
    p.start(cmdl[i]);
    while(p.state()==QProcess::Starting || p.state() == QProcess::Running){
      p.waitForFinished(200);
@@ -412,7 +381,7 @@ QStringList Backend::runShellCommand(QString command){
    outstr.append(tmp);
    ok = (p.exitCode()==0);
  }
- if(outstr.endsWith("\n")){outstr.chop(1);} //remove the newline at the end 
+ if(outstr.endsWith("\n")){outstr.chop(1);} //remove the newline at the end
  return outstr.split("\n");
 }
 
@@ -420,41 +389,6 @@ QString Backend::getALPassword(){
   QString rpassword = Config::autoLoginPassword();
   return rpassword;
 }
-
-/*QString Backend::getUsernameFromDisplayname(QString dspname){
-  if(dspname.isEmpty()){return "";}
-  int i = displaynameList.indexOf(dspname);
-  if(i == -1){ i = usernameList.indexOf(dspname); }
-  
-  if(i == -1){ return ""; }
-  else{ return usernameList[i]; }
-}
-
-QString Backend::getDisplayNameFromUsername(QString username){
-  if(username.isEmpty()){return "";}
-  int i = usernameList.indexOf(username);
-  if(i==-1){ i = displaynameList.indexOf(username); } //make sure it was not a display name passed in
-  if(i==-1){ return ""; }
-  else{
-    return displaynameList[i];  
-  }
-}*/
-
-/*QString Backend::getUserHomeDir(QString username){
-  if(username.isEmpty()){ return ""; }
-  int i = usernameList.indexOf(username);
-  if( i == -1 ){ i = displaynameList.indexOf(username); }
-  if( i < 0){ return ""; }
-  return homedirList[i];
-}*/
-
-/*QString Backend::getUserShell(QString username){
-  if(username.isEmpty()){ return ""; }
-  int i = usernameList.indexOf(username);
-  if( i == -1 ){ i = displaynameList.indexOf(username); }
-  if( i < 0){ return ""; }
-  return usershellList[i];	
-}*/
 
 QStringList Backend::keyModels()
 {
@@ -533,7 +467,7 @@ bool Backend::changeKbMap(QString model, QString layout, QString variant)
 	kbp.setProcessChannelMode(QProcess::MergedChannels);
    QStringList args;
    QString prog;
-   prog = "setxkbmap"; 
+   prog = "setxkbmap";
    if(!model.isEmpty()){ args << "-model" << model; }
    if(!layout.isEmpty()){ args << "-layout" << layout; }
    if(!variant.isEmpty()){ args << "-variant" << variant; }
@@ -588,9 +522,9 @@ QStringList Backend::languages()
 
 void Backend::openLogFile(QString logFilePath){
   //If a log file exists, move it to *.old
-  if(QFile::exists(logFilePath)){ 
+  if(QFile::exists(logFilePath)){
     if(QFile::exists(logFilePath+".old")){ QFile::remove(logFilePath+".old"); }
-    QFile::rename(logFilePath, logFilePath+".old"); 
+    QFile::rename(logFilePath, logFilePath+".old");
   }
   //save the path to the logfile
   logFile = logFilePath;
@@ -612,7 +546,7 @@ void Backend::checkLocalDirs(){
   if(!mainDir.exists()){ mainDir.mkdir(base); }
   if(!mainDir.exists("themes")){ mainDir.mkdir("themes"); }
   //Check for sample files
-  if(!mainDir.exists("pcdm.conf.sample")){ QFile::copy(":samples/pcdm.conf",base+"/pcdm.conf.sample"); } 
+  if(!mainDir.exists("pcdm.conf.sample")){ QFile::copy(":samples/pcdm.conf",base+"/pcdm.conf.sample"); }
   //Check for the PCDM runtime directory
   mainDir.cd(DBDIR);
   if(!mainDir.exists()){ mainDir.mkpath(DBDIR); }
@@ -621,7 +555,7 @@ void Backend::checkLocalDirs(){
 QString Backend::getLastUser(){
   //Load the file if necessary
   if(lastUser.isEmpty()){
-    readSystemLastLogin();  
+    readSystemLastLogin();
   }
   //return the value
   //QString user = getDisplayNameFromUsername(lastUser);
@@ -629,14 +563,13 @@ QString Backend::getLastUser(){
 }
 
 QString Backend::getLastDE(QString user, QString home){
-  if(user.isEmpty()){ return ""; }
   if(lastDE.isEmpty()){
     readSystemLastLogin();
   }
   QString de = readUserLastDesktop(home);
-  if(de.isEmpty()){ return lastDE; }
+  if(de.isEmpty() || user.isEmpty() || home.isEmpty() ){ return lastDE; }
   else{ return de; }
-  
+
 }
 
 void Backend::saveLoginInfo(QString user, QString home, QString desktop){
@@ -1003,20 +936,20 @@ void Backend::readSystemLastLogin(){
       //Load the previous login data
       QFile file(DBDIR+"lastlogin");
       if(!file.open(QIODevice::ReadOnly | QIODevice::Text)){
-        Backend::log("PCDM: Unable to open previous login data file");    
+        Backend::log("PCDM: Unable to open previous login data file");
       }else{
         QTextStream in(&file);
         lastUser= in.readLine();
 	  lastDE= in.readLine();
         file.close();
       }
-    }  
+    }
 }
 
 void Backend::writeSystemLastLogin(QString user, QString desktop){
   QFile file1(DBDIR+"lastlogin");
   if(!file1.open(QIODevice::Truncate | QIODevice::WriteOnly | QIODevice::Text)){
-    Backend::log("PCDM: Unable to save last login data to system directory");	  
+    Backend::log("PCDM: Unable to save last login data to system directory");
   }else{
     QTextStream out(&file1);
     out << user << "\n" << desktop;

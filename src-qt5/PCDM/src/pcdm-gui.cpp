@@ -622,7 +622,7 @@ void PCDMgui::retranslateUi(){
   systemButton->defaultAction()->setToolTip(tr("Shutdown the computer"));
   systemButton->defaultAction()->setText(tr("System"));
   //Menu entries for system button
-    systemMenu->clear();	
+    systemMenu->clear();
     //Get the current DPI and add options to switch
     QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
       int dpi = QApplication::primaryScreen()->physicalDotsPerInchX();
@@ -659,18 +659,19 @@ void PCDMgui::retranslateUi(){
     //Find the system hostname
     hostname = Backend::runShellCommand("hostname").join(" ").simplified();
     if(DEBUG_MODE){ qDebug() << " - Host:" << hostname; }
-    loginW->displayHostName(hostname);	  
+    loginW->displayHostName(hostname);
   }
   if(DEBUG_MODE){ qDebug() << "Translate Login Widget"; }
   loginW->retranslateUi();
-  
+
   //The desktop switcher
-  
+
     //Get the new desktop list (translated)
     QStringList deList = Backend::getAvailableDesktops(); //priority ordered
     QString lastDE;
     QString user = USERS->findUser(loginW->currentUsername());
     if(!user.isEmpty()){ lastDE = Backend::getLastDE(user, USERS->homedir(user) ); }
+    else{ lastDE = Backend::getLastDE("",""); }
     if(DEBUG_MODE){ qDebug() << "DE's:" << deList << lastDE; }
     if(lastDE.isEmpty()){ lastDE = deList[0]; }
     //Organize the desktop list alphabetically by filename
