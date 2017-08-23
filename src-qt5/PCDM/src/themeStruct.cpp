@@ -37,7 +37,7 @@ void ThemeStruct::loadThemeFile(QString filePath){
     else if(line.startsWith("APP_STYLESHEET_START")){ 
       //save all the following lines as the stylesheet
       QStringList styleLines;
-      while( !line.startsWith("APP_STYLESHEET_END") && !in.atEnd() ){
+      while( !line.startsWith("APP_STYLESHEET_STOP") && !in.atEnd() ){
         line = in.readLine().simplified();
 	styleLines << line;
       }
