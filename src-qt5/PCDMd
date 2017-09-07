@@ -61,7 +61,7 @@ touch /var/tmp/.PCDMAutoLogin # Allow Auto-Login the first time PCDM starts
 while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   if [ ! -e /etc/machine-id ] || [ ! -e /var/db/dbus/machine-id ]; then
     #detect/prevent Qt from crashing if the DBUS id file is non existant
-    dbus-uuidgen --ensure
+    dbus-uuidgen --ensure >/dev/null 2>/dev/null
   fi
   if [ -e /usr/local/bin/pc-checkxdisplay ]; then
      /usr/local/bin/pc-checkxdisplay
@@ -83,8 +83,8 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
 
   # Remove our X success marker
   if [ -e "/var/tmp/.pcdm-x-started" ] ; then rm /var/tmp/.pcdm-x-started; fi
-  echo "  [PCDM] Starting PCDM-session"
-  xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS vt9
+#  echo "  [PCDM] Starting PCDM-session"
+  xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS vt9 2>/dev/null
      if [ $? != 0 -a  ! -e "/var/tmp/.pcdm-x-started"] ; then
         # Looks like X failed to start...
         if [ ! -e "/var/tmp/.pcdm-x-failed" ] ; then
