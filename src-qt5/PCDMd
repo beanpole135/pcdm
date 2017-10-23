@@ -3,18 +3,39 @@
 # This starts the main PCDM UI appropriately
 #------------------------------------
 #echo "[PCDM] starting daemon..."
-PCDMCONF="/usr/local/etc/pcdm.conf"
-BASEPCDMAUTHFILE="/var/tmp/.PCDMAuth"
-STOPFILE="/var/tmp/.PCDMstop"
-if [ -e "$STOPFILE" ] ; then rm $STOPFILE; fi
 
+findOpenDisplay(){
+  num=0
+  while [ -e /tmp/.X11-unix/X${num} ]
+  do
+    num=`expr $num + 1`
+  done
+  DISPLAYNUM=${num}
+  return $num
+}
+
+VT=${1}
+if [ -z ${VT} ] ; then
+  echo "Unknown VT: ${VT}"
+  echo "Please supply a virtual terminal that PCDM should start on (example: "vt9")"
+  exit 1;
+fi
+echo "PCDMd Init: $1 $2"
+PCDMCONF="/usr/local/etc/pcdm.conf"
+BASEPCDMAUTHFILE="/var/tmp/.PCDMAuth-${VT}"
+STOPFILE="/var/tmp/.PCDMstop-${VT}"
 #Quick check that this is not the "stop" command
-if [ "${1}" = "stop" ]; then
+if [ "${2}" = "stop" ]; then
   touch ${STOPFILE}
-  exit
+  if [ 1 .eq. `pkill -f "pcdm-session.${VT}"` ] ; then
+    pkill -f "PCDM-session -once ${VT}"
+  fi
+  exit 0
 elif  [ -f ${STOPFILE} ]; then
   rm ${STOPFILE}
 fi
+
+if [ -e "$STOPFILE" ] ; then rm $STOPFILE; fi
 
 XOPTS=""
 grep -q "^ENABLE_TCP_LISTEN=TRUE" ${PCDMCONF}
@@ -23,6 +44,9 @@ if [ $? -ne 0 ]; then
 else
   XOPTS="-listen tcp"
 fi
+#set the DISAPLAYNUM variable
+findOpenDisplay
+
 
 #See if VNC support is enabled for logging in to this system
 grep -q "^ALLOW_REMOTE_LOGIN=TRUE" ${PCDMCONF}
@@ -36,7 +60,7 @@ if [ $? -eq 0 ]; then
      vncopts="-nevershared "
    fi
    if [ -e "/usr/local/etc/vncpass" ] ; then
-     vnccmd="x11vnc -display :0 $vncopts -passwdfile /usr/local/etc/vncpass -loop"
+     vnccmd="x11vnc -display :${DISPLAYNUM} $vncopts -passwdfile /usr/local/etc/vncpass -loop"
    else
      echo "WARNING: VNC enabled but no password in /usr/local/etc/vncpass!"
      sleep 5
@@ -51,21 +75,19 @@ if [ -e "/var/db/pc-updatemanager/.doingShutdownUpdate" ] ; then
 fi
 
 # Clear out a failed marker
-if [ -e "/var/tmp/.pcdm-x-failed" ] ; then
-  rm /var/tmp/.pcdm-x-failed
+if [ -e "/var/tmp/.pcdm-x-failed-${VT}" ] ; then
+  rm /var/tmp/.pcdm-x-failed-${VT}
 fi
 
 # Now start the X Server
 #echo "  [PCDM] Starting Xorg init"
-touch /var/tmp/.PCDMAutoLogin # Allow Auto-Login the first time PCDM starts
+touch /var/tmp/.PCDMAutoLogin-${VT} # Allow Auto-Login the first time PCDM starts
 while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   if [ ! -e /etc/machine-id ] || [ ! -e /var/db/dbus/machine-id ]; then
     #detect/prevent Qt from crashing if the DBUS id file is non existant
     dbus-uuidgen --ensure >/dev/null 2>/dev/null
   fi
-  if [ -e /usr/local/bin/pc-checkxdisplay ]; then
-     /usr/local/bin/pc-checkxdisplay
-  fi
+
   # Randomize the authorization file location
   PCDMAUTHFILE=${BASEPCDMAUTHFILE}-`openssl rand -hex 10`
   # Make sure the authorization file does not exist
@@ -75,31 +97,20 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
 #  echo "  [PCDM] Generated auth file: ${PCDMAUTHFILE}"
   export XAUTHORITY=${PCDMAUTHFILE} #Set the auth file location
   touch ${PCDMAUTHFILE} #Create the (empty) authorization file
-  xauth -f ${PCDMAUTHFILE} add :0 MIT-MAGIC-COOKIE-1 `openssl rand -hex 64` #Add a default entry to the file (randomized)
+  xauth -f ${PCDMAUTHFILE} add :${DISPLAYNUM} MIT-MAGIC-COOKIE-1 `openssl rand -hex 64` #Add a default entry to the file (randomized)
   if [ -n "$vnccmd" ] ; then
     # Start VNC
     (sleep 10 ; $vnccmd >/var/log/vncserver 2>/var/log/vncserver) &
   fi
 
   # Remove our X success marker
-  if [ -e "/var/tmp/.pcdm-x-started" ] ; then rm /var/tmp/.pcdm-x-started; fi
-#  echo "  [PCDM] Starting PCDM-session"
-  xinit /usr/local/bin/PCDM-session -once -- :0 -auth ${PCDMAUTHFILE} $XOPTS vt9 2>/dev/null
-     if [ $? != 0 -a  ! -e "/var/tmp/.pcdm-x-started"] ; then
+  if [ -e "/var/tmp/.pcdm-x-started-${VT}" ] ; then rm /var/tmp/.pcdm-x-started-${VT}; fi
+  echo "  [PCDM] Starting PCDM-session"
+  xinit /usr/local/bin/PCDM-session -once ${VT} -- :${DISPLAYNUM} -auth ${PCDMAUTHFILE} $XOPTS ${VT} 2>/dev/null
+     if [ $? != 0 ] && [ ! -e "/var/tmp/.pcdm-x-started-${VT}" ] && [ ! -f ${STOPFILE} ] ; then
         # Looks like X failed to start...
-        if [ ! -e "/var/tmp/.pcdm-x-failed" ] ; then
-          echo " [PCDM] xinit failure 1 - set the failed flag and try again"
-          # Failure 1: Lets move xorg.conf away, and try again
-          touch /var/tmp/.pcdm-x-failed
-          mv /etc/X11/xorg.conf /etc/X11/xorg.conf.prevFailed 2>/dev/null
-        else
-          echo "[PCDM] xinit failure 2 - move xorg.conf away."
-          # Failure 2: Wow, we really failed here, lets try running X wizard
-          touch ${STOPFILE} #debuging break out here
-          #mv /etc/X11/xorg.con.prevFailedf /etc/X11/xorg.conf.prev 2>/dev/null
-          touch /var/.runxsetup
-          rm /var/tmp/.pcdm-x-failed
-        fi
+         # touch /var/.runxsetup
+          touch ${STOPFILE}
      fi
 
   #Now remove the authorization file

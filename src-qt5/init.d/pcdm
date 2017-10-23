@@ -1,0 +1,89 @@
+#!/sbin/openrc-run
+# Copyright (c) 2016 Joe Maloney <jmaloney@ixsystems.com>
+# Released under the 2-clause BSD license.
+
+name="PCDM"
+description="Graphical Display Manager"
+
+#Determine the system install prefix
+if [ -z "${PREFIX}" ] ; then
+  SERVICEDIR="/usr/local/etc/init.d"
+else
+  SERVICEDIR="${PREFIX}/etc/init.d"
+fi
+
+#Get the sub-service VT device
+vt=${RC_SVCNAME##*.}
+if [ -n "${vt}" ] && [ "${vt}" != "pcdm" ] ; then
+  vt_device="${vt}"
+fi
+
+#If no sub device, detect/launch the sub services
+if [ -n "${vt_device}" ] ; then
+  name="${name} (${vt_device})"
+  command="/usr/local/sbin/PCDMd ${vt_device}"
+  supervisor="supervise-daemon"
+  pidfile="/var/run/PCDMd-${vt_device}.pid"
+fi
+
+if [ -z "${pcdm_args}" ] ; then
+  pcdm_args="vt9"
+fi
+
+start_pre() {
+  # Check if boot-loader set option to skip xorg
+  if [ "`kenv noxorg 2>/dev/null`" = "YES" ] ; then
+    exit 1
+  fi
+
+  if [ -e /var/run/nologin ]; then
+	exit 1 
+  fi	
+  if [ -z "${vt_device}" ] ; then
+    export OPENRC_SILENT=TRUE
+    for vtdev in ${pcdm_args}
+    do
+      if [ ! -f "${SERVICEDIR}/pcdm.${vtdev}" ] ; then
+        ln -fs "${SERVICEDIR}/pcdm" "${SERVICEDIR}/pcdm.${vtdev}"
+      fi
+      /sbin/service pcdm.${vtdev} start
+    done
+    exit 0;
+  fi
+}
+
+stop_pre() {
+  if [ -z "${vt_device}" ] ; then
+    export OPENRC_SILENT=TRUE
+    for vtdev in ${pcdm_args}
+    do
+      if [ -e "${SERVICEDIR}/pcdm.${vtdev}" ]; then
+        einfo "Stopping VT's ${vtdev}"
+        /sbin/service pcdm.${vtdev} stop
+      fi
+    done
+  else
+	#Make sure PCDMd knows that we intend to stop X
+	${command} stop
+  fi
+}
+
+stop_post(){
+  if [ -z "${vt_device}" ] ; then
+    export OPENRC_SILENT=TRUE
+    for vtdev in ${pcdm_args}
+    do
+      if [ -f "${SERVICEDIR}/pcdm.${vtdev}" ] ; then
+        rm "${SERVICEDIR}/pcdm.${vtdev}"
+      fi
+    done
+  else
+    #Make sure any running session on this VT gets stopped as well.
+    pkill -f "pcdm-session.${vt_device}"
+  fi
+}
+
+depend() {
+	need urandom xorgsetup
+	after bootmisc syscons mouse
+}

@@ -20,9 +20,9 @@
 #include <unistd.h>
 
 //#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
-#define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin")
-#define TMPAUTHFILE QString("/var/tmp/.PCDMAuth")
-#define TMPSTOPFILE QString("/var/tmp/.PCDMstop")
+#define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin-$1")
+#define TMPAUTHFILE QString("/var/tmp/.PCDMAuth-%1")
+#define TMPSTOPFILE QString("/var/tmp/.PCDMstop-%1")
 
 #include "pcdm-gui.h"
 #include "pcdm-backend.h"
@@ -35,9 +35,10 @@
 
 //Global classes
 UserList *USERS = 0;
+QString VT;
 
 //Setup any qDebug/qWarning/qError messages to get saved into this log file directly
-QFile logfile("/var/log/PCDM.log");
+QFile logfile;
 void MessageOutput(QtMsgType type, const QMessageLogContext &, const QString &msg){
   QString txt;
   switch(type){
@@ -66,7 +67,8 @@ int runSingleSession(int argc, char *argv[]){
   //clock.start();
   Backend::checkLocalDirs();  // Create and fill "/usr/local/share/PCDM" if needed
   //Setup the log file
-  qDebug() << "PCDM Log File: /var/log/PCDM.log"; //This does not go into the log
+  logfile.setFileName("/var/log/PCDM-"+VT+".log");
+  qDebug() << "PCDM Log File: " << logfile.fileName(); //This does not go into the log
     if(QFile::exists(logfile.fileName()+".old")){ QFile::remove(logfile.fileName()+".old"); }
     if(logfile.exists()){ QFile::rename(logfile.fileName(), logfile.fileName()+".old"); }
       //Make sure the parent directory exists
@@ -88,7 +90,7 @@ int runSingleSession(int argc, char *argv[]){
   Backend::changeKbMap(kmodel,klayout,kvariant);
   //Check for the flag to try and auto-login
   bool ALtriggered = false;
-  if(QFile::exists(TMPAUTOLOGINFILE)){ ALtriggered=true; QFile::remove(TMPAUTOLOGINFILE); }
+  if(QFile::exists(TMPAUTOLOGINFILE.arg(VT))){ ALtriggered=true; QFile::remove(TMPAUTOLOGINFILE.arg(VT)); }
 
   //QString changeLang;
   // Load the configuration file
@@ -216,7 +218,10 @@ int runSingleSession(int argc, char *argv[]){
 
     //qDebug() << "Showing GUI:" << QString::number(clock.elapsed())+" ms";
     w.show();
-
+    //Set the flag which says that X started properly
+    if( !QFile::exists("/var/tmp/.pcdm-x-started-"+VT) ){
+      QProcess::startDetached("touch /var/tmp/.pcdm-x-started-"+VT);
+    }
     //Now start the event loop until the window closes
     retCode = a.exec();
    }//end special retCode==-1 check (restart GUI)
@@ -234,7 +239,7 @@ int runSingleSession(int argc, char *argv[]){
     QCoreApplication::processEvents(QEventLoop::AllEvents,100);
   }
   //check for shutdown process
-  if( QFile::exists(TMPSTOPFILE) || QFile::exists("/var/run/nologin") || retCode > 0){
+  if( QFile::exists(TMPSTOPFILE.arg(VT)) || QFile::exists("/var/run/nologin") || retCode > 0){
     //splash.showMessage(QObject::tr("System Shutting Down"), Qt::AlignHCenter | Qt::AlignBottom, Qt::white);
     QCoreApplication::processEvents();
     //Pause for a few seconds to prevent starting a new session during a shutdown
@@ -259,8 +264,11 @@ int main(int argc, char *argv[])
  bool neverquit = true;
  bool runonce = true;  //Always set this for now until the internal repeater works properly
  setenv("MM_CHARSET", "UTF-8", 1); //ensure UTF-8 text formatting
- if(argc==2){ if( QString(argv[1]) == "-once"){ runonce = true; } }
-
+ VT = "vt9";
+ for(int i=1; i<argc; i++){
+    if(QString(argv[i]) == "-once"){ runonce = true; }
+    else{  VT = QString(argv[i]); }
+ }
  while(neverquit){
   if(runonce){ neverquit = false; }
   qDebug() << " -- PCDM Session Starting...";
@@ -290,7 +298,7 @@ int main(int argc, char *argv[])
     //   can spawn multiple child sessions on different TTY displays
   }*/
   qDebug() << "-- PCDM Session Ended --";
-  if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE) ){ neverquit = false; }
+  if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE.arg(VT)) ){ neverquit = false; }
  }
  return 0;
 }

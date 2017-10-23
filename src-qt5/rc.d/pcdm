@@ -19,7 +19,7 @@ pidfile="/var/run/PCDMd.pid"
 start_cmd="${name}_start"
 stop_cmd="${name}_stop"
 status_cmd="${name}_status"
-
+:${pcdm_flags:=vt9} #default to vt9
 load_rc_config ${name}
 : ${pcdm_enable:=no} #default to not start pcdm automatically
 
@@ -51,14 +51,14 @@ pcdm_start()
   echo "Starting PCDM."
   #Start the PCDM login daemon
   if [ ! -e /var/run/nologin ]; then
-    ${command} ${pcdm_flags} 
+    ${command} ${pcdm_flags}
   fi
 }
 
 pcdm_stop()
 {
   #Send the PCDM daemon the signal not to start a new session after this one finishes
-  ${command} stop
+  ${command} ${pcdm_flags} stop
 }
 
 

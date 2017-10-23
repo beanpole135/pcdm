@@ -15,7 +15,7 @@ int main(int argc, char ** argv)
 {
 
   // Set our marker that X started properly
-  system("touch /var/tmp/.pcdm-x-started");
+  //system("touch /var/tmp/.pcdm-x-started");
 
   // Load the CLI args
   uid_t my_gid;

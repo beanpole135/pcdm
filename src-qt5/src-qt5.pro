@@ -10,6 +10,10 @@ rcd=rc.d/pcdm
 rcd.path=/usr/local/etc/rc.d
 rcd.extra=cp rc.d/pcdm $(INSTALL_ROOT)/usr/local/etc/rc.d/pcdm
 
+initd=init.d/pcdm
+initd.path=/usr/local/etc/init.d
+initd.extra=cp init.d/pcdm $(INSTALL_ROOT)/usr/local/etc/init.d/pcdm
+
 cleanthemes.path=/usr/local/share/PCDM/themes
 cleanthemes.extra=rm -r $(INSTALL_ROOT)/usr/local/share/PCDM/themes
 
@@ -20,4 +24,4 @@ theme.extra=cp -r themes $(INSTALL_ROOT)/usr/local/share/PCDM/.
 xsession.files=xsessions/*.desktop
 xsession.path=/usr/local/share/xsessions
 
-INSTALLS += scripts rcd cleanthemes theme xsession
+INSTALLS += scripts rcd initd cleanthemes theme xsession

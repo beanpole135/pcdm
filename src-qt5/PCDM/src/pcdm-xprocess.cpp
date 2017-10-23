@@ -23,6 +23,7 @@ Sub-classed QProcess for starting an XSession Process
 
 #define DEBUG 0
 extern UserList *USERS;
+extern QString VT;
 
 XProcess::XProcess() : QProcess(0) {
   //initialize the variables
@@ -45,6 +46,9 @@ XProcess::~XProcess(){
 }
 
 void XProcess::loginToXSession(QString username, QString password, QString desktop, QString lang, QString devPassword, bool anon){
+  if( !QFile::exists("/var/tmp/.pcdm-x-started-"+VT) ){
+    QProcess::startDetached("touch /var/tmp/.pcdm-x-started-"+VT);
+  }
   //Setup the variables
   xuser = username;
   xpwd = password;
@@ -80,7 +84,7 @@ void XProcess::waitForSessionClosed(){
 
 bool XProcess::startXSession(){
   //Returns true if the session can continue, or false if it needs to be closed down
-  qDebug() << "Starting X Session:" << xuser << xcmd << xhome << xde;
+  qDebug() << "Starting X Session:" << xuser << xcmd << xhome << xde << VT;
   //Check that the necessary info to start the session is available
   if( xuser.isEmpty() || xcmd.isEmpty() || xhome.isEmpty() || xde.isEmpty() ){
     emit InvalidLogin();  //Make sure the GUI knows that it was a failure
@@ -140,7 +144,7 @@ bool XProcess::startXSession(){
     if(DEBUG){ qDebug() << " - Stealth Session selected"; }
     QProcess::execute("personacrypt tempinit "+xuser+" 10G"); //always use 10GB blank dir
   }
-  
+
   // Get the environment before we drop priv
   this->setProcessEnvironment( QProcessEnvironment::systemEnvironment() ); //current environment
 
@@ -160,7 +164,7 @@ bool XProcess::startXSession(){
   setupSessionEnvironment();
 
   // Create our startup script
-  tFile = new QTemporaryFile();
+  tFile = new QTemporaryFile("pcdm-session."+VT+".XXXXXX");
   if ( ! tFile->open() )
      return false;
 
@@ -213,13 +217,14 @@ bool XProcess::startXSession(){
   tOut << cmd + "\n"; //+ " >" + xhome+ "/.pcdm-startup.log" + " 2>" + xhome + "/.pcdm-startup.log\n";
   tOut << "exit $?"; //Make sure we return the DE return value
 
-  cmd = "/usr/local/share/PCDM/pcdm-session "+xuser+" "+tUid+" "+tGid+" "+tFile->fileName()+" "+logFile;
+  cmd = "/usr/local/share/PCDM/pcdm-session"; //+xuser+" "+tUid+" "+tGid+" "+tFile->fileName()+" "+logFile;
+  QStringList cmdArgs; cmdArgs << xuser << tUid << tGid << tFile->fileName() << logFile;
   connect( this, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(slotCleanup()) );
   tFile->setPermissions(QFile::ReadOwner | QFile::WriteOwner |QFile::ReadGroup | QFile::ReadUser | QFile::ReadOther);
   tFile->close();
 
   if(DEBUG){ Backend::log("Starting session with:\n" + cmd ); }
-  this->start(cmd);
+  this->start(cmd, cmdArgs);
   return true;
 }
 
