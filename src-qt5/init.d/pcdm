@@ -22,7 +22,8 @@ fi
 if [ -n "${vt_device}" ] ; then
   name="${name} (${vt_device})"
   command="/usr/local/sbin/PCDMd ${vt_device}"
-  supervisor="supervise-daemon"
+  #supervisor="supervise-daemon"
+  command_background="true"
   pidfile="/var/run/PCDMd-${vt_device}.pid"
 fi
 
@@ -46,29 +47,37 @@ start_pre() {
       if [ ! -f "${SERVICEDIR}/pcdm.${vtdev}" ] ; then
         ln -fs "${SERVICEDIR}/pcdm" "${SERVICEDIR}/pcdm.${vtdev}"
       fi
-      /sbin/service pcdm.${vtdev} start
+      if service_stopped pcdm.${vtdev} ; then
+        einfo "Starting session on ${vtdev}"
+        /sbin/service pcdm.${vtdev} start -q
+        sleep 1 #give the session a second to startup X to prevent conflicts in display numbers
+      fi
     done
     exit 0;
   fi
 }
 
-stop_pre() {
+stop() {
   if [ -z "${vt_device}" ] ; then
     export OPENRC_SILENT=TRUE
     for vtdev in ${pcdm_args}
     do
       if [ -e "${SERVICEDIR}/pcdm.${vtdev}" ]; then
-        einfo "Stopping VT's ${vtdev}"
-        /sbin/service pcdm.${vtdev} stop
+        
+        if service_started pcdm.${vtdev} ; then
+          einfo "Stopping session on ${vtdev}"
+          /sbin/service pcdm.${vtdev} stop -q
+        fi
       fi
     done
   else
 	#Make sure PCDMd knows that we intend to stop X
 	${command} stop
   fi
+  return 0
 }
 
-stop_post(){
+stop_post() {
   if [ -z "${vt_device}" ] ; then
     export OPENRC_SILENT=TRUE
     for vtdev in ${pcdm_args}
@@ -77,13 +86,13 @@ stop_post(){
         rm "${SERVICEDIR}/pcdm.${vtdev}"
       fi
     done
-  else
-    #Make sure any running session on this VT gets stopped as well.
-    pkill -f "pcdm-session.${vt_device}"
   fi
 }
 
 depend() {
-	need urandom xorgsetup
-	after bootmisc syscons mouse
+	need urandom
+	after bootmisc syscons mouse localmount
+	if [ ! -z "${vt_device}" ] ; then 
+	  keyword -shutdown
+	fi
 }

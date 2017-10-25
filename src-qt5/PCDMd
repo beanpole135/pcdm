@@ -20,14 +20,15 @@ if [ -z ${VT} ] ; then
   echo "Please supply a virtual terminal that PCDM should start on (example: "vt9")"
   exit 1;
 fi
-echo "PCDMd Init: $1 $2"
+#echo "PCDMd Init: $1 $2"
 PCDMCONF="/usr/local/etc/pcdm.conf"
 BASEPCDMAUTHFILE="/var/tmp/.PCDMAuth-${VT}"
 STOPFILE="/var/tmp/.PCDMstop-${VT}"
 #Quick check that this is not the "stop" command
 if [ "${2}" = "stop" ]; then
   touch ${STOPFILE}
-  if [ 1 .eq. `pkill -f "pcdm-session.${VT}"` ] ; then
+  pkill -f "pcdm-session.${VT}"
+  if [ 1 -eq $? ] ; then
     pkill -f "PCDM-session -once ${VT}"
   fi
   exit 0
@@ -91,7 +92,7 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   # Randomize the authorization file location
   PCDMAUTHFILE=${BASEPCDMAUTHFILE}-`openssl rand -hex 10`
   # Make sure the authorization file does not exist
-  if [ -f ${PCDMAUTHFILE} ]; then
+  if [ -f ${PCDMAUTHFILE} ] ; then
     rm ${PCDMAUTHFILE}
   fi
 #  echo "  [PCDM] Generated auth file: ${PCDMAUTHFILE}"
@@ -107,7 +108,7 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   if [ -e "/var/tmp/.pcdm-x-started-${VT}" ] ; then rm /var/tmp/.pcdm-x-started-${VT}; fi
   echo "  [PCDM] Starting PCDM-session"
   xinit /usr/local/bin/PCDM-session -once ${VT} -- :${DISPLAYNUM} -auth ${PCDMAUTHFILE} $XOPTS ${VT} 2>/dev/null
-     if [ $? != 0 ] && [ ! -e "/var/tmp/.pcdm-x-started-${VT}" ] && [ ! -f ${STOPFILE} ] ; then
+     if [ $? != 0 ] && [ ! -e "/var/tmp/.pcdm-x-started-${VT}" ] && [ ! -e ${STOPFILE} ] ; then
         # Looks like X failed to start...
          # touch /var/.runxsetup
           touch ${STOPFILE}
