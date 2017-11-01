@@ -90,7 +90,7 @@ stop_post() {
 }
 
 depend() {
-	need urandom
+	need urandom xorgsetup
 	after bootmisc syscons mouse localmount
 	if [ ! -z "${vt_device}" ] ; then 
 	  keyword -shutdown
