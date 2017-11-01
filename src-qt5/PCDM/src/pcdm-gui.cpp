@@ -577,10 +577,7 @@ void PCDMgui::ChangeDPI(QAction *act){
 }
 
 void PCDMgui::resetVideoDriver(){
-    QFile flag("/var/.runxsetup");
-    if( !flag.exists() ){
-      if( flag.open(QIODevice::WriteOnly) ){ flag.close(); } //just enough to create the file - no contents
-    }
+    QProcess::startDetached("service checkxdisplay forcerestart");
     QCoreApplication::exit(0); //need to go all the way out to the PCDMd routine
 }
 
