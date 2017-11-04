@@ -28,7 +28,7 @@
     </message>
     <message>
         <source>Select an alternate user and clear the password field</source>
-        <translation>Vali muu kasutaja ja tühjenda parooli väli</translation>
+        <translation>Vali muu kasutaja ja tühjenda parooliväli</translation>
     </message>
     <message>
         <source>Select this user</source>
@@ -68,31 +68,31 @@
     </message>
     <message>
         <source>Please connect your PersonaCrypt device to start login procedures.</source>
-        <translation type="unfinished"></translation>
+        <translation>Palun ühenda oma PersonaCrypt seade et alustada sisselogimisprotseduure</translation>
     </message>
     <message>
         <source>Stealth Session</source>
-        <translation type="unfinished"></translation>
+        <translation>Varjatud sessioon</translation>
     </message>
     <message>
         <source>Use a temporary home directory which is deleted on log out)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kasuta ajutist kodukataloogi (kustutatakse väljalogimisel)</translation>
     </message>
     <message>
         <source>Refresh</source>
-        <translation type="unfinished"></translation>
+        <translation>Värskenda</translation>
     </message>
     <message>
         <source>Refresh available users</source>
-        <translation type="unfinished"></translation>
+        <translation>Värskenda olemasolevaid kasutajaid</translation>
     </message>
     <message>
         <source>Device encryption key</source>
-        <translation type="unfinished"></translation>
+        <translation>Seadme krüptovõti</translation>
     </message>
     <message>
         <source>Device encryption key (personacrypt users only)</source>
-        <translation type="unfinished"></translation>
+        <translation>Seadme krüptovõti (ainult PersonaCrypt kasutajad)</translation>
     </message>
 </context>
 <context>
@@ -167,38 +167,38 @@
     </message>
     <message>
         <source>Change locale (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Muuda lokaat (%1)'ks</translation>
     </message>
     <message>
         <source>Change DPI</source>
-        <translation type="unfinished"></translation>
+        <translation>Muuda ekraani pikslitihedust</translation>
     </message>
     <message>
         <source>High (4K)</source>
-        <translation type="unfinished"></translation>
+        <translation>Kõrgresolutsioon (4K)</translation>
     </message>
     <message>
         <source>Medium</source>
-        <translation type="unfinished"></translation>
+        <translation>Keskmine</translation>
     </message>
     <message>
         <source>Standard</source>
-        <translation type="unfinished"></translation>
+        <translation>Standardne</translation>
     </message>
     <message>
         <source>Low </source>
-        <translation type="unfinished"></translation>
+        <translation>Madal</translation>
     </message>
     <message>
         <source>Refresh PCDM</source>
-        <translation type="unfinished"></translation>
+        <translation>Värskenda PCDM</translation>
     </message>
 </context>
 <context>
     <name>loginDelay</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished">Dialoog</translation>
+        <translation>Dialoog</translation>
     </message>
     <message>
         <source>%v/%m seconds</source>
@@ -214,7 +214,7 @@
     </message>
     <message>
         <source>PCDM Automatic Login</source>
-        <translation type="unfinished"></translation>
+        <translation>PCDM automaatne kasutaja sisselogimine</translation>
     </message>
 </context>
 <context>
