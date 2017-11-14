@@ -41,6 +41,11 @@ start_pre() {
 	exit 1 
   fi	
   if [ -z "${vt_device}" ] ; then
+    #Make sure that Xorg is setup properly (if needed)
+    # Before creating all the sub-services
+    if [ -e "/usr/local/bin/pc-checkxdisplay" ]; then
+      /usr/local/bin/pc-checkxdisplay
+    fi
     export OPENRC_SILENT=TRUE
     for vtdev in ${pcdm_args}
     do
@@ -90,9 +95,9 @@ stop_post() {
 }
 
 depend() {
-	need urandom xorgsetup
-	after bootmisc syscons mouse localmount
 	if [ ! -z "${vt_device}" ] ; then 
+	  need urandom
+	  after bootmisc syscons mouse localmount
 	  keyword -shutdown
 	fi
 }
