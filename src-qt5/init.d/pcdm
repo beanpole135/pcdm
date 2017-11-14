@@ -31,6 +31,15 @@ if [ -z "${pcdm_args}" ] ; then
   pcdm_args="vt9"
 fi
 
+if [ -z "${vt_device}" ]; then
+  extra_commands="setupx"
+fi
+
+setupx(){
+  touch /var/.runxsetup
+  /sbin/service pcdm restart
+}
+
 start_pre() {
   # Check if boot-loader set option to skip xorg
   if [ "`kenv noxorg 2>/dev/null`" = "YES" ] ; then

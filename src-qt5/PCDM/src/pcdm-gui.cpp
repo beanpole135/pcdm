@@ -577,7 +577,7 @@ void PCDMgui::ChangeDPI(QAction *act){
 }
 
 void PCDMgui::resetVideoDriver(){
-    QProcess::startDetached("service checkxdisplay forcerestart");
+    QProcess::startDetached("service pcdm setupx");
     QCoreApplication::exit(0); //need to go all the way out to the PCDMd routine
 }
 
