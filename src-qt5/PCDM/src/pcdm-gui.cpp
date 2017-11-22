@@ -626,7 +626,7 @@ void PCDMgui::updateSystemMenu(){
     if( uid==0 ){
       systemMenu->addSeparator();
       systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
-      if( QFile::exists("/tmp/.rebootRequired") ){
+      if( QFile::exists("/tmp/.trueos-update-staged") ){
         systemMenu->addAction( tr("Update and Restart System"), this, SLOT(slotRestartComputerWithUpdates()) );
       }
       if( !picosession ) {
