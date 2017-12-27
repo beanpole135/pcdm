@@ -54,6 +54,7 @@ private slots:
     void slotUserChanged(QString);
     void slotUserSelected(QString);
     void slotRestartComputer();
+    void slotRestartComputerWithUpdates();
     void slotShutdownComputer();
     void slotClosePCDM();
     void slotUpdateGUI();
@@ -64,6 +65,8 @@ private slots:
     void LoadAvailableUsers();
     void ChangeDPI(QAction*);
     void resetVideoDriver();
+
+	void updateSystemMenu();
 
 private:
     //Objects
@@ -81,13 +84,13 @@ private:
     QTimer *pcTimer; //refresh timer
     QStringList pcAvail, pcCurrent, sysAvail;
     QSize defIconSize;
-    
+
     QProcess* vkbd;
     ThemeStruct* currentTheme;
 
     QTranslator* m_translator;
     QString translationDir;
-    
+
     QString hostname;
 
 

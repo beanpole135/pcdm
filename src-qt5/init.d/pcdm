@@ -41,6 +41,15 @@ cleanup_sessions() {
   return 0
 }
 
+if [ -z "${vt_device}" ]; then
+  extra_commands="setupx"
+fi
+
+setupx(){
+  touch /var/.runxsetup
+  /sbin/service pcdm restart
+}
+
 start_pre() {
   # Check if boot-loader set option to skip xorg
   if [ "`kenv noxorg 2>/dev/null`" = "YES" ] ; then
@@ -51,6 +60,11 @@ start_pre() {
 	exit 1 
   fi	
   if [ -z "${vt_device}" ] ; then
+    #Make sure that Xorg is setup properly (if needed)
+    # Before creating all the sub-services
+    if [ -e "/usr/local/bin/pc-checkxdisplay" ]; then
+      /usr/local/bin/pc-checkxdisplay
+    fi
     export OPENRC_SILENT=TRUE
     cleanup_sessions #ensure things are cleaned up ahead of time
     for vtdev in ${pcdm_args}
@@ -96,9 +110,9 @@ stop_post() {
 }
 
 depend() {
-	need urandom xorgsetup
-	after bootmisc syscons mouse localmount
 	if [ ! -z "${vt_device}" ] ; then 
+	  need urandom
+	  after bootmisc syscons mouse localmount
 	  keyword -shutdown
 	fi
 }

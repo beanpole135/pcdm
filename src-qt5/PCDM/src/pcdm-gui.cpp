@@ -201,6 +201,8 @@ void PCDMgui::createGUIfromTheme(){
     toolbar->addWidget(systemButton);
     systemButton->setPopupMode( QToolButton::InstantPopup );
     systemButton->setFocusPolicy( Qt::NoFocus );
+    systemButton->setMenu(systemMenu);
+    connect(systemMenu, SIGNAL(aboutToShow()), this, SLOT(updateSystemMenu()) );
 
   //Create the grid layout
   QGridLayout* grid = new QGridLayout;
@@ -481,6 +483,23 @@ void PCDMgui::slotRestartComputer(){
   }
 }
 
+void PCDMgui::slotRestartComputerWithUpdates(){
+  QMessageBox verify;
+  verify.setWindowTitle(tr("System Restart"));
+  verify.setText(tr("You are about to restart the system to apply updates."));
+  verify.setInformativeText(tr("Are you sure?"));
+  verify.addButton(tr("Restart Now"), QMessageBox::AcceptRole);
+  verify.addButton(QMessageBox::Cancel);
+  verify.setDefaultButton(QMessageBox::Cancel);
+  int ret = verify.exec();
+
+  if(ret != QMessageBox::Cancel && verify.buttonRole(verify.clickedButton())==QMessageBox::AcceptRole){
+    Backend::log("PCDM: Restarting computer to apply updates");
+    system("pc-updatemanager startupdate");
+    QCoreApplication::exit(1); //flag that this is not a normal GUI close
+  }
+}
+
 void PCDMgui::slotClosePCDM(){
   //Same as UpdateGUI, but stops the daemon as well for debugging purposes
   system("killall -9 xvkbd"); //be sure to close the virtual keyboard
@@ -577,8 +596,45 @@ void PCDMgui::ChangeDPI(QAction *act){
 }
 
 void PCDMgui::resetVideoDriver(){
-    QProcess::startDetached("service checkxdisplay forcerestart");
+    QProcess::startDetached("service pcdm setupx");
     QCoreApplication::exit(0); //need to go all the way out to the PCDMd routine
+}
+
+void PCDMgui::updateSystemMenu(){
+  //Menu entries for system button
+    systemMenu->clear();
+    //Get the current DPI and add options to switch
+    QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
+      int dpi = QApplication::primaryScreen()->physicalDotsPerInchX();
+      qDebug() << "Current Screen DPI:" << dpi;
+       connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
+       QAction *tmpA = dpimenu->addAction(tr("High (4K, ~196 DPI)")); tmpA->setWhatsThis("196");
+          if(dpi>=170){ tmpA->setEnabled(true); }
+        tmpA = dpimenu->addAction(tr("Medium (~144 DPI)")); tmpA->setWhatsThis("144");
+          if(dpi>=120 && dpi<170){ tmpA->setEnabled(true); }
+        tmpA = dpimenu->addAction(tr("Standard (~96 DPI)")); tmpA->setWhatsThis("96");
+          if(dpi>=72 && dpi<120){ tmpA->setEnabled(true); }
+        tmpA = dpimenu->addAction(tr("Low (~48 DPI)")); tmpA->setWhatsThis("48");
+          if(dpi<72){ tmpA->setEnabled(true); }
+    systemMenu->addMenu(dpimenu);
+    systemMenu->addSeparator();
+    systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
+    if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
+    bool picosession = !qgetenv("PICO_CLIENT_LOGIN").isEmpty();
+    int uid = getuid();
+    //qDebug() << "Current User:" << uid << picosession;
+    if( uid==0 ){
+      systemMenu->addSeparator();
+      systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
+      if( QFile::exists("/tmp/.trueos-update-staged") ){
+        systemMenu->addAction( tr("Update and Restart System"), this, SLOT(slotRestartComputerWithUpdates()) );
+      }
+      if( !picosession ) {
+        systemMenu->addSeparator();
+        systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
+        systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
+      }
+    }
 }
 
 void PCDMgui::slotChangeKeyboardLayout(){
@@ -618,38 +674,7 @@ void PCDMgui::retranslateUi(){
   //system button
   systemButton->defaultAction()->setToolTip(tr("Shutdown the computer"));
   systemButton->defaultAction()->setText(tr("System"));
-  //Menu entries for system button
-    systemMenu->clear();
-    //Get the current DPI and add options to switch
-    QMenu *dpimenu = new QMenu( tr("Change DPI"), systemMenu);
-      int dpi = QApplication::primaryScreen()->physicalDotsPerInchX();
-      qDebug() << "Current Screen DPI:" << dpi;
-       connect(dpimenu, SIGNAL(triggered(QAction*)), this, SLOT(ChangeDPI(QAction*)) );
-       QAction *tmpA = dpimenu->addAction(tr("High (4K, ~196 DPI)")); tmpA->setWhatsThis("196");
-          if(dpi>=170){ tmpA->setEnabled(true); }
-        tmpA = dpimenu->addAction(tr("Medium (~144 DPI)")); tmpA->setWhatsThis("144");
-          if(dpi>=120 && dpi<170){ tmpA->setEnabled(true); }
-        tmpA = dpimenu->addAction(tr("Standard (~96 DPI)")); tmpA->setWhatsThis("96");
-          if(dpi>=72 && dpi<120){ tmpA->setEnabled(true); }
-        tmpA = dpimenu->addAction(tr("Low (~48 DPI)")); tmpA->setWhatsThis("48");
-          if(dpi<72){ tmpA->setEnabled(true); }
-    systemMenu->addMenu(dpimenu);
-    systemMenu->addSeparator();
-    systemMenu->addAction( tr("Refresh PCDM"), this, SLOT(slotUpdateGUI()) );
-    if(DEBUG_MODE){systemMenu->addAction( tr("Close PCDM"), this, SLOT(slotClosePCDM()) ); }
-    bool picosession = !qgetenv("PICO_CLIENT_LOGIN").isEmpty();
-    int uid = getuid();
-    //qDebug() << "Current User:" << uid << picosession;
-    if( uid==0 ){
-      systemMenu->addSeparator();
-      systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
-      if( !picosession ) {
-        systemMenu->addSeparator();
-        systemMenu->addAction( tr("Restart"),this, SLOT(slotRestartComputer()) );
-        systemMenu->addAction( tr("Shut Down"), this, SLOT(slotShutdownComputer()) );
-      }
-    }
-    systemButton->setMenu(systemMenu);
+
   //The main login widget
   if(hostname.isEmpty()){
     if(DEBUG_MODE){ qDebug() << "Finding Hostname..."; }
