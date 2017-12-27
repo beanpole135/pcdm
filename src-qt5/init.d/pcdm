@@ -1,5 +1,6 @@
 #!/sbin/openrc-run
 # Copyright (c) 2016 Joe Maloney <jmaloney@ixsystems.com>
+# Copyright (c) 2017 Ken Moore <ken@ixsystems.com>
 # Released under the 2-clause BSD license.
 
 name="PCDM"
@@ -31,6 +32,15 @@ if [ -z "${pcdm_args}" ] ; then
   pcdm_args="vt9"
 fi
 
+cleanup_sessions() {
+  rm /var/tmp/.PCDMAu* 1> /dev/null 2> /dev/null
+  for subservice in `ls ${SERVICEDIR}/pcdm.* 2> /dev/null`
+  do
+    rm "${subservice}"
+  done
+  return 0
+}
+
 start_pre() {
   # Check if boot-loader set option to skip xorg
   if [ "`kenv noxorg 2>/dev/null`" = "YES" ] ; then
@@ -42,6 +52,7 @@ start_pre() {
   fi	
   if [ -z "${vt_device}" ] ; then
     export OPENRC_SILENT=TRUE
+    cleanup_sessions #ensure things are cleaned up ahead of time
     for vtdev in ${pcdm_args}
     do
       if [ ! -f "${SERVICEDIR}/pcdm.${vtdev}" ] ; then
@@ -80,12 +91,7 @@ stop() {
 stop_post() {
   if [ -z "${vt_device}" ] ; then
     export OPENRC_SILENT=TRUE
-    for vtdev in ${pcdm_args}
-    do
-      if [ -f "${SERVICEDIR}/pcdm.${vtdev}" ] ; then
-        rm "${SERVICEDIR}/pcdm.${vtdev}"
-      fi
-    done
+    cleanup_sessions
   fi
 }
 

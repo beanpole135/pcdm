@@ -20,7 +20,7 @@
 #include <unistd.h>
 
 //#define TMPLANGFILE QString("/var/tmp/.PCDMLang")
-#define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin-$1")
+#define TMPAUTOLOGINFILE QString("/var/tmp/.PCDMAutoLogin-%1")
 #define TMPAUTHFILE QString("/var/tmp/.PCDMAuth-%1")
 #define TMPSTOPFILE QString("/var/tmp/.PCDMstop-%1")
 
@@ -116,14 +116,9 @@ int runSingleSession(int argc, char *argv[]){
     //Setup Log File
     qInstallMessageHandler(MessageOutput);
   int retCode = 0; //used for UI/application return
-  // Show our splash screen, so the user doesn't freak that that it takes a few seconds to show up
-  /*QSplashScreen splash;
-  if(!Config::splashscreen().isEmpty()){
-    splash.setPixmap( QPixmap(Config::splashscreen()) ); //load the splashscreen file
-  }
-  splash.show();*/
-  //QCoreApplication::processEvents(); //Process the splash screen event immediately
-  //qDebug() << "SplashScreen Started:" << QString::number(clock.elapsed())+" ms";
+  //Print out some debugging information about the init routine
+  qDebug() << "Autologin triggered:" << ALtriggered << VT;
+
   //Initialize the xprocess
   XProcess desktop;
 
