@@ -27,9 +27,9 @@ STOPFILE="/var/tmp/.PCDMstop-${VT}"
 #Quick check that this is not the "stop" command
 if [ "${2}" = "stop" ]; then
   touch ${STOPFILE}
-  pkill -f "pcdm-session.${VT}"
+  pkill -f "/tmp/pcdm-session.${VT}"
   if [ 1 -eq $? ] ; then
-    pkill -f "PCDM-session -once ${VT}"
+    pkill -f "/tmp/PCDM-session -once ${VT}"
   fi
   exit 0
 elif  [ -f ${STOPFILE} ]; then

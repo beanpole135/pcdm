@@ -38,6 +38,9 @@ cleanup_sessions() {
   do
     rm "${subservice}"
   done
+  # clean up any lingering pcdm session files
+  rm /pcdm-session.${vt_device}.* > /dev/null 2>&1 
+  rm /tmp/pcdm-session.${vt_device}.* > /dev/null 2>&1
   return 0
 }
 

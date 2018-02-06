@@ -164,7 +164,7 @@ bool XProcess::startXSession(){
   setupSessionEnvironment();
 
   // Create our startup script
-  tFile = new QTemporaryFile("pcdm-session."+VT+".XXXXXX");
+  tFile = new QTemporaryFile("/tmp/pcdm-session."+VT+".XXXXXX");
   if ( ! tFile->open() )
      return false;
 
