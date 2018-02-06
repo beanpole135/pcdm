@@ -40,6 +40,7 @@ cleanup_sessions() {
   done
   # clean up any lingering pcdm session files
   rm /pcdm-session.${vt_device}.* > /dev/null 2>&1 
+  einfo "Cleaning up sessions"
   return 0
 }
 
