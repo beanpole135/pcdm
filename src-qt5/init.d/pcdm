@@ -60,8 +60,8 @@ start_pre() {
   fi
 
   if [ -e /var/run/nologin ]; then
-	exit 1 
-  fi	
+	exit 1
+  fi
   if [ -z "${vt_device}" ] ; then
     #Make sure that Xorg is setup properly (if needed)
     # Before creating all the sub-services
@@ -73,7 +73,8 @@ start_pre() {
     for vtdev in ${pcdm_args}
     do
       if [ ! -f "${SERVICEDIR}/pcdm.${vtdev}" ] ; then
-        ln -fs "${SERVICEDIR}/pcdm" "${SERVICEDIR}/pcdm.${vtdev}"
+        rm "${SERVICEDIR}/pcdm.${vtdev}" >/dev/null 2>/dev/null
+        cp "${SERVICEDIR}/pcdm" "${SERVICEDIR}/pcdm.${vtdev}"
       fi
       if service_stopped pcdm.${vtdev} ; then
         einfo "Starting session on ${vtdev}"
@@ -91,7 +92,6 @@ stop() {
     for vtdev in ${pcdm_args}
     do
       if [ -e "${SERVICEDIR}/pcdm.${vtdev}" ]; then
-        
         if service_started pcdm.${vtdev} ; then
           einfo "Stopping session on ${vtdev}"
           /sbin/service pcdm.${vtdev} stop -q
@@ -113,7 +113,7 @@ stop_post() {
 }
 
 depend() {
-	if [ ! -z "${vt_device}" ] ; then 
+	if [ ! -z "${vt_device}" ] ; then
 	  need urandom
 	  after bootmisc syscons mouse localmount
 	  keyword -shutdown
