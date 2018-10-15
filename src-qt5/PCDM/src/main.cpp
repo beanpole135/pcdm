@@ -38,7 +38,7 @@ UserList *USERS = 0;
 QString VT;
 
 //Setup any qDebug/qWarning/qError messages to get saved into this log file directly
-QFile logfile;
+QFile* logfile = new QFile();
 void MessageOutput(QtMsgType type, const QMessageLogContext &, const QString &msg){
   QString txt;
   switch(type){
@@ -58,25 +58,33 @@ void MessageOutput(QtMsgType type, const QMessageLogContext &, const QString &ms
     txt = msg;
   }
 
-  QTextStream out(&logfile);
-  out << txt;
-  if(!txt.endsWith("\n")){ out << "\n"; }
+  if(logfile != nullptr and logfile->isOpen())
+  {
+     QTextStream out(logfile);
+     out << txt;
+     if(!txt.endsWith("\n")){ out << "\n"; }
+  }
 }
 int runSingleSession(int argc, char *argv[]){
   //QTime clock;
   //clock.start();
   Backend::checkLocalDirs();  // Create and fill "/usr/local/share/PCDM" if needed
+  
+  if(logfile == nullptr)
+  {
+    logfile = new QFile();
+  }
   //Setup the log file
-  logfile.setFileName("/var/log/PCDM-"+VT+".log");
-  qDebug() << "PCDM Log File: " << logfile.fileName(); //This does not go into the log
-    if(QFile::exists(logfile.fileName()+".old")){ QFile::remove(logfile.fileName()+".old"); }
-    if(logfile.exists()){ QFile::rename(logfile.fileName(), logfile.fileName()+".old"); }
+  logfile->setFileName("/var/log/PCDM-"+VT+".log");
+  qDebug() << "PCDM Log File: " << logfile->fileName(); //This does not go into the log
+    if(QFile::exists(logfile->fileName()+".old")){ QFile::remove(logfile->fileName()+".old"); }
+    if(logfile->exists()){ QFile::rename(logfile->fileName(), logfile->fileName()+".old"); }
       //Make sure the parent directory exists
       if(!QFile::exists("/var/log")){
         QDir dir;
         dir.mkpath("/var/log");
       }
-    logfile.open(QIODevice::WriteOnly | QIODevice::Append);
+    logfile->open(QIODevice::WriteOnly | QIODevice::Append);
   //Backend::openLogFile("/var/log/PCDM.log");
 
   //qDebug() << "Backend Checks Finished:" << QString::number(clock.elapsed())+" ms";
@@ -112,7 +120,7 @@ int runSingleSession(int argc, char *argv[]){
   //Backend::allowUidUnder1K(Config::allowUnder1KUsers(), Config::excludedUserList());
   //qDebug() << "Config File Loaded:" << QString::number(clock.elapsed())+" ms";
   // Startup the main application
-  QApplication a(argc,argv);
+  QApplication* a = new QApplication(argc,argv);
     //Setup Log File
     qInstallMessageHandler(MessageOutput);
   int retCode = 0; //used for UI/application return
@@ -120,7 +128,7 @@ int runSingleSession(int argc, char *argv[]){
   qDebug() << "Autologin triggered:" << ALtriggered << VT;
 
   //Initialize the xprocess
-  XProcess desktop;
+  XProcess* desktop = new XProcess();
 
   // Check what directory our app is in
     QString appDir = "/usr/local/share/PCDM";
@@ -133,7 +141,7 @@ int runSingleSession(int argc, char *argv[]){
     //Load the proper locale for the translator
     if ( QFile::exists(appDir + "/i18n/PCDM_" + langCode + ".qm" ) ) {
       translator.load( QString("PCDM_") + langCode, appDir + "/i18n/" );
-      a.installTranslator(&translator);
+      a->installTranslator(&translator);
       qDebug() <<"Loaded Translation:" + appDir + "/i18n/PCDM_" + langCode + ".qm";
     } else {
       qDebug() << "Could not find: " + appDir + "/i18n/PCDM_" + langCode + ".qm";
@@ -182,9 +190,9 @@ int runSingleSession(int argc, char *argv[]){
 	//now start the autologin if appropriate
 	if(goodAL){
             //qDebug() << "Starting AutoLogin:" << user;
-	  desktop.loginToXSession(user,pwd, dsk,lang,"",false);
+	  desktop->loginToXSession(user,pwd, dsk,lang,"",false);
 	  //splash.close();
-	  if(desktop.isRunning()){
+	  if(desktop->isRunning()){
 	    goodAL=true; //flag this as a good login to skip the GUI
 	  }
         }
@@ -205,11 +213,11 @@ int runSingleSession(int argc, char *argv[]){
     //splash.finish(&w); //close the splash when the GUI starts up
 
     //Setup the signals/slots to startup the desktop session
-    QObject::connect( &w,SIGNAL(xLoginAttempt(QString,QString,QString,QString, QString, bool)), &desktop,SLOT(loginToXSession(QString,QString,QString,QString, QString,bool)) ); 
+    QObject::connect( &w,SIGNAL(xLoginAttempt(QString,QString,QString,QString, QString, bool)), desktop,SLOT(loginToXSession(QString,QString,QString,QString, QString,bool)) ); 
     //Setup the signals/slots for return information for the GUI
-    QObject::connect( &desktop, SIGNAL(InvalidLogin()), &w, SLOT(slotLoginFailure()) );
-    QObject::connect( &desktop, SIGNAL(started()), &w, SLOT(slotLoginSuccess()) );
-    QObject::connect( &desktop, SIGNAL(ValidLogin()), &w, SLOT(slotLoginSuccess()) );
+    QObject::connect( desktop, SIGNAL(InvalidLogin()), &w, SLOT(slotLoginFailure()) );
+    QObject::connect( desktop, SIGNAL(started()), &w, SLOT(slotLoginSuccess()) );
+    QObject::connect( desktop, SIGNAL(ValidLogin()), &w, SLOT(slotLoginSuccess()) );
 
     //qDebug() << "Showing GUI:" << QString::number(clock.elapsed())+" ms";
     w.show();
@@ -218,15 +226,20 @@ int runSingleSession(int argc, char *argv[]){
       QProcess::startDetached("touch /var/tmp/.pcdm-x-started-"+VT);
     }
     //Now start the event loop until the window closes
-    retCode = a.exec();
+    retCode = a->exec();
    }//end special retCode==-1 check (restart GUI)
   }  // end of PCDM GUI running
   USERS->stopUpdates();
   //Wait for the desktop session to finish before exiting
   if(compositor.state()==QProcess::Running){ compositor.terminate(); }
-    desktop.waitForSessionClosed();
+    desktop->waitForSessionClosed();
     qDebug() << "PCDM Session finished";
-    logfile.close();
+    logfile->close();
+    if(logfile != nullptr)
+    {
+       delete logfile;
+       logfile = nullptr;
+    }
   //splash.show(); //show the splash screen again
   //Now wait a couple seconds for things to settle
   QTime wTime = QTime::currentTime().addSecs(2);
@@ -247,8 +260,16 @@ int runSingleSession(int argc, char *argv[]){
 
 
   //Clean up Code
-  delete &desktop;
-  delete &a;
+  if(desktop != nullptr)
+  {
+     delete desktop;
+     desktop = nullptr;
+  }
+  if(a != nullptr)
+  {
+    delete a;
+    a = nullptr;
+  }
   //delete &splash;
 
   return retCode;
@@ -279,6 +300,7 @@ int main(int argc, char *argv[])
     int retCode = runSingleSession(argc,argv);
     qDebug() << "-- PCDM Session Ended --";
     //check for special exit code
+
     if(retCode == -1){ neverquit=true; } //make sure we go around again at least once
     else if(retCode != 0){ neverquit=false; }
     //Now kill the shild process (whole session)
@@ -294,6 +316,12 @@ int main(int argc, char *argv[])
   }*/
   qDebug() << "-- PCDM Session Ended --";
   if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE.arg(VT)) ){ neverquit = false; }
+ }
+
+ if(logfile != nullptr)
+ {
+    delete logfile;	 
+    logfile = nullptr;
  }
  return 0;
 }
