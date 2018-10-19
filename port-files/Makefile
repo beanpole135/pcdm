@@ -20,8 +20,8 @@ MAKE_ARGS=      PREFIX=${STAGEDIR}${PREFIX}
 
 CONFLICTS=      pcbsd-utils-qt*
 
-USES=           qmake
-USE_QT5=        core gui network svg multimedia imageformats \
+USES=           qmake qt:5
+USE_QT=        core gui network svg multimedia imageformats \
 		buildtools_build linguist_build x11extras concurrent
 
 USE_GITHUB=	yes
