@@ -300,12 +300,7 @@ int main(int argc, char *argv[])
     int retCode = runSingleSession(argc,argv);
     qDebug() << "-- PCDM Session Ended --";
 
-    // Need to clean up pid file otherwise daemon restart command fails
-    // saying process is already running
-    if(QFile::exists("/var/run/PCDMd-" + VT + ".pid")) 
-    {
-       QFile::remove("/var/run/PCDMd-" + VT+ ".pid");
-    } 
+
     //check for special exit code
     if(retCode == -1){ neverquit=true; } //make sure we go around again at least once
     else if(retCode != 0){ neverquit=false; }
@@ -323,7 +318,12 @@ int main(int argc, char *argv[])
   qDebug() << "-- PCDM Session Ended --";
   if(QFile::exists("/var/run/nologin") || QFile::exists(TMPSTOPFILE.arg(VT)) ){ neverquit = false; }
  }
-
+ // Need to clean up pid file otherwise daemon restart command fails
+ // saying process is already running
+ if(QFile::exists("/var/run/PCDMd-" + VT + ".pid")) 
+ {
+    QFile::remove("/var/run/PCDMd-" + VT+ ".pid");
+ } 
  if(logfile != nullptr)
  {
     delete logfile;	 
