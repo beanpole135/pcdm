@@ -625,7 +625,9 @@ void PCDMgui::updateSystemMenu(){
     //qDebug() << "Current User:" << uid << picosession;
     if( uid==0 ){
       systemMenu->addSeparator();
-      systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
+      if( !QFile::exists("/usr/local/share/trident/scripts/generate-xorg-conf.sh") ){
+        systemMenu->addAction( tr("Change Video Driver"), this, SLOT(resetVideoDriver()) );
+      }
       if( QFile::exists("/tmp/.trueos-update-staged") ){
         systemMenu->addAction( tr("Update and Restart System"), this, SLOT(slotRestartComputerWithUpdates()) );
       }
