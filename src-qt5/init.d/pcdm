@@ -78,7 +78,7 @@ start_pre() {
       fi
       if service_stopped pcdm.${vtdev} ; then
         einfo "Starting session on ${vtdev}"
-        /sbin/service pcdm.${vtdev} start -q
+        /usr/sbin/service pcdm.${vtdev} start -q
         sleep 1 #give the session a second to startup X to prevent conflicts in display numbers
       fi
     done
@@ -94,7 +94,7 @@ stop() {
       if [ -e "${SERVICEDIR}/pcdm.${vtdev}" ]; then
         if service_started pcdm.${vtdev} ; then
           einfo "Stopping session on ${vtdev}"
-          /sbin/service pcdm.${vtdev} stop -q
+          /usr/sbin/service pcdm.${vtdev} stop -q
         fi
       fi
     done
