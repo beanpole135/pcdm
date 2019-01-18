@@ -110,8 +110,13 @@ while [ ! -e /var/run/nologin -a ! -e ${STOPFILE} ]; do
   xinit /usr/local/bin/PCDM-session -once ${VT} -- :${DISPLAYNUM} -auth ${PCDMAUTHFILE} $XOPTS ${VT} 2>/dev/null
      if [ $? != 0 ] && [ ! -e "/var/tmp/.pcdm-x-started-${VT}" ] && [ ! -e ${STOPFILE} ] ; then
         # Looks like X failed to start...
-         # touch /var/.runxsetup
+        if [ -z "${XORGCONFIG}" ] ; then
+          #Try to use the fallback config file if it exists
+          XORGCONFIG="xorg.fallback.conf"
+        else
+          #already tried fallback config - just exit
           touch ${STOPFILE}
+        fi
      fi
 
   #Now remove the authorization file
