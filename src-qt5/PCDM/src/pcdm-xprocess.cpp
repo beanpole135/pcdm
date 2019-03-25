@@ -95,6 +95,10 @@ bool XProcess::startXSession(){
   //Check for PAM username/password validity
   if( !pam_checkPW() ){ emit InvalidLogin(); pam_shutdown(); return true; }
 
+  //Make sure the user is added to any required groups
+  QStringList cgroups = Backend::runShellCommand("id -nG "+xuser).join("").split(" "); //current groups
+  if(!cgroups.contains("video")){ Backend::runShellCommand("pw group mod video -m "+xuser); } //add user to video group (required for GPU access)
+
   //If this has a special device password, mount the personacrypt device
   if( !xanonlogin && !xdevpass.isEmpty() ){ //&& Backend::getAvailablePersonaCryptUsers().contains(xuser) ){
     Backend::log(" - PersonaCrypt Login Detected");
