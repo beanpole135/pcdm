@@ -13,6 +13,7 @@ LICENSE=	BSD2CLAUSE
 RUN_DEPENDS=    xorg-minimal>=0:x11/xorg-minimal \
 		xhost:x11/xhost \
 		setxkbmap:x11/setxkbmap \
+		pc-sysinstall:sysutils/pc-sysinstall \
 		${LOCALBASE}/bin/qsudo:sysutils/qsudo
 
 WRKSRC_SUBDIR=  src-qt5

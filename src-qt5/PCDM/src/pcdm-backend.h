@@ -21,7 +21,7 @@
 #include "pcdm-config.h"
 //#include "pcbsd-utils.h"
 
-#define PCSYSINSTALL    QString("/usr/sbin/pc-sysinstall")
+#define PCSYSINSTALL    QString("/usr/local/sbin/pc-sysinstall")
 #define DBDIR QString("/var/db/pcdm/")
 
 class Process : public QProcess {
